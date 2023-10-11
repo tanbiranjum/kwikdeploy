@@ -1,15 +1,9 @@
-import React from 'react'
-import { MainNav } from './components/main-nav'
-import { UserNav } from './components/user-nav'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const DashboardPage = (props: Props) => {
-  return (
-    <main>
-        
-    </main>
-  )
-}
+  return <main></main>;
+};
 
-export default DashboardPage
+export default DashboardPage;
