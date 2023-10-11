@@ -1,5 +1,5 @@
-import { MainNav } from "@/app/dashboard/components/main-nav";
-import { UserNav } from "@/app/dashboard/components/user-nav";
+import { MainNav } from "@/app/components/main-nav";
+import { UserNav } from "@/app/components/user-nav";
 import React from "react";
 
 type Props = {};

@@ -14,7 +14,7 @@ type CardProps = React.ComponentProps<typeof Card>;
 const ProjectCard = ({ className, ...props }: CardProps) => {
   return (
     <Link href={`/dashboard/projects/${props.id}`}>
-      <Card className={cn("w-[380px] text-center", className)} {...props}>
+      <Card className={cn("w-[304px] ", className)} {...props}>
         <CardHeader>
           <CardTitle>Title </CardTitle>
           <CardDescription>description </CardDescription>
