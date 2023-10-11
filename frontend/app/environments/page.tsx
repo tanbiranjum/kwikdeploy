@@ -14,35 +14,31 @@ type Props = {};
 
 const targetName = [
   {
-    name: "target 1",
-    status: "Online",
+    name: "dev",
+    target: "Server 1",
   },
   {
-    name: "target 2",
-    status: "Online",
+    name: "test",
+    target: "Server 2",
   },
   {
-    name: "target 3",
-    status: "Online",
-  },
-  {
-    name: "target 4",
-    status: "Online",
+    name: "prod",
+    target: "Server 3",
   },
 ];
 
-const TargetsPage = (props: Props) => {
+const EnvironmentsPage = (props: Props) => {
   return (
     <div className="space-y-6 py-8">
       <Button>
         <Icons.plus className="mr-2 h-4 w-4" />
-        Add Target
+        Add Environments
       </Button>
       <Table>
         <TableHeader className="bg-slate-100 border">
           <TableRow>
-            <TableHead className="w-[200px]">Target Name</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead className="w-[200px]">Environment Name</TableHead>
+            <TableHead>Target</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -50,7 +46,7 @@ const TargetsPage = (props: Props) => {
           {targetName.map((target) => (
             <TableRow key={target.name}>
               <TableCell className="font-medium">{target.name}</TableCell>
-              <TableCell>{target.status}</TableCell>
+              <TableCell>{target.target}</TableCell>
               <TableCell className="text-right">
                 <div className="flex gap-3 justify-end">
                   <Button variant="outline" size="icon">
@@ -69,4 +65,4 @@ const TargetsPage = (props: Props) => {
   );
 };
 
-export default TargetsPage;
+export default EnvironmentsPage;
