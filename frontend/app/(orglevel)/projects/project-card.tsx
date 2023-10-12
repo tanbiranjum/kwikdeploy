@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./components/ui/card";
+} from "../../components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -15,6 +15,7 @@ type CardAttribute = {
   bodyCard?: string;
   footerCard?: string;
 };
+
 type CardProps = React.ComponentProps<typeof Card> & CardAttribute;
 
 const ProjectCard = ({
@@ -26,7 +27,7 @@ const ProjectCard = ({
   ...props
 }: CardProps) => {
   return (
-    <Link href={`/${props.id}`}>
+    <Link href={`/${props.id}/targets`}>
       <Card className={cn("w-[304px] ", className)} {...props}>
         <CardHeader>
           <CardTitle>{titleCard} </CardTitle>

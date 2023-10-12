@@ -9,11 +9,8 @@ const LoginPage = (props: Props) => {
       <div className="max-w-lg mx-auto space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
-            Login to app
+            KwikDeploy Login
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Enter your email and password to login
-          </p>
         </div>
         <UserLoginForm />
       </div>

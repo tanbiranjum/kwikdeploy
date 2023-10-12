@@ -3,9 +3,9 @@ import React from "react";
 import ProjectCard from "./project-card";
 
 import Link from "next/link";
-import MainContainer from "./components/main-container";
-import { Button } from "./components/ui/button";
-import { Icons } from "./components/icons";
+import MainContainer from "../../components/main-container";
+import { Button } from "../../components/ui/button";
+import { Icons } from "../../components/icons";
 
 type Props = {};
 
@@ -16,7 +16,7 @@ const ProjectsPage = (props: Props) => {
         <Link href="/targets">
           <Button>
             <Icons.plus className="mr-2 h-4 w-4" />
-            Add a project
+            Add Project
           </Button>
         </Link>
       </div>

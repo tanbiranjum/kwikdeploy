@@ -30,40 +30,15 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Profile name</p>
+            <p className="text-sm font-medium leading-none">Profile</p>
             <p className="text-xs leading-none text-muted-foreground">
               m@example.com
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Projects
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Targets
-            <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Environments
-            <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            App Definitions
-            <DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>Releases</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
         <DropdownMenuItem>
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

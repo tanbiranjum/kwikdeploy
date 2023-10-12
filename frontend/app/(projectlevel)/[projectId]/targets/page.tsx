@@ -1,6 +1,6 @@
-import { Icons } from "../components/icons";
-import MainContainer from "../components/main-container";
-import { Button } from "../components/ui/button";
+import { Icons } from "../../../components/icons";
+import MainContainer from "../../../components/main-container";
+import { Button } from "../../../components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,38 +8,42 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
+} from "../../../components/ui/table";
 import React from "react";
 
 type Props = {};
 
 const targetName = [
   {
-    name: "dev",
-    target: "Server 1",
+    name: "target 1",
+    status: "Online",
   },
   {
-    name: "test",
-    target: "Server 2",
+    name: "target 2",
+    status: "Online",
   },
   {
-    name: "prod",
-    target: "Server 3",
+    name: "target 3",
+    status: "Online",
+  },
+  {
+    name: "target 4",
+    status: "Online",
   },
 ];
 
-const EnvironmentsPage = (props: Props) => {
+const TargetsPage = (props: Props) => {
   return (
-    <MainContainer props={{ className: "" }}>
+    <MainContainer props={{className:""}}>
       <Button>
         <Icons.plus className="mr-2 h-4 w-4" />
-        Add Environments
+        Add Target
       </Button>
       <Table>
         <TableHeader className="bg-slate-100 border">
           <TableRow>
-            <TableHead className="w-[200px]">Environment Name</TableHead>
-            <TableHead>Target</TableHead>
+            <TableHead className="w-[200px]">Target Name</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -47,7 +51,7 @@ const EnvironmentsPage = (props: Props) => {
           {targetName.map((target) => (
             <TableRow key={target.name}>
               <TableCell className="font-medium">{target.name}</TableCell>
-              <TableCell>{target.target}</TableCell>
+              <TableCell>{target.status}</TableCell>
               <TableCell className="text-right">
                 <div className="flex gap-3 justify-end">
                   <Button variant="outline" size="icon">
@@ -66,4 +70,4 @@ const EnvironmentsPage = (props: Props) => {
   );
 };
 
-export default EnvironmentsPage;
+export default TargetsPage;
