@@ -11,7 +11,7 @@
         "tags": [
           "Projects"
         ],
-        "operationId": "Projects_GetProjectList",
+        "operationId": "Projects_GetList",
         "parameters": [
           {
             "name": "PageNumber",
@@ -92,7 +92,7 @@
         "tags": [
           "Projects"
         ],
-        "operationId": "Projects_GetProject",
+        "operationId": "Projects_GetById",
         "parameters": [
           {
             "name": "id",
@@ -227,7 +227,7 @@
         "tags": [
           "Projects"
         ],
-        "operationId": "Projects_UniqueProjectName",
+        "operationId": "Projects_IsUniqueName",
         "parameters": [
           {
             "name": "name",
@@ -263,7 +263,7 @@
         "tags": [
           "Projects"
         ],
-        "operationId": "Projects_UniqueProjectName2",
+        "operationId": "Projects_IsUniqueNameExludingItself",
         "parameters": [
           {
             "name": "name",
@@ -309,7 +309,7 @@
         "tags": [
           "Targets"
         ],
-        "operationId": "Targets_GetTargetsList",
+        "operationId": "Targets_GetList",
         "parameters": [
           {
             "name": "PageNumber",
@@ -390,7 +390,7 @@
         "tags": [
           "Targets"
         ],
-        "operationId": "Targets_GetTarget",
+        "operationId": "Targets_GetById",
         "parameters": [
           {
             "name": "id",
@@ -525,7 +525,7 @@
         "tags": [
           "Targets"
         ],
-        "operationId": "Targets_UniqueTargetName",
+        "operationId": "Targets_IsUniqueName",
         "parameters": [
           {
             "name": "name",
@@ -561,7 +561,7 @@
         "tags": [
           "Targets"
         ],
-        "operationId": "Targets_UniqueTargetName2",
+        "operationId": "Targets_IsUniqueNameExludingItself",
         "parameters": [
           {
             "name": "name",

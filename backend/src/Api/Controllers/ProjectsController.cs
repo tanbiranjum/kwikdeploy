@@ -12,26 +12,26 @@ namespace KwikDeploy.Api.Controllers;
 public class ProjectsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedList<ProjectHeadDto>>> GetProjectList([FromQuery] ProjectGetListQuery query)
+    public async Task<ActionResult<PaginatedList<ProjectHeadDto>>> GetList([FromQuery] ProjectGetListQuery query)
     {
         return await Mediator.Send(query);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProjectDto>> GetProject(int id)
+    public async Task<ActionResult<ProjectDto>> GetById(int id)
     {
         return await Mediator.Send(new ProjectGetQuery { Id = id });
     }
 
     [HttpGet("uniquename/{name}")]
-    public async Task<ActionResult<bool>> UniqueProjectName(string name)
+    public async Task<ActionResult<bool>> IsUniqueName(string name)
     {
         return await Mediator.Send(new ProjectUniqueNameQuery { Name = name, ProjectId = null });
     }
 
 
     [HttpGet("uniquename/{name}/{projectId}")]
-    public async Task<ActionResult<bool>> UniqueProjectName(string name, int projectId)
+    public async Task<ActionResult<bool>> IsUniqueNameExludingItself(string name, int projectId)
     {
         return await Mediator.Send(new ProjectUniqueNameQuery { Name = name, ProjectId = projectId  });
     }

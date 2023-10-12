@@ -237,5 +237,4 @@ _Pvt_Extensions
 /.mfractor
 src/WebUI/ClientApp/package-lock.json
 
-Client
 !src/Application/[Rr]eleases/
