@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { MainNav } from "./components/main-nav";
 import ManiNavContainer from "@/components/ui/main-nav-container";
+import ClientOnly from "./components/client-only";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ManiNavContainer />
-        {children}
+        <ClientOnly>
+          <ManiNavContainer />
+          {children}
+        </ClientOnly>
       </body>
     </html>
   );
