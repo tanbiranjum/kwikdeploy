@@ -14,27 +14,27 @@ namespace KwikDeploy.Api.Controllers;
 public class TargetsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedList<TargetHeadDto>>> GetTargetsList([FromQuery] TargetGetList query)
+    public async Task<ActionResult<PaginatedList<TargetHeadDto>>> GetList([FromQuery] TargetGetList query)
     {
         return await Mediator.Send(query);
     }
 
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TargetDto>> GetTarget(int id)
+    public async Task<ActionResult<TargetDto>> GetById(int id)
     {
         return await Mediator.Send(new TargetGetQuery { Id = id });
     }
 
     [HttpGet("uniquename/{name}")]
-    public async Task<ActionResult<bool>> UniqueTargetName(string name)
+    public async Task<ActionResult<bool>> IsUniqueName(string name)
     {
         return await Mediator.Send(new TargetUniqueNameQuery { Name = name, TargetId = null });
     }
 
 
     [HttpGet("uniquename/{name}/{targetId}")]
-    public async Task<ActionResult<bool>> UniqueTargetName(string name, int targetId)
+    public async Task<ActionResult<bool>> IsUniqueNameExludingItself(string name, int targetId)
     {
         return await Mediator.Send(new TargetUniqueNameQuery { Name = name, TargetId = targetId });
     }
