@@ -8,7 +8,7 @@ namespace KwikDeploy.Api.Controllers;
 [Authorize]
 [ApiController]
 [ApiExceptionFilter]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {
     private ISender? _mediator;

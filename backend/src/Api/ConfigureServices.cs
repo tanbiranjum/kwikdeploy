@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using ZymLabs.NSwag.FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +12,16 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: "_allowedOrigins",
+                              policy =>
+                              {
+                                  policy.WithOrigins("http://localhost:3000",
+                                                        "https://app.kwikdeploy.com");
+                              });
+        });
+
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();

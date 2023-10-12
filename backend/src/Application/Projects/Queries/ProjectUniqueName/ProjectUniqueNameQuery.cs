@@ -7,6 +7,8 @@ namespace KwikDeploy.Application.Projects.Queries.ProjectGet;
 public record ProjectUniqueNameQuery : IRequest<bool>
 {
     public string Name { get; init; } = null!;
+
+    public int? ProjectId { get; init; } = null;
 }
 
 public class ProjectUniqueNameQueryHandler : IRequestHandler<ProjectUniqueNameQuery, bool>
@@ -20,11 +22,23 @@ public class ProjectUniqueNameQueryHandler : IRequestHandler<ProjectUniqueNameQu
 
     public async Task<bool> Handle(ProjectUniqueNameQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Projects.Where(x => x.Name == request.Name).SingleOrDefaultAsync(cancellationToken);
-
-        if (entity == null)
+        if (request.ProjectId == null)
         {
-            return true;
+            var entity = await _context.Projects.Where(x => x.Name.ToLower() == request.Name.ToLower()).SingleOrDefaultAsync(cancellationToken);
+
+            if (entity == null)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            var entity = await _context.Projects.Where(x => x.Id != request.ProjectId && x.Name.ToLower() == request.Name.ToLower()).SingleOrDefaultAsync(cancellationToken);
+
+            if (entity == null)
+            {
+                return true;
+            }
         }
 
         return false;

@@ -29,22 +29,32 @@ if (app.Environment.IsDevelopment())
 else
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
+
+    // TEMPORARILY ADDED
+    // Initialise and seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+        await initialiser.InitialiseAsync();
+        await initialiser.SeedAsync();
+    }
 }
 
 app.UseHealthChecks("/health");
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSwaggerUi3(settings =>
 {
-    settings.Path = "/api";
-    settings.DocumentPath = "/api/specification.json";
+    settings.Path = "/swagger";
+    settings.DocumentPath = "/swagger/specification.json";
 });
 
 app.UseRouting();
 
 app.UseAuthentication();
+app.UseCors("_allowedOrigins");
 app.UseAuthorization();
 
 app.MapControllerRoute(

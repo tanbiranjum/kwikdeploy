@@ -25,7 +25,14 @@ public class ProjectsController : ApiControllerBase
     [HttpGet("uniquename/{name}")]
     public async Task<ActionResult<bool>> UniqueProjectName(string name)
     {
-        return await Mediator.Send(new ProjectUniqueNameQuery { Name = name });
+        return await Mediator.Send(new ProjectUniqueNameQuery { Name = name, ProjectId = null });
+    }
+
+
+    [HttpGet("uniquename/{name}/{projectId}")]
+    public async Task<ActionResult<bool>> UniqueProjectName(string name, int projectId)
+    {
+        return await Mediator.Send(new ProjectUniqueNameQuery { Name = name, ProjectId = projectId  });
     }
 
     [HttpPost]

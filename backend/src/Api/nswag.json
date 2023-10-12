@@ -51,7 +51,7 @@
       "startupType": null,
       "allowNullableBodyParameters": true,
       "useHttpAttributeNameAsOperationId": false,
-      "output": "wwwroot/api/specification.json",
+      "output": "wwwroot/swagger/specification.json",
       "outputType": "OpenApi3",
       "newLineBehavior": "Auto",
       "assemblyPaths": [],
