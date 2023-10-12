@@ -1,8 +1,9 @@
-import { MainNav } from "@/components/main-nav";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { UserNav } from "@/components/user-nav";
+import { MainNav } from "./components/main-nav";
+import ManiNavContainer from "@/app/components/ui/main-nav-container";
+import ClientOnly from "./components/client-only";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,17 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="max-w-screen-xl min-h-screen mx-auto border-2 shadow-sm rounded-md p-4">
-          <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-              <MainNav className="" />
-              <div className="ml-auto flex items-center space-x-4">
-                <UserNav />
-              </div>
-            </div>
-          </div>
+        <ClientOnly>
+          <ManiNavContainer />
           {children}
-        </div>
+        </ClientOnly>
       </body>
     </html>
   );

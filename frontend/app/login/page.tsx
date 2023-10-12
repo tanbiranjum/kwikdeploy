@@ -1,4 +1,4 @@
-import UserLoginForm from "@/components/user-login-form";
+import UserLoginForm from "./user-login-form";
 import React from "react";
 
 type Props = {};

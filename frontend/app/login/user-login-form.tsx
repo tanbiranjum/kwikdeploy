@@ -1,10 +1,10 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Icons } from "./icons";
-import { Button } from "./ui/button";
+import { Label } from "../components/ui/label";
+import { Input } from "../components/ui/input";
+import { Icons } from "../components/icons";
+import { Button } from "../components/ui/button";
 import { useState } from "react";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
