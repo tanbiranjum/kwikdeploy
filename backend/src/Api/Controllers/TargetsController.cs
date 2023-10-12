@@ -1,9 +1,12 @@
 ﻿using KwikDeploy.Application.Common.Models;
+using KwikDeploy.Application.Projects.Queries.ProjectGet;
 using KwikDeploy.Application.Targets.Commands.TargetCreate;
 using KwikDeploy.Application.Targets.Commands.TargetDelete;
 using KwikDeploy.Application.Targets.Commands.TargetRegenerateKey;
 using KwikDeploy.Application.Targets.Commands.TargetUpdate;
+using KwikDeploy.Application.Targets.Queries.TargetGet;
 using KwikDeploy.Application.Targets.Queries.TargetGetList;
+using KwikDeploy.Application.Targets.Queries.TargetUniqueName;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KwikDeploy.Api.Controllers;
@@ -14,6 +17,26 @@ public class TargetsController : ApiControllerBase
     public async Task<ActionResult<PaginatedList<TargetHeadDto>>> GetTargetsList([FromQuery] TargetGetList query)
     {
         return await Mediator.Send(query);
+    }
+
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<TargetDto>> GetTarget(int id)
+    {
+        return await Mediator.Send(new TargetGetQuery { Id = id });
+    }
+
+    [HttpGet("uniquename/{name}")]
+    public async Task<ActionResult<bool>> UniqueTargetName(string name)
+    {
+        return await Mediator.Send(new TargetUniqueNameQuery { Name = name, TargetId = null });
+    }
+
+
+    [HttpGet("uniquename/{name}/{targetId}")]
+    public async Task<ActionResult<bool>> UniqueTargetName(string name, int targetId)
+    {
+        return await Mediator.Send(new TargetUniqueNameQuery { Name = name, TargetId = targetId });
     }
 
     [HttpPost]

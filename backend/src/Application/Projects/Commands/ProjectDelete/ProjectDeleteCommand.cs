@@ -18,17 +18,15 @@ public class ProjectDeleteCommandHandler : IRequestHandler<ProjectDeleteCommand>
 
     public async Task Handle(ProjectDeleteCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Projects
-            .FindAsync(new object[] { request.Id }, cancellationToken);
-
+        // Existance Check
+        var entity = await _context.Projects.FindAsync(request.Id, cancellationToken);
         if (entity == null)
         {
             throw new NotFoundException(nameof(Target), request.Id);
         }
 
+        // Delete
         _context.Projects.Remove(entity);
-
         await _context.SaveChangesAsync(cancellationToken);
     }
-
 }

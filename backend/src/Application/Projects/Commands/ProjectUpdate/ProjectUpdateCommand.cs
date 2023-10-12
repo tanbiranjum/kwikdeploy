@@ -25,8 +25,15 @@ public class ProjectUpdateCommandHandler : IRequestHandler<ProjectUpdateCommand>
 
     public async Task Handle(ProjectUpdateCommand request, CancellationToken cancellationToken)
     {
-        var existingEntity = await _context.Projects.Where(x => x.Id != request.Id && x.Name == request.Name).SingleOrDefaultAsync(cancellationToken);
+        // Existance Check
+        var entity = await _context.Projects.FindAsync(request.Id, cancellationToken);
+        if (entity == null)
+        {
+            throw new NotFoundException(nameof(Project), request.Id);
+        }
 
+        // Unique Name Check
+        var existingEntity = await _context.Projects.Where(x => x.Id != request.Id && x.Name == request.Name).SingleOrDefaultAsync(cancellationToken);
         if (existingEntity != null)
         {
             throw new ValidationException(new List<ValidationFailure> {
@@ -34,17 +41,8 @@ public class ProjectUpdateCommandHandler : IRequestHandler<ProjectUpdateCommand>
             });
         }
 
-
-        var entity = await _context.Projects
-            .FindAsync(new object[] { request.Id }, cancellationToken);
-
-        if (entity == null)
-        {
-            throw new NotFoundException(nameof(Project), request.Id);
-        }
-
+        // Update
         entity.Name = request.Name;
-
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

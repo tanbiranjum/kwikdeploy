@@ -4,6 +4,7 @@ using KwikDeploy.Application.Projects.Commands.ProjectDelete;
 using KwikDeploy.Application.Projects.Commands.ProjectUpdate;
 using KwikDeploy.Application.Projects.Queries.ProjectGet;
 using KwikDeploy.Application.Projects.Queries.ProjectGetList;
+using KwikDeploy.Application.Projects.Queries.ProjectUniqueName;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KwikDeploy.Api.Controllers;

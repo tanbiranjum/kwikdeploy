@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace KwikDeploy.Application.Projects.Queries.ProjectGet;
+namespace KwikDeploy.Application.Projects.Queries.ProjectUniqueName;
 
 public record ProjectUniqueNameQuery : IRequest<bool>
 {

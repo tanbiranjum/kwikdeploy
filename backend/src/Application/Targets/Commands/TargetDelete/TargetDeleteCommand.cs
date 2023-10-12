@@ -19,17 +19,17 @@ public class TargetDeleteCommandHandler : IRequestHandler<TargetDeleteCommand>
 
     public async Task Handle(TargetDeleteCommand request, CancellationToken cancellationToken)
     {
+        // Existance Check
         var entity = await _context.Targets
                         .Where(x => x.Id == request.Id)
                         .SingleOrDefaultAsync(cancellationToken);
-
         if (entity == null)
         {
             throw new NotFoundException(nameof(Target), request.Id);
         }
 
+        // Delete
         _context.Targets.Remove(entity);
-
         await _context.SaveChangesAsync(cancellationToken);
     }
 

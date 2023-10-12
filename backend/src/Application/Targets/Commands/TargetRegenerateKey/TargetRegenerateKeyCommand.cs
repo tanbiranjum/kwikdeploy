@@ -22,17 +22,17 @@ public class TargetRegenerateKeyCommandHandler : IRequestHandler<TargetRegenerat
 
     public async Task<string> Handle(TargetRegenerateKeyCommand request, CancellationToken cancellationToken)
     {
+        // Existance Check
         var entity = await _context.Targets
                         .Where(x => x.Id == request.Id)
                         .SingleOrDefaultAsync(cancellationToken);
-
         if (entity == null)
         {
             throw new NotFoundException(nameof(Target), request.Id);
         }
 
+        // Update
         entity.Key = Guid.NewGuid().ToString();
-
         await _context.SaveChangesAsync(cancellationToken);
 
         return entity.Key;
