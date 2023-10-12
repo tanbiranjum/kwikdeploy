@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 import ProjectCard from "./project-card";
-import { Button } from "@/components/ui/button";
+
 import Link from "next/link";
 import MainContainer from "./components/main-container";
+import { Button } from "./components/ui/button";
 
 type Props = {};
 

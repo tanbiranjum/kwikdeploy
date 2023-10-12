@@ -1,5 +1,5 @@
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
+import { Icons } from "../components/icons";
+import { Button } from "../components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../components/ui/table";
 import React from "react";
 
 type Props = {};

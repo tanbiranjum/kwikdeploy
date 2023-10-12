@@ -1,11 +1,9 @@
-
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { MainNav } from "./components/main-nav";
-import ManiNavContainer from "@/components/ui/main-nav-container";
+import ManiNavContainer from "@/app/components/ui/main-nav-container";
 import ClientOnly from "./components/client-only";
-
 
 const inter = Inter({ subsets: ["latin"] });
 
