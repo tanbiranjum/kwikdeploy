@@ -1,4 +1,5 @@
 import { Icons } from "../components/icons";
+import MainContainer from "../components/main-container";
 import { Button } from "../components/ui/button";
 import {
   Table,
@@ -33,7 +34,7 @@ const targetName = [
 
 const TargetsPage = (props: Props) => {
   return (
-    <div className="space-y-6 py-8">
+    <MainContainer props={{className:""}}>
       <Button>
         <Icons.plus className="mr-2 h-4 w-4" />
         Add Target
@@ -65,7 +66,7 @@ const TargetsPage = (props: Props) => {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </MainContainer>
   );
 };
 

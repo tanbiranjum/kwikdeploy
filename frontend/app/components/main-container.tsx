@@ -7,7 +7,6 @@ type MainContainerProps = {
     React.HTMLAttributes<HTMLElement>,
     HTMLElement
   >;
-  title: string;
 };
 
 const MainContainer = ({ children, props }: MainContainerProps) => {

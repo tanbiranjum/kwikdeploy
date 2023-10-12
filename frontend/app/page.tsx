@@ -10,7 +10,7 @@ type Props = {};
 
 const ProjectsPage = (props: Props) => {
   return (
-    <MainContainer props={{ className: "" }} title="tile">
+    <MainContainer props={{ className: "" }}>
       <div className={cn("")}>
         <Link href="/targets">
           <Button>Add a project</Button>
