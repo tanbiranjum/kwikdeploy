@@ -9,21 +9,22 @@ export function MainNav({
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
+  if (pathname === "/login") return null;
 
-  if (pathname === "/dashboard/projects")
+  if (pathname === "/")
     return (
       <nav
         className={cn("flex items-center space-x-4 lg:space-x-6", className)}
         {...props}
       >
         <Link
-          href="/dashboard/projects"
+          href="/"
           className="text-sm font-medium transition-colors hover:text-primary"
         >
           Projects
         </Link>
         <Link
-          href="/dashboard/settings"
+          href="/settings"
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
         >
           Settings
@@ -37,37 +38,37 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/dashboard/projects"
+        href="/"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Projects
       </Link>
       <Link
-        href="/dashboard/targets"
+        href="/targets"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Targets
       </Link>
       <Link
-        href="/dashboard/environments"
+        href="/environments"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Environments
       </Link>
       <Link
-        href="/dashboard/app-definitions"
+        href="/app-definitions"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         App Definitions
       </Link>
       <Link
-        href="/dashboard/releases"
+        href="/releases"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Releases
       </Link>
       <Link
-        href="/dashboard/settings"
+        href="/settings"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Settings
