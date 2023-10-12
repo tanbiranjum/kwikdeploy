@@ -5,6 +5,7 @@ import ProjectCard from "./project-card";
 import Link from "next/link";
 import MainContainer from "./components/main-container";
 import { Button } from "./components/ui/button";
+import { Icons } from "./components/icons";
 
 type Props = {};
 
@@ -13,7 +14,10 @@ const ProjectsPage = (props: Props) => {
     <MainContainer props={{ className: "" }}>
       <div className={cn("")}>
         <Link href="/targets">
-          <Button>Add a project</Button>
+          <Button>
+            <Icons.plus className="mr-2 h-4 w-4" />
+            Add a project
+          </Button>
         </Link>
       </div>
       <div className={cn("flex justify-center items-center flex-wrap gap-4")}>
