@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>KwikDeploy.Application</RootNamespace>
+        <AssemblyName>KwikDeploy.Application</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="AppDefs\Commands\" />
+      <Folder Include="AppDefs\Queries\" />
+      <Folder Include="Envs\Commands\" />
+      <Folder Include="Envs\Queries\" />
+      <Folder Include="Pipelines\Commands\" />
+      <Folder Include="Pipelines\Queries\" />
+      <Folder Include="Releases\Commands\" />
+      <Folder Include="Releases\Queries\" />
+    </ItemGroup>
+
+</Project>
