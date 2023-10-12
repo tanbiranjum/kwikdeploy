@@ -12,37 +12,37 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/dashboard/projects"
+        href="/projects"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Projects
       </Link>
       <Link
-        href="/dashboard/targets"
+        href="/targets"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Targets
       </Link>
       <Link
-        href="/dashboard/environments"
+        href="/environments"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Environments
       </Link>
       <Link
-        href="/dashboard/app-definitions"
+        href="/app-definitions"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         App Definitions
       </Link>
       <Link
-        href="/dashboard/releases"
+        href="/releases"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Releases
       </Link>
       <Link
-        href="/dashboard/settings"
+        href="/settings"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Settings
