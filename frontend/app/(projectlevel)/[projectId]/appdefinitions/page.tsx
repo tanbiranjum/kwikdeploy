@@ -33,7 +33,7 @@ export default function AppDefinitionsPage() {
       </div>
       <div className="flex flex-wrap gap-4">
         {appDefinitions.map((appDefinition) => (
-          <Card className="w-[350px]">
+          <Card className="w-[350px]" key={appDefinition.id}>
             <CardHeader>
               <CardTitle>{appDefinition.name}</CardTitle>
             </CardHeader>
