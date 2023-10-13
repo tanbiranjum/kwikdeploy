@@ -10,6 +10,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Controllers;
 
+public class SuccessfulLoginResponse
+{
+    public string Id { get; set; } = null!;
+    public string Username { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string Token { get; set; } = null!;
+}
+
 public class AccountsController : ApiControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -30,7 +38,7 @@ public class AccountsController : ApiControllerBase
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login(UserLogin command)
+    public async Task<ActionResult<SuccessfulLoginResponse>> Login(UserLogin command)
     {
         var user = await _userManager.FindByNameAsync(command.UserName);
 
@@ -41,7 +49,7 @@ public class AccountsController : ApiControllerBase
             var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.UserName!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -52,10 +60,12 @@ public class AccountsController : ApiControllerBase
 
             var token = GetToken(authClaims);
 
-            return Ok(new
+            return Ok(new SuccessfulLoginResponse
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                Id = user.Id,
+                Username = user.UserName!,
+                Email = user.Email!,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
             });
         }
 

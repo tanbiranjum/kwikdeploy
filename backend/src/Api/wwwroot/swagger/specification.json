@@ -659,7 +659,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulLoginResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "",
@@ -898,6 +905,24 @@
             "maxLength": 30,
             "minLength": 1,
             "nullable": false
+          }
+        }
+      },
+      "SuccessfulLoginResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
           }
         }
       },

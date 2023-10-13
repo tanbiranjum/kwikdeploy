@@ -36,6 +36,7 @@ const ProjectsPage = (props: Props) => {
       <div className={cn("flex flex-wrap gap-4")}>
         {projects.map((project) => (
           <ProjectCard
+            key={project.id}
             projectId={project.id!}
             titleCard={project.name}
             descriptionCard=""

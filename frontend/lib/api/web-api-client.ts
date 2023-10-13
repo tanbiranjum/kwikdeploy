@@ -662,7 +662,7 @@ export class TargetsClient implements ITargetsClient {
 
 export interface IAccountsClient {
 
-    login(command: UserLogin): Promise<void>;
+    login(command: UserLogin): Promise<SuccessfulLoginResponse>;
 }
 
 export class AccountsClient implements IAccountsClient {
@@ -675,7 +675,7 @@ export class AccountsClient implements IAccountsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    login(command: UserLogin): Promise<void> {
+    login(command: UserLogin): Promise<SuccessfulLoginResponse> {
         let url_ = this.baseUrl + "/Accounts/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -686,6 +686,7 @@ export class AccountsClient implements IAccountsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -694,12 +695,15 @@ export class AccountsClient implements IAccountsClient {
         });
     }
 
-    protected processLogin(response: Response): Promise<void> {
+    protected processLogin(response: Response): Promise<SuccessfulLoginResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SuccessfulLoginResponse.fromJS(resultData200);
+            return result200;
             });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -713,7 +717,7 @@ export class AccountsClient implements IAccountsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<SuccessfulLoginResponse>(null as any);
     }
 }
 
@@ -1235,6 +1239,54 @@ export interface ITargetUpdateCommand {
     id?: number;
     projectId?: number;
     name: string;
+}
+
+export class SuccessfulLoginResponse implements ISuccessfulLoginResponse {
+    id?: string;
+    username?: string;
+    email?: string;
+    token?: string;
+
+    constructor(data?: ISuccessfulLoginResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.username = _data["username"];
+            this.email = _data["email"];
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): SuccessfulLoginResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new SuccessfulLoginResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["username"] = this.username;
+        data["email"] = this.email;
+        data["token"] = this.token;
+        return data;
+    }
+}
+
+export interface ISuccessfulLoginResponse {
+    id?: string;
+    username?: string;
+    email?: string;
+    token?: string;
 }
 
 export class UserLogin implements IUserLogin {
