@@ -9,6 +9,7 @@ const navItems = [
     { name: "Targets", href: "/targets" },
     { name: "Environments", href: "/environments" },
     { name: "App Definitions", href: "/appdefinitions" },
+    { name: "Pipelines", href: "/pipelines" },
     { name: "Releases", href: "/releases" },
     { name: "Settings", href: "/settings" },
 ]
@@ -33,7 +34,7 @@ export default function ProjectLevelLayout({
                             className="text-sm font-medium transition-colors hover:text-primary"
                             href={`/projects`}
                         >
-                            Back to Projects
+                            &lt;&lt; Back
                         </Link>
                         {navItems.map((navItem, i) => (
                             <Link key={i}
