@@ -1,20 +1,40 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Icons } from "../components/icons";
 import { Button } from "../components/ui/button";
 import { useState } from "react";
+import { loginSchema } from "@/lib/validations/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/app/components/ui/form";
+import { z } from "zod";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 const UserLoginForm = ({ className, ...props }: UserLoginFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange",
+  });
+
+  async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
+
+    // values after validation
+    console.log(data);
 
     setTimeout(() => {
       setIsLoading(false);
@@ -22,41 +42,42 @@ const UserLoginForm = ({ className, ...props }: UserLoginFormProps) => {
   }
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={isLoading}
-            />
-          </div>
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="password">
-              Password
-            </Label>
-            <Input
-              id="password"
-              placeholder="******"
-              type="password"
-              disabled={isLoading}
-            />
-          </div>
-          <Button disabled={isLoading}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="******" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button disabled={isLoading} type="submit">
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             Sign In
           </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
     </div>
   );
 };

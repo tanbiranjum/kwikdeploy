@@ -1,3 +1,4 @@
+import AddEnvironmentDialog from "@/app/components/add-environment-dialog";
 import { Icons } from "../../../components/icons";
 import MainContainer from "../../../components/main-container";
 import { Button } from "../../../components/ui/button";
@@ -31,10 +32,7 @@ const targetName = [
 const EnvironmentsPage = (props: Props) => {
   return (
     <MainContainer props={{ className: "" }}>
-      <Button>
-        <Icons.plus className="mr-2 h-4 w-4" />
-        Add Environments
-      </Button>
+      <AddEnvironmentDialog />
       <Table>
         <TableHeader className="bg-slate-100 border">
           <TableRow>
