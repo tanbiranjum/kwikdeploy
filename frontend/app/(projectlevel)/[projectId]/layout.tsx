@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from 'next/navigation'
 import { cn } from "@/lib/utils"
 import { UserNav } from "@/app/components/user-nav"
+import { Icons } from "../../components/icons";
 
 const navItems = [
     { name: "Targets", href: "/targets" },
@@ -34,7 +35,7 @@ export default function ProjectLevelLayout({
                             className="text-sm font-medium transition-colors hover:text-primary"
                             href={`/projects`}
                         >
-                            &lt;&lt; Back
+                            &lt;- Back
                         </Link>
                         {navItems.map((navItem, i) => (
                             <Link key={i}

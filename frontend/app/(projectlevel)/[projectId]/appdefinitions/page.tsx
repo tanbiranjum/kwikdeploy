@@ -49,8 +49,8 @@ export default function AppDefinitionsPage() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-            <Link href="#" className="text-sm font-bold">{appDefinition.variableCount} Variables</Link>
-            <Link href="#" className="text-sm font-bold">{appDefinition.mountCount} Mounts</Link>
+              <Button variant="ghost" className="text-sm font-bold">{appDefinition.variableCount} Variables</Button>
+              <Button variant="ghost" className="text-sm font-bold">{appDefinition.mountCount} Mounts</Button>
             </CardFooter>
           </Card>
         ))}
