@@ -1,5 +1,5 @@
 # Contributing to KwikDeploy
-Thank you for considering Contributing to KwikDeploy. Every contribution helps!
+Thank you for considering to contribute to KwikDeploy. Every contribution helps!
 
 Contribution does not only mean writing code and sending pull requests. You can 
 contribute in other ways too like:
