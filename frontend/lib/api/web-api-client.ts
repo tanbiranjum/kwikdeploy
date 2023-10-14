@@ -9,731 +9,1233 @@
 // ReSharper disable InconsistentNaming
 
 export interface IProjectsClient {
+    getList(
+        pageNumber: number | undefined,
+        pageSize: number | undefined
+    ): Promise<PaginatedListOfProjectHeadDto>
 
-    getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfProjectHeadDto>;
+    create(command: ProjectCreateCommand): Promise<number>
 
-    create(command: ProjectCreateCommand): Promise<number>;
+    getById(id: number): Promise<ProjectDto>
 
-    getById(id: number): Promise<ProjectDto>;
+    update(id: number, command: ProjectUpdateCommand): Promise<void>
 
-    update(id: number, command: ProjectUpdateCommand): Promise<void>;
+    delete(id: number): Promise<void>
 
-    delete(id: number): Promise<void>;
+    isUniqueName(name: string): Promise<boolean>
 
-    isUniqueName(name: string): Promise<boolean>;
-
-    isUniqueNameExludingItself(name: string, projectId: number): Promise<boolean>;
+    isUniqueNameExludingItself(
+        name: string,
+        projectId: number
+    ): Promise<boolean>
 }
 
 export class ProjectsClient implements IProjectsClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+    }
+    private baseUrl: string
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+        undefined
 
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    constructor(
+        baseUrl?: string,
+        http?: {
+            fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+        }
+    ) {
+        this.http = http!
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
-    getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfProjectHeadDto> {
-        let url_ = this.baseUrl + "/Projects?";
+    getList(
+        pageNumber: number | undefined,
+        pageSize: number | undefined
+    ): Promise<PaginatedListOfProjectHeadDto> {
+        let url_ = this.baseUrl + "/Projects?"
         if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
+            throw new Error("The parameter 'pageNumber' cannot be null.")
         else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&"
         if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
+            throw new Error("The parameter 'pageSize' cannot be null.")
         else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        url_ = url_.replace(/[?&]$/, "");
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&"
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetList(_response);
-        });
+            return this.processGetList(_response)
+        })
     }
 
-    protected processGetList(response: Response): Promise<PaginatedListOfProjectHeadDto> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+    protected processGetList(
+        response: Response
+    ): Promise<PaginatedListOfProjectHeadDto> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfProjectHeadDto.fromJS(resultData200);
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = PaginatedListOfProjectHeadDto.fromJS(resultData200)
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<PaginatedListOfProjectHeadDto>(null as any);
+        return Promise.resolve<PaginatedListOfProjectHeadDto>(null as any)
     }
 
     create(command: ProjectCreateCommand): Promise<number> {
-        let url_ = this.baseUrl + "/Projects";
-        url_ = url_.replace(/[?&]$/, "");
+        let url_ = this.baseUrl + "/Projects"
+        url_ = url_.replace(/[?&]$/, "")
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(command)
 
         let options_: RequestInit = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate(_response);
-        });
+            return this.processCreate(_response)
+        })
     }
 
     protected processCreate(response: Response): Promise<number> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<number>(null as any);
+        return Promise.resolve<number>(null as any)
     }
 
     getById(id: number): Promise<ProjectDto> {
-        let url_ = this.baseUrl + "/Projects/{id}";
+        let url_ = this.baseUrl + "/Projects/{id}"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetById(_response);
-        });
+            return this.processGetById(_response)
+        })
     }
 
     protected processGetById(response: Response): Promise<ProjectDto> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProjectDto.fromJS(resultData200);
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = ProjectDto.fromJS(resultData200)
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<ProjectDto>(null as any);
+        return Promise.resolve<ProjectDto>(null as any)
     }
 
     update(id: number, command: ProjectUpdateCommand): Promise<void> {
-        let url_ = this.baseUrl + "/Projects/{id}";
+        let url_ = this.baseUrl + "/Projects/{id}"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(command)
 
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-            }
-        };
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate(_response);
-        });
+            return this.processUpdate(_response)
+        })
     }
 
     protected processUpdate(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 204) {
             return response.text().then((_responseText) => {
-            return;
-            });
+                return
+            })
         } else if (status === 400) {
             return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
+                let result400: any = null
+                let resultData400 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result400 = ProblemDetails.fromJS(resultData400)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    result400
+                )
+            })
         } else {
             return response.text().then((_responseText) => {
-            let resultdefault: any = null;
-            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            resultdefault = ProblemDetails.fromJS(resultDatadefault);
-            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
-            });
+                let resultdefault: any = null
+                let resultDatadefault =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                resultdefault = ProblemDetails.fromJS(resultDatadefault)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    resultdefault
+                )
+            })
         }
     }
 
     delete(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/Projects/{id}";
+        let url_ = this.baseUrl + "/Projects/{id}"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "DELETE",
-            headers: {
-            }
-        };
+            headers: {},
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete(_response);
-        });
+            return this.processDelete(_response)
+        })
     }
 
     protected processDelete(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 204) {
             return response.text().then((_responseText) => {
-            return;
-            });
+                return
+            })
         } else {
             return response.text().then((_responseText) => {
-            let resultdefault: any = null;
-            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            resultdefault = ProblemDetails.fromJS(resultDatadefault);
-            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
-            });
+                let resultdefault: any = null
+                let resultDatadefault =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                resultdefault = ProblemDetails.fromJS(resultDatadefault)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    resultdefault
+                )
+            })
         }
     }
 
     isUniqueName(name: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/Projects/uniquename/{name}";
+        let url_ = this.baseUrl + "/Projects/uniquename/{name}"
         if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'name' must be defined.")
+        url_ = url_.replace("{name}", encodeURIComponent("" + name))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueName(_response);
-        });
+            return this.processIsUniqueName(_response)
+        })
     }
 
     protected processIsUniqueName(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<boolean>(null as any)
     }
 
-    isUniqueNameExludingItself(name: string, projectId: number): Promise<boolean> {
-        let url_ = this.baseUrl + "/Projects/uniquename/{name}/{projectId}";
+    isUniqueNameExludingItself(
+        name: string,
+        projectId: number
+    ): Promise<boolean> {
+        let url_ = this.baseUrl + "/Projects/uniquename/{name}/{projectId}"
         if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+            throw new Error("The parameter 'name' must be defined.")
+        url_ = url_.replace("{name}", encodeURIComponent("" + name))
         if (projectId === undefined || projectId === null)
-            throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'projectId' must be defined.")
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueNameExludingItself(_response);
-        });
+            return this.processIsUniqueNameExludingItself(_response)
+        })
     }
 
-    protected processIsUniqueNameExludingItself(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+    protected processIsUniqueNameExludingItself(
+        response: Response
+    ): Promise<boolean> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<boolean>(null as any)
     }
 }
 
 export interface ITargetsClient {
+    getList(
+        pageNumber: number | undefined,
+        pageSize: number | undefined
+    ): Promise<PaginatedListOfTargetHeadDto>
 
-    getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto>;
+    create(command: TargetCreateCommand): Promise<number>
 
-    create(command: TargetCreateCommand): Promise<number>;
+    getById(id: number): Promise<TargetDto>
 
-    getById(id: number): Promise<TargetDto>;
+    update(id: number, command: TargetUpdateCommand): Promise<void>
 
-    update(id: number, command: TargetUpdateCommand): Promise<void>;
+    delete(id: number): Promise<void>
 
-    delete(id: number): Promise<void>;
+    isUniqueName(name: string): Promise<boolean>
 
-    isUniqueName(name: string): Promise<boolean>;
+    isUniqueNameExludingItself(name: string, targetId: number): Promise<boolean>
 
-    isUniqueNameExludingItself(name: string, targetId: number): Promise<boolean>;
-
-    regenerateKey(id: number): Promise<string>;
+    regenerateKey(id: number): Promise<string>
 }
 
 export class TargetsClient implements ITargetsClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+    }
+    private baseUrl: string
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+        undefined
 
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    constructor(
+        baseUrl?: string,
+        http?: {
+            fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+        }
+    ) {
+        this.http = http!
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
-    getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto> {
-        let url_ = this.baseUrl + "/Targets?";
+    getList(
+        pageNumber: number | undefined,
+        pageSize: number | undefined
+    ): Promise<PaginatedListOfTargetHeadDto> {
+        let url_ = this.baseUrl + "/Targets?"
         if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
+            throw new Error("The parameter 'pageNumber' cannot be null.")
         else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&"
         if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
+            throw new Error("The parameter 'pageSize' cannot be null.")
         else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        url_ = url_.replace(/[?&]$/, "");
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&"
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetList(_response);
-        });
+            return this.processGetList(_response)
+        })
     }
 
-    protected processGetList(response: Response): Promise<PaginatedListOfTargetHeadDto> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+    protected processGetList(
+        response: Response
+    ): Promise<PaginatedListOfTargetHeadDto> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfTargetHeadDto.fromJS(resultData200);
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = PaginatedListOfTargetHeadDto.fromJS(resultData200)
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<PaginatedListOfTargetHeadDto>(null as any);
+        return Promise.resolve<PaginatedListOfTargetHeadDto>(null as any)
     }
 
     create(command: TargetCreateCommand): Promise<number> {
-        let url_ = this.baseUrl + "/Targets";
-        url_ = url_.replace(/[?&]$/, "");
+        let url_ = this.baseUrl + "/Targets"
+        url_ = url_.replace(/[?&]$/, "")
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(command)
 
         let options_: RequestInit = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate(_response);
-        });
+            return this.processCreate(_response)
+        })
     }
 
     protected processCreate(response: Response): Promise<number> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<number>(null as any);
+        return Promise.resolve<number>(null as any)
     }
 
     getById(id: number): Promise<TargetDto> {
-        let url_ = this.baseUrl + "/Targets/{id}";
+        let url_ = this.baseUrl + "/Targets/{id}"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetById(_response);
-        });
+            return this.processGetById(_response)
+        })
     }
 
     protected processGetById(response: Response): Promise<TargetDto> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TargetDto.fromJS(resultData200);
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = TargetDto.fromJS(resultData200)
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<TargetDto>(null as any);
+        return Promise.resolve<TargetDto>(null as any)
     }
 
     update(id: number, command: TargetUpdateCommand): Promise<void> {
-        let url_ = this.baseUrl + "/Targets/{id}";
+        let url_ = this.baseUrl + "/Targets/{id}"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(command)
 
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-            }
-        };
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate(_response);
-        });
+            return this.processUpdate(_response)
+        })
     }
 
     protected processUpdate(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 204) {
             return response.text().then((_responseText) => {
-            return;
-            });
+                return
+            })
         } else if (status === 400) {
             return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
+                let result400: any = null
+                let resultData400 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result400 = ProblemDetails.fromJS(resultData400)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    result400
+                )
+            })
         } else {
             return response.text().then((_responseText) => {
-            let resultdefault: any = null;
-            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            resultdefault = ProblemDetails.fromJS(resultDatadefault);
-            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
-            });
+                let resultdefault: any = null
+                let resultDatadefault =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                resultdefault = ProblemDetails.fromJS(resultDatadefault)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    resultdefault
+                )
+            })
         }
     }
 
     delete(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/Targets/{id}";
+        let url_ = this.baseUrl + "/Targets/{id}"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "DELETE",
-            headers: {
-            }
-        };
+            headers: {},
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete(_response);
-        });
+            return this.processDelete(_response)
+        })
     }
 
     protected processDelete(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 204) {
             return response.text().then((_responseText) => {
-            return;
-            });
+                return
+            })
         } else {
             return response.text().then((_responseText) => {
-            let resultdefault: any = null;
-            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            resultdefault = ProblemDetails.fromJS(resultDatadefault);
-            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
-            });
+                let resultdefault: any = null
+                let resultDatadefault =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                resultdefault = ProblemDetails.fromJS(resultDatadefault)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    resultdefault
+                )
+            })
         }
     }
 
     isUniqueName(name: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/Targets/uniquename/{name}";
+        let url_ = this.baseUrl + "/Targets/uniquename/{name}"
         if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'name' must be defined.")
+        url_ = url_.replace("{name}", encodeURIComponent("" + name))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueName(_response);
-        });
+            return this.processIsUniqueName(_response)
+        })
     }
 
     protected processIsUniqueName(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<boolean>(null as any)
     }
 
-    isUniqueNameExludingItself(name: string, targetId: number): Promise<boolean> {
-        let url_ = this.baseUrl + "/Targets/uniquename/{name}/{targetId}";
+    isUniqueNameExludingItself(
+        name: string,
+        targetId: number
+    ): Promise<boolean> {
+        let url_ = this.baseUrl + "/Targets/uniquename/{name}/{targetId}"
         if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+            throw new Error("The parameter 'name' must be defined.")
+        url_ = url_.replace("{name}", encodeURIComponent("" + name))
         if (targetId === undefined || targetId === null)
-            throw new Error("The parameter 'targetId' must be defined.");
-        url_ = url_.replace("{targetId}", encodeURIComponent("" + targetId));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'targetId' must be defined.")
+        url_ = url_.replace("{targetId}", encodeURIComponent("" + targetId))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueNameExludingItself(_response);
-        });
+            return this.processIsUniqueNameExludingItself(_response)
+        })
     }
 
-    protected processIsUniqueNameExludingItself(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+    protected processIsUniqueNameExludingItself(
+        response: Response
+    ): Promise<boolean> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<boolean>(null as any)
     }
 
     regenerateKey(id: number): Promise<string> {
-        let url_ = this.baseUrl + "/Targets/{id}/regeneratekey";
+        let url_ = this.baseUrl + "/Targets/{id}/regeneratekey"
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
 
         let options_: RequestInit = {
             method: "POST",
             headers: {
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processRegenerateKey(_response);
-        });
+            return this.processRegenerateKey(_response)
+        })
     }
 
     protected processRegenerateKey(response: Response): Promise<string> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 =
+                    resultData200 !== undefined ? resultData200 : <any>null
+
+                return result200
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<string>(null as any);
+        return Promise.resolve<string>(null as any)
     }
 }
 
 export interface IAccountsClient {
-
-    login(command: UserLogin): Promise<SuccessfulLoginResponse>;
+    login(command: UserLogin): Promise<SuccessfulLoginResponse>
 }
 
 export class AccountsClient implements IAccountsClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+    }
+    private baseUrl: string
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+        undefined
 
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    constructor(
+        baseUrl?: string,
+        http?: {
+            fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+        }
+    ) {
+        this.http = http!
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
     login(command: UserLogin): Promise<SuccessfulLoginResponse> {
-        let url_ = this.baseUrl + "/Accounts/login";
-        url_ = url_.replace(/[?&]$/, "");
+        let url_ = this.baseUrl + "/Accounts/login"
+        url_ = url_.replace(/[?&]$/, "")
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(command)
 
         let options_: RequestInit = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
+                Accept: "application/json",
+            },
+        }
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processLogin(_response);
-        });
+            return this.processLogin(_response)
+        })
     }
 
-    protected processLogin(response: Response): Promise<SuccessfulLoginResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+    protected processLogin(
+        response: Response
+    ): Promise<SuccessfulLoginResponse> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = SuccessfulLoginResponse.fromJS(resultData200);
-            return result200;
-            });
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = SuccessfulLoginResponse.fromJS(resultData200)
+                return result200
+            })
         } else if (status === 401) {
             return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = ProblemDetails.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
+                let result401: any = null
+                let resultData401 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result401 = ProblemDetails.fromJS(resultData401)
+                return throwException(
+                    "A server side error occurred.",
+                    status,
+                    _responseText,
+                    _headers,
+                    result401
+                )
+            })
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
         }
-        return Promise.resolve<SuccessfulLoginResponse>(null as any);
+        return Promise.resolve<SuccessfulLoginResponse>(null as any)
     }
 }
 
-export class PaginatedListOfProjectHeadDto implements IPaginatedListOfProjectHeadDto {
-    items?: ProjectHeadDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
+export interface IUsersClient {
+    getList(
+        pageNumber: number | undefined,
+        pageSize: number | undefined
+    ): Promise<PaginatedListOfUserHeadDto>
+
+    create(command: UserCreateCommand): Promise<ResultWithIdOfString>
+
+    delete(command: UserDeleteCommand): Promise<Result>
+
+    getById(id: string): Promise<UserDto>
+}
+
+export class UsersClient implements IUsersClient {
+    private http: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+    }
+    private baseUrl: string
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+        undefined
+
+    constructor(
+        baseUrl?: string,
+        http?: {
+            fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
+        }
+    ) {
+        this.http = http!
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
+    }
+
+    getList(
+        pageNumber: number | undefined,
+        pageSize: number | undefined
+    ): Promise<PaginatedListOfUserHeadDto> {
+        let url_ = this.baseUrl + "/Users?"
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.")
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&"
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.")
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&"
+        url_ = url_.replace(/[?&]$/, "")
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+            },
+        }
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetList(_response)
+        })
+    }
+
+    protected processGetList(
+        response: Response
+    ): Promise<PaginatedListOfUserHeadDto> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = PaginatedListOfUserHeadDto.fromJS(resultData200)
+                return result200
+            })
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
+        }
+        return Promise.resolve<PaginatedListOfUserHeadDto>(null as any)
+    }
+
+    create(command: UserCreateCommand): Promise<ResultWithIdOfString> {
+        let url_ = this.baseUrl + "/Users"
+        url_ = url_.replace(/[?&]$/, "")
+
+        const content_ = JSON.stringify(command)
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        }
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreate(_response)
+        })
+    }
+
+    protected processCreate(response: Response): Promise<ResultWithIdOfString> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = ResultWithIdOfString.fromJS(resultData200)
+                return result200
+            })
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
+        }
+        return Promise.resolve<ResultWithIdOfString>(null as any)
+    }
+
+    delete(command: UserDeleteCommand): Promise<Result> {
+        let url_ = this.baseUrl + "/Users"
+        url_ = url_.replace(/[?&]$/, "")
+
+        const content_ = JSON.stringify(command)
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        }
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDelete(_response)
+        })
+    }
+
+    protected processDelete(response: Response): Promise<Result> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = Result.fromJS(resultData200)
+                return result200
+            })
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
+        }
+        return Promise.resolve<Result>(null as any)
+    }
+
+    getById(id: string): Promise<UserDto> {
+        let url_ = this.baseUrl + "/Users/{id}"
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.")
+        url_ = url_.replace("{id}", encodeURIComponent("" + id))
+        url_ = url_.replace(/[?&]$/, "")
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+            },
+        }
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetById(_response)
+        })
+    }
+
+    protected processGetById(response: Response): Promise<UserDto> {
+        const status = response.status
+        let _headers: any = {}
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v: any, k: any) => (_headers[k] = v))
+        }
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null
+                let resultData200 =
+                    _responseText === ""
+                        ? null
+                        : JSON.parse(_responseText, this.jsonParseReviver)
+                result200 = UserDto.fromJS(resultData200)
+                return result200
+            })
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException(
+                    "An unexpected server error occurred.",
+                    status,
+                    _responseText,
+                    _headers
+                )
+            })
+        }
+        return Promise.resolve<UserDto>(null as any)
+    }
+}
+
+export class PaginatedListOfProjectHeadDto
+    implements IPaginatedListOfProjectHeadDto
+{
+    items?: ProjectHeadDto[]
+    pageNumber?: number
+    totalPages?: number
+    totalCount?: number
+    hasPreviousPage?: boolean
+    hasNextPage?: boolean
 
     constructor(data?: IPaginatedListOfProjectHeadDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
@@ -741,180 +1243,179 @@ export class PaginatedListOfProjectHeadDto implements IPaginatedListOfProjectHea
     init(_data?: any) {
         if (_data) {
             if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
+                this.items = [] as any
                 for (let item of _data["items"])
-                    this.items!.push(ProjectHeadDto.fromJS(item));
+                    this.items!.push(ProjectHeadDto.fromJS(item))
             }
-            this.pageNumber = _data["pageNumber"];
-            this.totalPages = _data["totalPages"];
-            this.totalCount = _data["totalCount"];
-            this.hasPreviousPage = _data["hasPreviousPage"];
-            this.hasNextPage = _data["hasNextPage"];
+            this.pageNumber = _data["pageNumber"]
+            this.totalPages = _data["totalPages"]
+            this.totalCount = _data["totalCount"]
+            this.hasPreviousPage = _data["hasPreviousPage"]
+            this.hasNextPage = _data["hasNextPage"]
         }
     }
 
     static fromJS(data: any): PaginatedListOfProjectHeadDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfProjectHeadDto();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new PaginatedListOfProjectHeadDto()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
+        data = typeof data === "object" ? data : {}
         if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
+            data["items"] = []
+            for (let item of this.items) data["items"].push(item.toJSON())
         }
-        data["pageNumber"] = this.pageNumber;
-        data["totalPages"] = this.totalPages;
-        data["totalCount"] = this.totalCount;
-        data["hasPreviousPage"] = this.hasPreviousPage;
-        data["hasNextPage"] = this.hasNextPage;
-        return data;
+        data["pageNumber"] = this.pageNumber
+        data["totalPages"] = this.totalPages
+        data["totalCount"] = this.totalCount
+        data["hasPreviousPage"] = this.hasPreviousPage
+        data["hasNextPage"] = this.hasNextPage
+        return data
     }
 }
 
 export interface IPaginatedListOfProjectHeadDto {
-    items?: ProjectHeadDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
+    items?: ProjectHeadDto[]
+    pageNumber?: number
+    totalPages?: number
+    totalCount?: number
+    hasPreviousPage?: boolean
+    hasNextPage?: boolean
 }
 
 export class ProjectHeadDto implements IProjectHeadDto {
-    id?: number;
-    name?: string;
+    id?: number
+    name?: string
 
     constructor(data?: IProjectHeadDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
+            this.id = _data["id"]
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): ProjectHeadDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProjectHeadDto();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new ProjectHeadDto()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface IProjectHeadDto {
-    id?: number;
-    name?: string;
+    id?: number
+    name?: string
 }
 
 export class ProjectDto implements IProjectDto {
-    id?: number;
-    name?: string;
+    id?: number
+    name?: string
 
     constructor(data?: IProjectDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
+            this.id = _data["id"]
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): ProjectDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProjectDto();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new ProjectDto()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface IProjectDto {
-    id?: number;
-    name?: string;
+    id?: number
+    name?: string
 }
 
 export class ProjectCreateCommand implements IProjectCreateCommand {
-    name!: string;
+    name!: string
 
     constructor(data?: IProjectCreateCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.name = _data["name"];
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): ProjectCreateCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProjectCreateCommand();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new ProjectCreateCommand()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface IProjectCreateCommand {
-    name: string;
+    name: string
 }
 
 export class ProblemDetails implements IProblemDetails {
-    type?: string | undefined;
-    title?: string | undefined;
-    status?: number | undefined;
-    detail?: string | undefined;
+    type?: string | undefined
+    title?: string | undefined
+    status?: number | undefined
+    detail?: string | undefined
     instance?: string | undefined;
 
-    [key: string]: any;
+    [key: string]: any
 
     constructor(data?: IProblemDetails) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
@@ -923,101 +1424,102 @@ export class ProblemDetails implements IProblemDetails {
         if (_data) {
             for (var property in _data) {
                 if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
+                    this[property] = _data[property]
             }
-            this.type = _data["type"];
-            this.title = _data["title"];
-            this.status = _data["status"];
-            this.detail = _data["detail"];
-            this.instance = _data["instance"];
+            this.type = _data["type"]
+            this.title = _data["title"]
+            this.status = _data["status"]
+            this.detail = _data["detail"]
+            this.instance = _data["instance"]
         }
     }
 
     static fromJS(data: any): ProblemDetails {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProblemDetails();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new ProblemDetails()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
+        data = typeof data === "object" ? data : {}
         for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
+            if (this.hasOwnProperty(property)) data[property] = this[property]
         }
-        data["type"] = this.type;
-        data["title"] = this.title;
-        data["status"] = this.status;
-        data["detail"] = this.detail;
-        data["instance"] = this.instance;
-        return data;
+        data["type"] = this.type
+        data["title"] = this.title
+        data["status"] = this.status
+        data["detail"] = this.detail
+        data["instance"] = this.instance
+        return data
     }
 }
 
 export interface IProblemDetails {
-    type?: string | undefined;
-    title?: string | undefined;
-    status?: number | undefined;
-    detail?: string | undefined;
-    instance?: string | undefined;
+    type?: string | undefined
+    title?: string | undefined
+    status?: number | undefined
+    detail?: string | undefined
+    instance?: string | undefined
 
-    [key: string]: any;
+    [key: string]: any
 }
 
 export class ProjectUpdateCommand implements IProjectUpdateCommand {
-    id?: number;
-    name!: string;
+    id?: number
+    name!: string
 
     constructor(data?: IProjectUpdateCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
+            this.id = _data["id"]
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): ProjectUpdateCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProjectUpdateCommand();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new ProjectUpdateCommand()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface IProjectUpdateCommand {
-    id?: number;
-    name: string;
+    id?: number
+    name: string
 }
 
-export class PaginatedListOfTargetHeadDto implements IPaginatedListOfTargetHeadDto {
-    items?: TargetHeadDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
+export class PaginatedListOfTargetHeadDto
+    implements IPaginatedListOfTargetHeadDto
+{
+    items?: TargetHeadDto[]
+    pageNumber?: number
+    totalPages?: number
+    totalCount?: number
+    hasPreviousPage?: boolean
+    hasNextPage?: boolean
 
     constructor(data?: IPaginatedListOfTargetHeadDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
@@ -1025,337 +1527,693 @@ export class PaginatedListOfTargetHeadDto implements IPaginatedListOfTargetHeadD
     init(_data?: any) {
         if (_data) {
             if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
+                this.items = [] as any
                 for (let item of _data["items"])
-                    this.items!.push(TargetHeadDto.fromJS(item));
+                    this.items!.push(TargetHeadDto.fromJS(item))
             }
-            this.pageNumber = _data["pageNumber"];
-            this.totalPages = _data["totalPages"];
-            this.totalCount = _data["totalCount"];
-            this.hasPreviousPage = _data["hasPreviousPage"];
-            this.hasNextPage = _data["hasNextPage"];
+            this.pageNumber = _data["pageNumber"]
+            this.totalPages = _data["totalPages"]
+            this.totalCount = _data["totalCount"]
+            this.hasPreviousPage = _data["hasPreviousPage"]
+            this.hasNextPage = _data["hasNextPage"]
         }
     }
 
     static fromJS(data: any): PaginatedListOfTargetHeadDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfTargetHeadDto();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new PaginatedListOfTargetHeadDto()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
+        data = typeof data === "object" ? data : {}
         if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
+            data["items"] = []
+            for (let item of this.items) data["items"].push(item.toJSON())
         }
-        data["pageNumber"] = this.pageNumber;
-        data["totalPages"] = this.totalPages;
-        data["totalCount"] = this.totalCount;
-        data["hasPreviousPage"] = this.hasPreviousPage;
-        data["hasNextPage"] = this.hasNextPage;
-        return data;
+        data["pageNumber"] = this.pageNumber
+        data["totalPages"] = this.totalPages
+        data["totalCount"] = this.totalCount
+        data["hasPreviousPage"] = this.hasPreviousPage
+        data["hasNextPage"] = this.hasNextPage
+        return data
     }
 }
 
 export interface IPaginatedListOfTargetHeadDto {
-    items?: TargetHeadDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
+    items?: TargetHeadDto[]
+    pageNumber?: number
+    totalPages?: number
+    totalCount?: number
+    hasPreviousPage?: boolean
+    hasNextPage?: boolean
 }
 
 export class TargetHeadDto implements ITargetHeadDto {
-    id?: number;
-    name?: string;
-    connected?: boolean;
+    id?: number
+    name?: string
+    connected?: boolean
 
     constructor(data?: ITargetHeadDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.connected = _data["connected"];
+            this.id = _data["id"]
+            this.name = _data["name"]
+            this.connected = _data["connected"]
         }
     }
 
     static fromJS(data: any): TargetHeadDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TargetHeadDto();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new TargetHeadDto()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["connected"] = this.connected;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["name"] = this.name
+        data["connected"] = this.connected
+        return data
     }
 }
 
 export interface ITargetHeadDto {
-    id?: number;
-    name?: string;
-    connected?: boolean;
+    id?: number
+    name?: string
+    connected?: boolean
 }
 
 export class TargetDto implements ITargetDto {
-    id?: number;
-    projectId?: number;
-    name?: string;
+    id?: number
+    projectId?: number
+    name?: string
 
     constructor(data?: ITargetDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.projectId = _data["projectId"];
-            this.name = _data["name"];
+            this.id = _data["id"]
+            this.projectId = _data["projectId"]
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): TargetDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TargetDto();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new TargetDto()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["projectId"] = this.projectId;
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["projectId"] = this.projectId
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface ITargetDto {
-    id?: number;
-    projectId?: number;
-    name?: string;
+    id?: number
+    projectId?: number
+    name?: string
 }
 
 export class TargetCreateCommand implements ITargetCreateCommand {
-    projectId?: number;
-    name!: string;
+    projectId?: number
+    name!: string
 
     constructor(data?: ITargetCreateCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.projectId = _data["projectId"];
-            this.name = _data["name"];
+            this.projectId = _data["projectId"]
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): TargetCreateCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new TargetCreateCommand();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new TargetCreateCommand()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["projectId"] = this.projectId;
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["projectId"] = this.projectId
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface ITargetCreateCommand {
-    projectId?: number;
-    name: string;
+    projectId?: number
+    name: string
 }
 
 export class TargetUpdateCommand implements ITargetUpdateCommand {
-    id?: number;
-    projectId?: number;
-    name!: string;
+    id?: number
+    projectId?: number
+    name!: string
 
     constructor(data?: ITargetUpdateCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.projectId = _data["projectId"];
-            this.name = _data["name"];
+            this.id = _data["id"]
+            this.projectId = _data["projectId"]
+            this.name = _data["name"]
         }
     }
 
     static fromJS(data: any): TargetUpdateCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new TargetUpdateCommand();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new TargetUpdateCommand()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["projectId"] = this.projectId;
-        data["name"] = this.name;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["projectId"] = this.projectId
+        data["name"] = this.name
+        return data
     }
 }
 
 export interface ITargetUpdateCommand {
-    id?: number;
-    projectId?: number;
-    name: string;
+    id?: number
+    projectId?: number
+    name: string
 }
 
 export class SuccessfulLoginResponse implements ISuccessfulLoginResponse {
-    id?: string;
-    username?: string;
-    email?: string;
-    token?: string;
+    id?: string
+    username?: string
+    email?: string
+    token?: string
 
     constructor(data?: ISuccessfulLoginResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.username = _data["username"];
-            this.email = _data["email"];
-            this.token = _data["token"];
+            this.id = _data["id"]
+            this.username = _data["username"]
+            this.email = _data["email"]
+            this.token = _data["token"]
         }
     }
 
     static fromJS(data: any): SuccessfulLoginResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new SuccessfulLoginResponse();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new SuccessfulLoginResponse()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["username"] = this.username;
-        data["email"] = this.email;
-        data["token"] = this.token;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["username"] = this.username
+        data["email"] = this.email
+        data["token"] = this.token
+        return data
     }
 }
 
 export interface ISuccessfulLoginResponse {
-    id?: string;
-    username?: string;
-    email?: string;
-    token?: string;
+    id?: string
+    username?: string
+    email?: string
+    token?: string
 }
 
 export class UserLogin implements IUserLogin {
-    userName?: string;
-    password?: string;
+    userName?: string
+    password?: string
 
     constructor(data?: IUserLogin) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    (<any>this)[property] = (<any>data)[property]
             }
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.userName = _data["userName"];
-            this.password = _data["password"];
+            this.userName = _data["userName"]
+            this.password = _data["password"]
         }
     }
 
     static fromJS(data: any): UserLogin {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserLogin();
-        result.init(data);
-        return result;
+        data = typeof data === "object" ? data : {}
+        let result = new UserLogin()
+        result.init(data)
+        return result
     }
 
     toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userName"] = this.userName;
-        data["password"] = this.password;
-        return data;
+        data = typeof data === "object" ? data : {}
+        data["userName"] = this.userName
+        data["password"] = this.password
+        return data
     }
 }
 
 export interface IUserLogin {
-    userName?: string;
-    password?: string;
+    userName?: string
+    password?: string
+}
+
+export class PaginatedListOfUserHeadDto implements IPaginatedListOfUserHeadDto {
+    items?: UserHeadDto[]
+    pageNumber?: number
+    totalPages?: number
+    totalCount?: number
+    hasPreviousPage?: boolean
+    hasNextPage?: boolean
+
+    constructor(data?: IPaginatedListOfUserHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any
+                for (let item of _data["items"])
+                    this.items!.push(UserHeadDto.fromJS(item))
+            }
+            this.pageNumber = _data["pageNumber"]
+            this.totalPages = _data["totalPages"]
+            this.totalCount = _data["totalCount"]
+            this.hasPreviousPage = _data["hasPreviousPage"]
+            this.hasNextPage = _data["hasNextPage"]
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfUserHeadDto {
+        data = typeof data === "object" ? data : {}
+        let result = new PaginatedListOfUserHeadDto()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        if (Array.isArray(this.items)) {
+            data["items"] = []
+            for (let item of this.items) data["items"].push(item.toJSON())
+        }
+        data["pageNumber"] = this.pageNumber
+        data["totalPages"] = this.totalPages
+        data["totalCount"] = this.totalCount
+        data["hasPreviousPage"] = this.hasPreviousPage
+        data["hasNextPage"] = this.hasNextPage
+        return data
+    }
+}
+
+export interface IPaginatedListOfUserHeadDto {
+    items?: UserHeadDto[]
+    pageNumber?: number
+    totalPages?: number
+    totalCount?: number
+    hasPreviousPage?: boolean
+    hasNextPage?: boolean
+}
+
+export class UserHeadDto implements IUserHeadDto {
+    id?: string
+    userName?: string | undefined
+
+    constructor(data?: IUserHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"]
+            this.userName = _data["userName"]
+        }
+    }
+
+    static fromJS(data: any): UserHeadDto {
+        data = typeof data === "object" ? data : {}
+        let result = new UserHeadDto()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["userName"] = this.userName
+        return data
+    }
+}
+
+export interface IUserHeadDto {
+    id?: string
+    userName?: string | undefined
+}
+
+export class UserDto implements IUserDto {
+    id?: string
+    userName?: string | undefined
+    email?: string | undefined
+    emailConfirmed?: boolean
+    lockoutEnd?: Date | undefined
+    lockoutEnabled?: boolean
+    accessFailedCount?: number
+
+    constructor(data?: IUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"]
+            this.userName = _data["userName"]
+            this.email = _data["email"]
+            this.emailConfirmed = _data["emailConfirmed"]
+            this.lockoutEnd = _data["lockoutEnd"]
+                ? new Date(_data["lockoutEnd"].toString())
+                : <any>undefined
+            this.lockoutEnabled = _data["lockoutEnabled"]
+            this.accessFailedCount = _data["accessFailedCount"]
+        }
+    }
+
+    static fromJS(data: any): UserDto {
+        data = typeof data === "object" ? data : {}
+        let result = new UserDto()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["userName"] = this.userName
+        data["email"] = this.email
+        data["emailConfirmed"] = this.emailConfirmed
+        data["lockoutEnd"] = this.lockoutEnd
+            ? this.lockoutEnd.toISOString()
+            : <any>undefined
+        data["lockoutEnabled"] = this.lockoutEnabled
+        data["accessFailedCount"] = this.accessFailedCount
+        return data
+    }
+}
+
+export interface IUserDto {
+    id?: string
+    userName?: string | undefined
+    email?: string | undefined
+    emailConfirmed?: boolean
+    lockoutEnd?: Date | undefined
+    lockoutEnabled?: boolean
+    accessFailedCount?: number
+}
+
+export class ResultWithIdOfString implements IResultWithIdOfString {
+    id?: string | undefined
+    succeeded?: boolean
+    errors?: string[]
+
+    constructor(data?: IResultWithIdOfString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"]
+            this.succeeded = _data["succeeded"]
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any
+                for (let item of _data["errors"]) this.errors!.push(item)
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultWithIdOfString {
+        data = typeof data === "object" ? data : {}
+        let result = new ResultWithIdOfString()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        data["succeeded"] = this.succeeded
+        if (Array.isArray(this.errors)) {
+            data["errors"] = []
+            for (let item of this.errors) data["errors"].push(item)
+        }
+        return data
+    }
+}
+
+export interface IResultWithIdOfString {
+    id?: string | undefined
+    succeeded?: boolean
+    errors?: string[]
+}
+
+export class UserCreateCommand implements IUserCreateCommand {
+    userName!: string
+    email?: string | undefined
+    password!: string
+    confirmPassword!: string
+
+    constructor(data?: IUserCreateCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userName = _data["userName"]
+            this.email = _data["email"]
+            this.password = _data["password"]
+            this.confirmPassword = _data["confirmPassword"]
+        }
+    }
+
+    static fromJS(data: any): UserCreateCommand {
+        data = typeof data === "object" ? data : {}
+        let result = new UserCreateCommand()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        data["userName"] = this.userName
+        data["email"] = this.email
+        data["password"] = this.password
+        data["confirmPassword"] = this.confirmPassword
+        return data
+    }
+}
+
+export interface IUserCreateCommand {
+    userName: string
+    email?: string | undefined
+    password: string
+    confirmPassword: string
+}
+
+export class Result implements IResult {
+    succeeded?: boolean
+    errors?: string[]
+
+    constructor(data?: IResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.succeeded = _data["succeeded"]
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any
+                for (let item of _data["errors"]) this.errors!.push(item)
+            }
+        }
+    }
+
+    static fromJS(data: any): Result {
+        data = typeof data === "object" ? data : {}
+        let result = new Result()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        data["succeeded"] = this.succeeded
+        if (Array.isArray(this.errors)) {
+            data["errors"] = []
+            for (let item of this.errors) data["errors"].push(item)
+        }
+        return data
+    }
+}
+
+export interface IResult {
+    succeeded?: boolean
+    errors?: string[]
+}
+
+export class UserDeleteCommand implements IUserDeleteCommand {
+    id?: string
+
+    constructor(data?: IUserDeleteCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property]
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"]
+        }
+    }
+
+    static fromJS(data: any): UserDeleteCommand {
+        data = typeof data === "object" ? data : {}
+        let result = new UserDeleteCommand()
+        result.init(data)
+        return result
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === "object" ? data : {}
+        data["id"] = this.id
+        return data
+    }
+}
+
+export interface IUserDeleteCommand {
+    id?: string
 }
 
 export class SwaggerException extends Error {
-    override message: string;
-    status: number;
-    response: string;
-    headers: { [key: string]: any; };
-    result: any;
+    override message: string
+    status: number
+    response: string
+    headers: { [key: string]: any }
+    result: any
 
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
-        super();
+    constructor(
+        message: string,
+        status: number,
+        response: string,
+        headers: { [key: string]: any },
+        result: any
+    ) {
+        super()
 
-        this.message = message;
-        this.status = status;
-        this.response = response;
-        this.headers = headers;
-        this.result = result;
+        this.message = message
+        this.status = status
+        this.response = response
+        this.headers = headers
+        this.result = result
     }
 
-    protected isSwaggerException = true;
+    protected isSwaggerException = true
 
     static isSwaggerException(obj: any): obj is SwaggerException {
-        return obj.isSwaggerException === true;
+        return obj.isSwaggerException === true
     }
 }
 
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== undefined)
-        throw result;
-    else
-        throw new SwaggerException(message, status, response, headers, null);
+function throwException(
+    message: string,
+    status: number,
+    response: string,
+    headers: { [key: string]: any },
+    result?: any
+): any {
+    if (result !== null && result !== undefined) throw result
+    else throw new SwaggerException(message, status, response, headers, null)
 }

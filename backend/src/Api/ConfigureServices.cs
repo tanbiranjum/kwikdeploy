@@ -33,7 +33,7 @@ public static class ConfigureServices
 
         services.AddControllers();
 
-        services.AddRazorPages();
+        services.AddSignalR();
 
         services.AddScoped<FluentValidationSchemaProcessor>(provider =>
         {

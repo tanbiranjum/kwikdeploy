@@ -8,6 +8,8 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+// NSwag Custom FetchClient
+
 export interface IProjectsClient {
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfProjectHeadDto>;
@@ -31,8 +33,8 @@ export class ProjectsClient implements IProjectsClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.http = http!;
+        this.baseUrl = baseUrl ?? "";
     }
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfProjectHeadDto> {
@@ -314,6 +316,8 @@ export class ProjectsClient implements IProjectsClient {
     }
 }
 
+// NSwag Custom FetchClient
+
 export interface ITargetsClient {
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto>;
@@ -339,8 +343,8 @@ export class TargetsClient implements ITargetsClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.http = http!;
+        this.baseUrl = baseUrl ?? "";
     }
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto> {
@@ -660,6 +664,8 @@ export class TargetsClient implements ITargetsClient {
     }
 }
 
+// NSwag Custom FetchClient
+
 export interface IAccountsClient {
 
     login(command: UserLogin): Promise<SuccessfulLoginResponse>;
@@ -671,8 +677,8 @@ export class AccountsClient implements IAccountsClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.http = http!;
+        this.baseUrl = baseUrl ?? "";
     }
 
     login(command: UserLogin): Promise<SuccessfulLoginResponse> {
@@ -721,6 +727,8 @@ export class AccountsClient implements IAccountsClient {
     }
 }
 
+// NSwag Custom FetchClient
+
 export interface IUsersClient {
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfUserHeadDto>;
@@ -738,8 +746,8 @@ export class UsersClient implements IUsersClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.http = http!;
+        this.baseUrl = baseUrl ?? "";
     }
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfUserHeadDto> {
