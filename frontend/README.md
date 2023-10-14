@@ -1,0 +1,15 @@
+# KwikDeploy Frontend
+
+## How to run locally
+
+Create a copy of .env.example as .env.local
+
+Then start the application by running:
+
+    npm run dev
+
+The default config points to the REST API at api.kwikdeploy.com so that frontend developers need not setup
+the backend locally.
+
+However, if you want to run the backend locally, follow the README in the backend folder. Then update
+your .env.local to point to the local backend API.
