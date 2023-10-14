@@ -6,6 +6,7 @@ Create a copy of .env.example as .env.local
 
 Then start the application by running:
 
+    npm install
     npm run dev
 
 The default config points to the REST API at api.kwikdeploy.com so that frontend developers need not setup
