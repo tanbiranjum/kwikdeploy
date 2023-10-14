@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using KwikDeploy.Application.Common.Interfaces;
+using KwikDeploy.Domain.Identity;
 using KwikDeploy.Infrastructure.Identity;
 using KwikDeploy.Infrastructure.Persistence;
 using KwikDeploy.Infrastructure.Persistence.Interceptors;

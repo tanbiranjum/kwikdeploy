@@ -1,4 +1,5 @@
-﻿using KwikDeploy.Infrastructure.Identity;
+﻿using KwikDeploy.Domain.Identity;
+using KwikDeploy.Infrastructure.Identity;
 using KwikDeploy.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

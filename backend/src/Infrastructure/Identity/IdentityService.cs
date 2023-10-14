@@ -1,5 +1,6 @@
 ﻿using KwikDeploy.Application.Common.Interfaces;
 using KwikDeploy.Application.Common.Models;
+using KwikDeploy.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
