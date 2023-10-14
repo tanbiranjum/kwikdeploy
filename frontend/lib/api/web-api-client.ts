@@ -44,7 +44,7 @@ export class ProjectsClient implements IProjectsClient {
             fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
         }
     ) {
-        this.http = http!
+        this.http = http ? http : (window as any)
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
@@ -462,7 +462,7 @@ export class TargetsClient implements ITargetsClient {
             fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
         }
     ) {
-        this.http = http!
+        this.http = http ? http : (window as any)
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
@@ -913,7 +913,7 @@ export class AccountsClient implements IAccountsClient {
             fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
         }
     ) {
-        this.http = http!
+        this.http = http ? http : (window as any)
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
@@ -1012,7 +1012,7 @@ export class UsersClient implements IUsersClient {
             fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
         }
     ) {
-        this.http = http!
+        this.http = http ? http : (window as any)
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : ""
     }
 
