@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
+using KwikDeploy.Application.Common.Exceptions;
 using KwikDeploy.Application.Common.Models;
 using KwikDeploy.Domain.Exceptions;
 using KwikDeploy.Domain.Identity;
@@ -20,15 +20,16 @@ public class UserCreateCommand : IRequest<ResultWithId<string>>
 public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, ResultWithId<string>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
+
     public UserCreateCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-
     }
+
     public async Task<ResultWithId<string>> Handle(UserCreateCommand request, CancellationToken cancellationToken)
     {
         string normalizedUserName = _userManager.NormalizeName(request.UserName);
-        if (await _userManager.Users.AnyAsync(predicate: x => x.NormalizedUserName == normalizedUserName, cancellationToken))
+        if (await _userManager.Users.AnyAsync(x => x.NormalizedUserName == normalizedUserName, cancellationToken))
         {
             throw new ValidationException(new List<ValidationFailure>
             {
@@ -38,9 +39,9 @@ public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, Resul
 
         IdentityResult result = await _userManager.CreateAsync(new ApplicationUser
         {
-            UserName = request.UserName, 
-            Email = request.Email, 
-            NormalizedUserName = normalizedUserName, 
+            UserName = request.UserName,
+            Email = request.Email,
+            NormalizedUserName = normalizedUserName,
             NormalizedEmail = _userManager.NormalizeEmail(request.Email)
         });
 
@@ -49,6 +50,7 @@ public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, Resul
             IEnumerable<string> err = result.Errors.Select(x => x.Code);
             throw new UserCreateErrorException();
         }
+
         ApplicationUser? user = await _userManager.FindByNameAsync(normalizedUserName);
         return ResultWithId<string>.Success(user!.Id);
     }

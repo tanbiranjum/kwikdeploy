@@ -18,6 +18,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
+                
             };
     }
 
@@ -25,6 +26,11 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         HandleException(context);
 
+        if (!context.ExceptionHandled)
+        {
+            HandleUnknownException(context);
+        }
+        
         base.OnException(context);
     }
 
@@ -116,6 +122,21 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         {
             StatusCode = StatusCodes.Status403Forbidden
         };
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleUnknownException(ExceptionContext context)
+    {
+        // TODO: Error should be logged somewhere
+        var details = new ProblemDetails()
+        {
+            Status = StatusCodes.Status500InternalServerError,
+            Title = "Internal Server Error",
+            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1"
+        };
+        
+        context.Result = new ObjectResult(details) { StatusCode = StatusCodes.Status500InternalServerError };
 
         context.ExceptionHandled = true;
     }
