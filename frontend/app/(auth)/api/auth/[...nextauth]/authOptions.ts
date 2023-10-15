@@ -1,6 +1,6 @@
-import { SuccessfulLoginResponse } from "@/lib/api/web-api-client";
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { SuccessfulLoginResponse } from "@/lib/api/web-api-client"
+import { NextAuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,10 +11,14 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const response = await fetch(`${process.env.NEXTAUTH_URL}/backendapi/accounts/login`, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(credentials)
-        })
+        const response = await fetch(
+          `${process.env.NEXTAUTH_URL}/backendapi/accounts/login`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+          }
+        )
 
         if (response.ok) {
           const data: SuccessfulLoginResponse = await response.json()
@@ -23,7 +27,7 @@ export const authOptions: NextAuthOptions = {
             id: data.id!,
             userName: data.username,
             email: data.email,
-            token: data.token
+            token: data.token,
           }
         }
 
@@ -32,8 +36,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
-  pages: {
-  },
+  pages: {},
 
   session: {
     strategy: "jwt",
@@ -42,7 +45,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user }) => {
       token.apiToken = user.token
-      return token;
+      return token
     },
-  }
-};
+  },
+}

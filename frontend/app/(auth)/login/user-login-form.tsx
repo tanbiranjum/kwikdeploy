@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { Input } from "../components/ui/input";
-import { Icons } from "../components/icons";
-import { Button } from "../components/ui/button";
-import { useState } from "react";
-import { loginSchema } from "@/lib/validations/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { loginSchema } from "@/lib/validations/auth"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { signIn } from "next-auth/react"
 
 import {
   Form,
@@ -17,37 +17,37 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/components/ui/form";
-import { z } from "zod";
+} from "@/components/ui/form"
+import { z } from "zod"
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>
 
 const UserLoginForm = ({ className, ...props }: UserLoginFormProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
-  });
+  })
 
   async function onSubmit(data: LoginFormValues) {
-    setIsLoading(true);
+    setIsLoading(true)
 
     // values after validation
-    console.log(data);
+    console.log(data)
 
     const user = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
-    });
-    console.log(user);
+    })
+    console.log(user)
 
     setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+      setIsLoading(false)
+    }, 3000)
   }
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -88,7 +88,7 @@ const UserLoginForm = ({ className, ...props }: UserLoginFormProps) => {
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default UserLoginForm;
+export default UserLoginForm

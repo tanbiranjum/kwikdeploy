@@ -1,6 +1,6 @@
-import { Icons } from "../../../components/icons";
-import MainContainer from "../../../components/main-container";
-import { Button } from "../../../components/ui/button";
+import { Icons } from "@/components/icons"
+import MainContainer from "@/components/main-container"
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -8,10 +8,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import React from "react";
+} from "@/components/ui/table"
+import React from "react"
 
-type Props = {};
+type Props = {}
 
 const targetName = [
   {
@@ -30,17 +30,17 @@ const targetName = [
     name: "target 4",
     status: "Online",
   },
-];
+]
 
 const TargetsPage = (props: Props) => {
   return (
-    <MainContainer props={{className:""}}>
+    <MainContainer props={{ className: "" }}>
       <Button>
         <Icons.plus className="mr-2 h-4 w-4" />
         Add Target
       </Button>
       <Table>
-        <TableHeader className="bg-slate-100 border">
+        <TableHeader className="border bg-slate-100">
           <TableRow>
             <TableHead className="w-[200px]">Target Name</TableHead>
             <TableHead>Status</TableHead>
@@ -53,12 +53,12 @@ const TargetsPage = (props: Props) => {
               <TableCell className="font-medium">{target.name}</TableCell>
               <TableCell>{target.status}</TableCell>
               <TableCell className="text-right">
-                <div className="flex gap-3 justify-end">
+                <div className="flex justify-end gap-3">
                   <Button variant="outline" size="icon">
-                    <Icons.pencil className="w-4 h-4" />
+                    <Icons.pencil className="h-4 w-4" />
                   </Button>
                   <Button variant="outline" size="icon">
-                    <Icons.trash className="w-4 h-4 text-red-600" />
+                    <Icons.trash className="h-4 w-4 text-red-600" />
                   </Button>
                 </div>
               </TableCell>
@@ -67,7 +67,7 @@ const TargetsPage = (props: Props) => {
         </TableBody>
       </Table>
     </MainContainer>
-  );
-};
+  )
+}
 
-export default TargetsPage;
+export default TargetsPage

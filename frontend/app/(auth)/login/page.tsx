@@ -1,12 +1,12 @@
-import UserLoginForm from "./user-login-form";
-import React from "react";
+import UserLoginForm from "./user-login-form"
+import React from "react"
 
-type Props = {};
+type Props = {}
 
 const LoginPage = (props: Props) => {
   return (
     <main className="min-h-screen p-24">
-      <div className="max-w-lg mx-auto space-y-6">
+      <div className="mx-auto max-w-lg space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
             KwikDeploy Login
@@ -15,7 +15,7 @@ const LoginPage = (props: Props) => {
         <UserLoginForm />
       </div>
     </main>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

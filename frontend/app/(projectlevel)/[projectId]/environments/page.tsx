@@ -1,7 +1,7 @@
-import AddEnvironmentDialog from "@/app/components/add-environment-dialog";
-import { Icons } from "../../../components/icons";
-import MainContainer from "../../../components/main-container";
-import { Button } from "../../../components/ui/button";
+import AddEnvironmentDialog from "@/components/add-environment-dialog"
+import { Icons } from "@/components/icons"
+import MainContainer from "@/components/main-container"
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -9,10 +9,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import React from "react";
+} from "@/components/ui/table"
+import React from "react"
 
-type Props = {};
+type Props = {}
 
 const targetName = [
   {
@@ -27,14 +27,14 @@ const targetName = [
     name: "prod",
     target: "Server 3",
   },
-];
+]
 
 const EnvironmentsPage = (props: Props) => {
   return (
     <MainContainer props={{ className: "" }}>
       <AddEnvironmentDialog />
       <Table>
-        <TableHeader className="bg-slate-100 border">
+        <TableHeader className="border bg-slate-100">
           <TableRow>
             <TableHead className="w-[200px]">Environment Name</TableHead>
             <TableHead>Target</TableHead>
@@ -47,12 +47,12 @@ const EnvironmentsPage = (props: Props) => {
               <TableCell className="font-medium">{target.name}</TableCell>
               <TableCell>{target.target}</TableCell>
               <TableCell className="text-right">
-                <div className="flex gap-3 justify-end">
+                <div className="flex justify-end gap-3">
                   <Button variant="outline" size="icon">
-                    <Icons.pencil className="w-4 h-4" />
+                    <Icons.pencil className="h-4 w-4" />
                   </Button>
                   <Button variant="outline" size="icon">
-                    <Icons.trash className="w-4 h-4 text-red-600" />
+                    <Icons.trash className="h-4 w-4 text-red-600" />
                   </Button>
                 </div>
               </TableCell>
@@ -61,7 +61,7 @@ const EnvironmentsPage = (props: Props) => {
         </TableBody>
       </Table>
     </MainContainer>
-  );
-};
+  )
+}
 
-export default EnvironmentsPage;
+export default EnvironmentsPage

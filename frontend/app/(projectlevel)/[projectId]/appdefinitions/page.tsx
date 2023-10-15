@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 
 import {
   Card,
@@ -6,19 +6,47 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card";
-import { Icons } from "../../../components/icons";
-import { Button } from "../../../components/ui/button";
+} from "@/components/ui/card"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
 
-import MainContainer from "@/app/components/main-container";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import MainContainer from "@/components/main-container"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 const appDefinitions = [
-  { id: 1, name: 'App Frontend', image: 'app-frontend', tag: 'latest', variableCount: 3, mountCount: 0 },
-  { id: 2, name: 'App Backend', image: 'app-backend', tag: 'v1', variableCount: 2, mountCount: 2 },
-  { id: 3, name: 'MySQL', image: 'mysql', tag: '8.0', variableCount: 4, mountCount: 1 },
-  { id: 4, name: 'Redis Cache', image: 'redis', tag: 'latest', variableCount: 0, mountCount: 0 },
+  {
+    id: 1,
+    name: "App Frontend",
+    image: "app-frontend",
+    tag: "latest",
+    variableCount: 3,
+    mountCount: 0,
+  },
+  {
+    id: 2,
+    name: "App Backend",
+    image: "app-backend",
+    tag: "v1",
+    variableCount: 2,
+    mountCount: 2,
+  },
+  {
+    id: 3,
+    name: "MySQL",
+    image: "mysql",
+    tag: "8.0",
+    variableCount: 4,
+    mountCount: 1,
+  },
+  {
+    id: 4,
+    name: "Redis Cache",
+    image: "redis",
+    tag: "latest",
+    variableCount: 0,
+    mountCount: 0,
+  },
 ]
 
 export default function AppDefinitionsPage() {
@@ -49,12 +77,16 @@ export default function AppDefinitionsPage() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button variant="ghost" className="text-sm font-bold">{appDefinition.variableCount} Variables</Button>
-              <Button variant="ghost" className="text-sm font-bold">{appDefinition.mountCount} Mounts</Button>
+              <Button variant="ghost" className="text-sm font-bold">
+                {appDefinition.variableCount} Variables
+              </Button>
+              <Button variant="ghost" className="text-sm font-bold">
+                {appDefinition.mountCount} Mounts
+              </Button>
             </CardFooter>
           </Card>
         ))}
       </div>
     </MainContainer>
-  );
+  )
 }

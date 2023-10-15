@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   Dialog,
   DialogContent,
@@ -7,20 +7,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "./ui/dialog"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Button } from "./ui/button";
-import { Icons } from "./icons";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+} from "./ui/select"
+import { Button } from "./ui/button"
+import { Icons } from "./icons"
+import { Label } from "./ui/label"
+import { Input } from "./ui/input"
 
-type Props = {};
+type Props = {}
 
 const AddEnvironmentDialog = (props: Props) => {
   return (
@@ -39,13 +39,13 @@ const AddEnvironmentDialog = (props: Props) => {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="flex gap-3 items-center">
+          <div className="flex items-center gap-3">
             <Label htmlFor="name" className="w-[50px]">
               Name
             </Label>
-            <Input id="name" defaultValue="server 1"/>
+            <Input id="name" defaultValue="server 1" />
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex items-center gap-3">
             <Label htmlFor="target" className="w-[50px]">
               Target
             </Label>
@@ -66,7 +66,7 @@ const AddEnvironmentDialog = (props: Props) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default AddEnvironmentDialog;
+export default AddEnvironmentDialog
