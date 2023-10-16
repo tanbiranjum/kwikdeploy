@@ -1,4 +1,3 @@
-using Api.Hubs;
 using KwikDeploy.Infrastructure.Persistence;
 
 // https://github.com/npgsql/doc/blob/main/conceptual/Npgsql/types/datetime.md/
@@ -63,8 +62,9 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}")
     .RequireAuthorization();
 
-app.MapHub<KwikDeployHub>("/hub");
-
-app.MapFallbackToFile("index.html");
+app.UseWebSockets(new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2),
+});
 
 app.Run();

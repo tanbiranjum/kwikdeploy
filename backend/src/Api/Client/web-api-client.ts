@@ -906,7 +906,7 @@ export class UsersClient implements IUsersClient {
     }
 
     isUniqueUserName(userName: string | undefined, id: string | null | undefined): Promise<boolean> {
-        let url_ = this.baseUrl + "/Users/uniquename?";
+        let url_ = this.baseUrl + "/Users/uniqueUserName?";
         if (userName === null)
             throw new Error("The parameter 'userName' cannot be null.");
         else if (userName !== undefined)
@@ -947,7 +947,7 @@ export class UsersClient implements IUsersClient {
     }
 
     isUniqueEmail(email: string | undefined, id: string | null | undefined): Promise<boolean> {
-        let url_ = this.baseUrl + "/Users/uniqueemail?";
+        let url_ = this.baseUrl + "/Users/uniqueEmail?";
         if (email === null)
             throw new Error("The parameter 'email' cannot be null.");
         else if (email !== undefined)
@@ -1029,7 +1029,7 @@ export class UsersClient implements IUsersClient {
     }
 
     setUserName(id: string, data: UserSetUserNameDto): Promise<Result> {
-        let url_ = this.baseUrl + "/Users/{id}/username";
+        let url_ = this.baseUrl + "/Users/{id}/userName";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1067,6 +1067,52 @@ export class UsersClient implements IUsersClient {
             });
         }
         return Promise.resolve<Result>(null as any);
+    }
+}
+
+export interface IWebSocketClient {
+
+    get(): Promise<void>;
+}
+
+export class WebSocketClient implements IWebSocketClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    get(): Promise<void> {
+        let url_ = this.baseUrl + "/ws";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGet(_response);
+        });
+    }
+
+    protected processGet(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
     }
 }
 
