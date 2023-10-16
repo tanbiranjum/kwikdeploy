@@ -1,4 +1,4 @@
-module kwikdeploy/agent
+module kwikdeploy
 
 go 1.21.0
 

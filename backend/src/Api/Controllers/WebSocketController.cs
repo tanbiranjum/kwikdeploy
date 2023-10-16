@@ -25,48 +25,57 @@ public class WebSocketController : ControllerBase
     {
         try
         {
-            var registerMessageString = await ReadStringMessage(webSocket);
-            if (registerMessageString.StartsWith("register"))
+            Console.WriteLine("Connnection initiated from agent");
+
+            var registerRequest = new Request { MessageId = Guid.NewGuid().ToString(), Command = "register", Body = "" };
+            await WriteStringMessage(webSocket, JsonSerializer.Serialize(registerRequest));
+
+            var registerResponseJson = await ReadStringMessage(webSocket);
+            Console.WriteLine($"recv: {registerResponseJson}");
+            var response = JsonSerializer.Deserialize<Response>(registerResponseJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            var key = response.Result;
+            if (key != "123")
             {
-                var jsonString = registerMessageString.Substring("register".Length);
-                var registerMessage = JsonSerializer.Deserialize<RegisterMessage>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                if (registerMessage!.Key == "123")
-                {
-                    await WriteStringMessage(webSocket, "Connection successful");
-                    Console.WriteLine("Client connected");
-                }
-                else
-                {
-                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Invalid key", CancellationToken.None);
-                }
+                var disconnectRequest = new Request { MessageId = Guid.NewGuid().ToString(), Command = "disconnect", Body = "" };
+                await WriteStringMessage(webSocket, JsonSerializer.Serialize(disconnectRequest));
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(5));
             int i = 100;
             while (true)
             {
-                await WriteStringMessage(webSocket, $"deploy{JsonSerializer.Serialize(new DeployCommand { Id = i++ })}");
-                var message = await ReadStringMessage(webSocket);
-                Console.WriteLine(message);
+                if (i++ % 2 == 0)
+                {
+                    var pingRequest = new Request { MessageId = Guid.NewGuid().ToString(), Command = "ping", Body = "" };
+                    await WriteStringMessage(webSocket, JsonSerializer.Serialize(pingRequest));
 
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                    var pingResponseJson = await ReadStringMessage(webSocket);
+                    var r = JsonSerializer.Deserialize<Response>(pingResponseJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    Console.WriteLine($"Received Response: {r.Result}");
+                }
+                else
+                {
+                    var deployRequest = new Request
+                    {
+                        MessageId = Guid.NewGuid().ToString(),
+                        Command = "deploy",
+                        Body = JsonSerializer.Serialize(new DeployRequest { ReleaseId = i, Prop1 = "aaa", Prop2 = DateTime.Now.ToString() })
+                    };
+                    Console.WriteLine($"Sending: {deployRequest.Body}");
+                    await WriteStringMessage(webSocket, JsonSerializer.Serialize(deployRequest));
+
+                    var deployResponseJson = await ReadStringMessage(webSocket);
+                    var r = JsonSerializer.Deserialize<Response>(deployResponseJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    var b = JsonSerializer.Deserialize<DeployResponse>(r.Body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    Console.WriteLine($"Received Response: {r.Result}, Body: {JsonSerializer.Serialize(b)}");
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(1));
             }
-
-            //while (true)
-            //{
-            //    var message = await ReadStringMessage(webSocket);
-            //    Console.WriteLine(message);
-
-            //    if (message == "ping")
-            //    {
-            //        await WriteStringMessage(webSocket, "pong");
-            //    }
-            //}
-
         }
         catch (Exception ex)
         {
-            if(ex.Message == "Connection closed")
+            if (ex.Message == "Connection closed")
             {
                 await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Server connection closed", CancellationToken.None);
             }
@@ -112,13 +121,36 @@ public class WebSocketController : ControllerBase
     }
 }
 
+public class Request
+{
+    public string MessageId { get; set; } = null!;
+    public string Command { get; set; } = null!;
+    public string Body { get; set; } = null!;
+}
+
+public class Response
+{
+    public string MessageId { get; set; } = null!;
+    public string Result { get; set; } = null!;
+    public string Body { get; set; } = null!;
+}
+
+
 public class RegisterMessage
 {
     public string Key { get; set; } = null!;
 }
 
-public class DeployCommand
+public class DeployRequest
 {
-    public int Id { get; set; }
+    public int ReleaseId { get; set; }
+    public string Prop1 { get; set; }
+    public string Prop2 { get; set; }
+}
+
+public class DeployResponse
+{
+    public int ReleaseId { get; set; }
+    public string Status { get; set; }
 }
 
