@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react"
 import {
   Dialog,
@@ -22,12 +24,15 @@ import useProjects from "@/hooks/useProjects"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useToast } from "./ui/use-toast"
 
 type Props = {}
 
 const AddProjectDialog = (props: Props) => {
   const [open, setOpen] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const { mutateProjects } = useProjects()
+  const { toast } = useToast()
 
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
 
@@ -55,16 +60,30 @@ const AddProjectDialog = (props: Props) => {
   })
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    setIsSaving(true)
     const response = await fetch(`/backendapi/projects`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-    if (response.ok) {
+    if (!response.ok) {
+      setOpen(false)
+      form.reset()
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem when saving new project. Try again!",
+      })
+    } else {
       mutateProjects()
       setOpen(false)
       form.reset()
+      toast({
+        title: "Success!",
+        description: "New project has been added.",
+      })
     }
+    setIsSaving(false)
   }
 
   return (
@@ -97,7 +116,12 @@ const AddProjectDialog = (props: Props) => {
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Save</Button>
+              <Button type="submit" disabled={isSaving}>
+                {isSaving && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Save
+              </Button>
             </DialogFooter>
           </form>
         </Form>
