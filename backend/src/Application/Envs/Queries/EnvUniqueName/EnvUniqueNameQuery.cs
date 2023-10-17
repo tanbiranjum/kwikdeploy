@@ -1,19 +1,24 @@
 ﻿using KwikDeploy.Application.Common.Interfaces;
+using KwikDeploy.Application.Common.Models;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KwikDeploy.Application.Envs.Queries.EnvUniqueName;
 
-public record EnvUniqueNameQuery : IRequest<bool>
+public record EnvUniqueNameQuery : IRequest<Result<bool>>
 {
+    [FromRoute]
     public int ProjectId { get; init; }
 
+    [FromQuery]
     public string Name { get; init; } = null!;
 
+    [FromQuery]
     public int? EnvId { get; init; } = null;
 }
 
-public class EnvUniqueNameQueryHandler : IRequestHandler<EnvUniqueNameQuery, bool>
+public class EnvUniqueNameQueryHandler : IRequestHandler<EnvUniqueNameQuery, Result<bool>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -22,17 +27,17 @@ public class EnvUniqueNameQueryHandler : IRequestHandler<EnvUniqueNameQuery, boo
         _context = context;
     }
 
-    public async Task<bool> Handle(EnvUniqueNameQuery request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> Handle(EnvUniqueNameQuery request, CancellationToken cancellationToken)
     {
-        if (request.EnvId == null)
+        if (request.EnvId is null || request.EnvId == 0)
         {
             var entity = await _context.Envs
                             .Where(x => x.ProjectId == request.ProjectId
                                         && x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
                             .SingleOrDefaultAsync(cancellationToken);
-            if (entity == null)
+            if (entity is null)
             {
-                return true;
+                return new Result<bool>(true);
             }
         }
         else
@@ -42,12 +47,12 @@ public class EnvUniqueNameQueryHandler : IRequestHandler<EnvUniqueNameQuery, boo
                                         && x.Id != request.EnvId
                                         && x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
                             .SingleOrDefaultAsync(cancellationToken);
-            if (entity == null)
+            if (entity is null)
             {
-                return true;
+                return new Result<bool>(true);
             }
         }
 
-        return false;
+        return new Result<bool>(false);
     }
 }

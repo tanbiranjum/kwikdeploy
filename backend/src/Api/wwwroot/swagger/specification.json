@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/Envs/{projectId}": {
+    "/Envs/{ProjectId}": {
       "get": {
         "tags": [
           "Envs"
@@ -14,7 +14,7 @@
         "operationId": "Envs_GetList",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -24,7 +24,7 @@
             "x-position": 1
           },
           {
-            "name": "ProjectId",
+            "name": "PageNumber",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -33,22 +33,13 @@
             "x-position": 2
           },
           {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 3
-          },
-          {
             "name": "PageSize",
             "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 4
+            "x-position": 3
           }
         ],
         "responses": {
@@ -86,7 +77,7 @@
         "operationId": "Envs_Create",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -97,11 +88,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EnvCreateCommand"
+                "$ref": "#/components/schemas/EnvCreateCommandBody"
               }
             }
           },
@@ -114,8 +105,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/ResultOfInteger"
                 }
               }
             }
@@ -138,7 +128,7 @@
         ]
       }
     },
-    "/Envs/{projectId}/{id}": {
+    "/Envs/{ProjectId}/{Id}": {
       "get": {
         "tags": [
           "Envs"
@@ -146,7 +136,7 @@
         "operationId": "Envs_GetById",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -156,7 +146,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -191,7 +181,7 @@
         "operationId": "Envs_Update",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -201,7 +191,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -212,11 +202,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EnvUpdateCommand"
+                "$ref": "#/components/schemas/EnvUpdateCommandBody"
               }
             }
           },
@@ -261,7 +251,7 @@
         "operationId": "Envs_Delete",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -271,7 +261,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -303,7 +293,7 @@
         ]
       }
     },
-    "/Envs/{projectId}/uniquename/{name}": {
+    "/Envs/{ProjectId}/uniqueName": {
       "get": {
         "tags": [
           "Envs"
@@ -311,7 +301,7 @@
         "operationId": "Envs_IsUniqueName",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -321,67 +311,20 @@
             "x-position": 1
           },
           {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/Envs/{projectId}/uniquename/{name}/{envId}": {
-      "get": {
-        "tags": [
-          "Envs"
-        ],
-        "operationId": "Envs_IsUniqueNameExludingItself",
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
+            "name": "Name",
+            "in": "query",
             "schema": {
               "type": "string"
             },
             "x-position": 2
           },
           {
-            "name": "envId",
-            "in": "path",
-            "required": true,
+            "name": "EnvId",
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "nullable": true
             },
             "x-position": 3
           }
@@ -392,7 +335,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/ResultOfBoolean"
                 }
               }
             }
@@ -455,11 +398,11 @@
         ],
         "operationId": "Projects_Create",
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateCommand"
+                "$ref": "#/components/schemas/ProjectCreateCommandBody"
               }
             }
           },
@@ -472,8 +415,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/ResultOfInteger"
                 }
               }
             }
@@ -486,7 +428,7 @@
         ]
       }
     },
-    "/Projects/{id}": {
+    "/Projects/{Id}": {
       "get": {
         "tags": [
           "Projects"
@@ -494,7 +436,7 @@
         "operationId": "Projects_GetById",
         "parameters": [
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -529,7 +471,7 @@
         "operationId": "Projects_Update",
         "parameters": [
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -540,11 +482,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectUpdateCommand"
+                "$ref": "#/components/schemas/ProjectUpdateCommandBody"
               }
             }
           },
@@ -589,7 +531,7 @@
         "operationId": "Projects_Delete",
         "parameters": [
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -621,7 +563,7 @@
         ]
       }
     },
-    "/Projects/uniquename/{name}": {
+    "/Projects/uniquename": {
       "get": {
         "tags": [
           "Projects"
@@ -629,94 +571,10 @@
         "operationId": "Projects_IsUniqueName",
         "parameters": [
           {
-            "name": "name",
-            "in": "path",
-            "required": true,
+            "name": "Name",
+            "in": "query",
             "schema": {
               "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/Projects/uniquename/{name}/{projectId}": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "operationId": "Projects_IsUniqueNameExludingItself",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/Targets/{projectId}": {
-      "get": {
-        "tags": [
-          "Targets"
-        ],
-        "operationId": "Targets_GetList",
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
             },
             "x-position": 1
           },
@@ -725,9 +583,47 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "nullable": true
             },
             "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/Targets/{ProjectId}": {
+      "get": {
+        "tags": [
+          "Targets"
+        ],
+        "operationId": "Targets_GetList",
+        "parameters": [
+          {
+            "name": "ProjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
           },
           {
             "name": "PageNumber",
@@ -736,7 +632,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 3
+            "x-position": 2
           },
           {
             "name": "PageSize",
@@ -745,7 +641,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 4
+            "x-position": 3
           }
         ],
         "responses": {
@@ -783,7 +679,7 @@
         "operationId": "Targets_Create",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -794,11 +690,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TargetCreateCommand"
+                "$ref": "#/components/schemas/TargetCreateCommandBody"
               }
             }
           },
@@ -811,8 +707,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/ResultOfInteger"
                 }
               }
             }
@@ -825,7 +720,7 @@
         ]
       }
     },
-    "/Targets/{projectId}/{id}": {
+    "/Targets/{ProjectId}/{Id}": {
       "get": {
         "tags": [
           "Targets"
@@ -833,7 +728,7 @@
         "operationId": "Targets_GetById",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -843,7 +738,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -878,7 +773,7 @@
         "operationId": "Targets_Update",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -888,7 +783,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -899,11 +794,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TargetUpdateCommand"
+                "$ref": "#/components/schemas/TargetUpdateCommandBody"
               }
             }
           },
@@ -938,7 +833,7 @@
         "operationId": "Targets_Delete",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -948,7 +843,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -980,7 +875,7 @@
         ]
       }
     },
-    "/Targets/{projectId}/uniquename/{name}": {
+    "/Targets/{ProjectId}/uniqueName": {
       "get": {
         "tags": [
           "Targets"
@@ -988,7 +883,7 @@
         "operationId": "Targets_IsUniqueName",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -998,67 +893,20 @@
             "x-position": 1
           },
           {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/Targets/{projectId}/uniquename/{name}/{targetId}": {
-      "get": {
-        "tags": [
-          "Targets"
-        ],
-        "operationId": "Targets_IsUniqueNameExludingItself",
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
+            "name": "Name",
+            "in": "query",
             "schema": {
               "type": "string"
             },
             "x-position": 2
           },
           {
-            "name": "targetId",
-            "in": "path",
-            "required": true,
+            "name": "TargetId",
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "nullable": true
             },
             "x-position": 3
           }
@@ -1069,7 +917,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/ResultOfBoolean"
                 }
               }
             }
@@ -1082,7 +930,7 @@
         ]
       }
     },
-    "/Targets/{projectId}/{id}/regeneratekey": {
+    "/Targets/{ProjectId}/{Id}/regenerateKey": {
       "post": {
         "tags": [
           "Targets"
@@ -1090,7 +938,7 @@
         "operationId": "Targets_RegenerateKey",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "ProjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1100,7 +948,7 @@
             "x-position": 1
           },
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1116,7 +964,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/ResultOfString"
                 }
               }
             }
@@ -1221,11 +1069,11 @@
         ],
         "operationId": "Users_Create",
         "requestBody": {
-          "x-name": "command",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateCommand"
+                "$ref": "#/components/schemas/UserCreateCommandBody"
               }
             }
           },
@@ -1238,42 +1086,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultWithIdOfString"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "Users_Delete",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDeleteCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
+                  "$ref": "#/components/schemas/ResultOfString"
                 }
               }
             }
@@ -1286,7 +1099,7 @@
         ]
       }
     },
-    "/Users/{id}": {
+    "/Users/{Id}": {
       "get": {
         "tags": [
           "Users"
@@ -1294,7 +1107,7 @@
         "operationId": "Users_GetById",
         "parameters": [
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1313,6 +1126,33 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_Delete",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
           }
         },
         "security": [
@@ -1353,7 +1193,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/ResultOfBoolean"
                 }
               }
             }
@@ -1397,7 +1237,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/ResultOfBoolean"
                 }
               }
             }
@@ -1410,7 +1250,7 @@
         ]
       }
     },
-    "/Users/{id}/email": {
+    "/Users/{Id}/email": {
       "put": {
         "tags": [
           "Users"
@@ -1418,7 +1258,7 @@
         "operationId": "Users_SetEmail",
         "parameters": [
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1428,11 +1268,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "data",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserSetEmailDto"
+                "$ref": "#/components/schemas/UserSetEmailCommandBody"
               }
             }
           },
@@ -1440,15 +1280,8 @@
           "x-position": 2
         },
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
+          "204": {
+            "description": ""
           }
         },
         "security": [
@@ -1458,7 +1291,7 @@
         ]
       }
     },
-    "/Users/{id}/userName": {
+    "/Users/{Id}/userName": {
       "put": {
         "tags": [
           "Users"
@@ -1466,7 +1299,7 @@
         "operationId": "Users_SetUserName",
         "parameters": [
           {
-            "name": "id",
+            "name": "Id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1476,11 +1309,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "data",
+          "x-name": "Body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserSetUserNameDto"
+                "$ref": "#/components/schemas/UserSetUserNameCommandBody"
               }
             }
           },
@@ -1488,15 +1321,8 @@
           "x-position": 2
         },
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Result"
-                }
-              }
-            }
+          "204": {
+            "description": ""
           }
         },
         "security": [
@@ -1618,53 +1444,48 @@
           }
         }
       },
-      "EnvCreateCommand": {
+      "ResultOfBoolean": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name"
-        ],
         "properties": {
-          "projectId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "targetId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 30,
-            "minLength": 1,
-            "nullable": false
+          "value": {
+            "type": "boolean"
           }
         }
       },
-      "EnvUpdateCommand": {
+      "ResultOfInteger": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name"
-        ],
         "properties": {
-          "projectId": {
+          "value": {
             "type": "integer",
             "format": "int32"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
+          }
+        }
+      },
+      "EnvCreateCommandBody": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
           "targetId": {
             "type": "integer",
             "format": "int32"
           },
           "name": {
-            "type": "string",
-            "maxLength": 30,
-            "minLength": 1,
-            "nullable": false
+            "type": "string"
+          }
+        }
+      },
+      "EnvUpdateCommandBody": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "targetId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
           }
         }
       },
@@ -1724,37 +1545,21 @@
           }
         }
       },
-      "ProjectCreateCommand": {
+      "ProjectCreateCommandBody": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name"
-        ],
         "properties": {
           "name": {
-            "type": "string",
-            "maxLength": 30,
-            "minLength": 1,
-            "nullable": false
+            "type": "string"
           }
         }
       },
-      "ProjectUpdateCommand": {
+      "ProjectUpdateCommandBody": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name"
-        ],
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
           "name": {
-            "type": "string",
-            "maxLength": 30,
-            "minLength": 1,
-            "nullable": false
+            "type": "string"
           }
         }
       },
@@ -1821,45 +1626,31 @@
           }
         }
       },
-      "TargetCreateCommand": {
+      "TargetCreateCommandBody": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name"
-        ],
         "properties": {
-          "projectId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "name": {
-            "type": "string",
-            "maxLength": 30,
-            "minLength": 1,
-            "nullable": false
+            "type": "string"
           }
         }
       },
-      "TargetUpdateCommand": {
+      "TargetUpdateCommandBody": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name"
-        ],
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "projectId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
             "type": "string",
-            "maxLength": 30,
-            "minLength": 1,
-            "nullable": false
+            "nullable": true
           }
         }
       },
@@ -1968,86 +1759,26 @@
           }
         }
       },
-      "ResultWithIdOfString": {
+      "UserCreateCommandBody": {
         "type": "object",
         "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "UserCreateCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "userName",
-          "password",
-          "confirmPassword"
-        ],
         "properties": {
           "userName": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "nullable": false
+            "type": "string"
           },
           "email": {
             "type": "string",
-            "maxLength": 255,
-            "minLength": 0,
-            "pattern": "^[^@]+@[^@]+$",
             "nullable": true
           },
           "password": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "nullable": false
+            "type": "string"
           },
           "confirmPassword": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "nullable": false
-          }
-        }
-      },
-      "Result": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "UserDeleteCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
             "type": "string"
           }
         }
       },
-      "UserSetEmailDto": {
+      "UserSetEmailCommandBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2056,7 +1787,7 @@
           }
         }
       },
-      "UserSetUserNameDto": {
+      "UserSetUserNameCommandBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

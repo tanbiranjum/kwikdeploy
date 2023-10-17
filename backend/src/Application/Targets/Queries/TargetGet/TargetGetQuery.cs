@@ -1,14 +1,18 @@
 ﻿using KwikDeploy.Application.Common.Exceptions;
 using KwikDeploy.Application.Common.Interfaces;
+using KwikDeploy.Application.Common.Models;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KwikDeploy.Application.Targets.Queries.TargetGet;
 
 public record TargetGetQuery : IRequest<TargetDto>
 {
+    [FromRoute]
     public int ProjectId { get; set; }
 
+    [FromRoute]
     public int Id { get; init; }
 }
 
@@ -31,7 +35,7 @@ public class TargetGetHandler : IRequestHandler<TargetGetQuery, TargetDto>
                                         Name = x.Name,
                                     }).SingleOrDefaultAsync();
 
-        if (targetDto == null)
+        if (targetDto is null)
         {
             throw new NotFoundException(nameof(TargetDto), request.Id);
         }

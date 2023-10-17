@@ -2,14 +2,17 @@
 using KwikDeploy.Application.Common.Interfaces;
 using KwikDeploy.Application.Targets.Queries.TargetGet;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KwikDeploy.Application.Envs.Queries.EnvGet;
 
 public record EnvGetQuery : IRequest<EnvDto>
 {
+    [FromRoute]
     public int ProjectId { get; init; }
 
+    [FromRoute]
     public int Id { get; init; }
 }
 
@@ -33,7 +36,7 @@ public class EnvGetHandler : IRequestHandler<EnvGetQuery, EnvDto>
                                         Name = x.Name,
                                     }).SingleOrDefaultAsync();
 
-        if (targetDto == null)
+        if (targetDto is null)
         {
             throw new NotFoundException(nameof(TargetDto), request.Id);
         }

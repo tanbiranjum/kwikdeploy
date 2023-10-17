@@ -5,7 +5,7 @@ public class EnvCreateCommandValidator : AbstractValidator<EnvCreateCommand>
 {
     public EnvCreateCommandValidator()
     {
-        RuleFor(v => v.Name)
+        RuleFor(v => v.Body.Name)
             .MaximumLength(30)
             .NotEmpty();
     }

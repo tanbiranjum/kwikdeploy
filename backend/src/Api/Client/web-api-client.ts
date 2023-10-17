@@ -10,19 +10,17 @@
 
 export interface IEnvsClient {
 
-    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfEnvHeadDto>;
+    getList(projectId: number, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfEnvHeadDto>;
 
-    create(projectId: number, command: EnvCreateCommand): Promise<number>;
+    create(projectId: number, body: EnvCreateCommandBody): Promise<ResultOfInteger>;
 
     getById(projectId: number, id: number): Promise<EnvDto>;
 
-    update(projectId: number, id: number, command: EnvUpdateCommand): Promise<void>;
+    update(projectId: number, id: number, body: EnvUpdateCommandBody): Promise<void>;
 
     delete(projectId: number, id: number): Promise<void>;
 
-    isUniqueName(projectId: number, name: string): Promise<boolean>;
-
-    isUniqueNameExludingItself(projectId: number, name: string, envId: number): Promise<boolean>;
+    isUniqueName(projectId: number, name: string | undefined, envId: number | null | undefined): Promise<ResultOfBoolean>;
 }
 
 export class EnvsClient implements IEnvsClient {
@@ -35,15 +33,11 @@ export class EnvsClient implements IEnvsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfEnvHeadDto> {
-        let url_ = this.baseUrl + "/Envs/{projectId}?";
+    getList(projectId: number, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfEnvHeadDto> {
+        let url_ = this.baseUrl + "/Envs/{ProjectId}?";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        if (projectId === null)
-            throw new Error("The parameter 'projectId' cannot be null.");
-        else if (projectId !== undefined)
-            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
         else if (pageNumber !== undefined)
@@ -91,14 +85,14 @@ export class EnvsClient implements IEnvsClient {
         return Promise.resolve<PaginatedListOfEnvHeadDto>(null as any);
     }
 
-    create(projectId: number, command: EnvCreateCommand): Promise<number> {
-        let url_ = this.baseUrl + "/Envs/{projectId}";
+    create(projectId: number, body: EnvCreateCommandBody): Promise<ResultOfInteger> {
+        let url_ = this.baseUrl + "/Envs/{ProjectId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -114,15 +108,14 @@ export class EnvsClient implements IEnvsClient {
         });
     }
 
-    protected processCreate(response: Response): Promise<number> {
+    protected processCreate(response: Response): Promise<ResultOfInteger> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
             let result201: any = null;
             let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result201 = resultData201 !== undefined ? resultData201 : <any>null;
-    
+            result201 = ResultOfInteger.fromJS(resultData201);
             return result201;
             });
         } else if (status === 400) {
@@ -137,17 +130,17 @@ export class EnvsClient implements IEnvsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<number>(null as any);
+        return Promise.resolve<ResultOfInteger>(null as any);
     }
 
     getById(projectId: number, id: number): Promise<EnvDto> {
-        let url_ = this.baseUrl + "/Envs/{projectId}/{id}";
+        let url_ = this.baseUrl + "/Envs/{ProjectId}/{Id}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -180,17 +173,17 @@ export class EnvsClient implements IEnvsClient {
         return Promise.resolve<EnvDto>(null as any);
     }
 
-    update(projectId: number, id: number, command: EnvUpdateCommand): Promise<void> {
-        let url_ = this.baseUrl + "/Envs/{projectId}/{id}";
+    update(projectId: number, id: number, body: EnvUpdateCommandBody): Promise<void> {
+        let url_ = this.baseUrl + "/Envs/{ProjectId}/{Id}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -230,13 +223,13 @@ export class EnvsClient implements IEnvsClient {
     }
 
     delete(projectId: number, id: number): Promise<void> {
-        let url_ = this.baseUrl + "/Envs/{projectId}/{id}";
+        let url_ = this.baseUrl + "/Envs/{ProjectId}/{Id}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -267,14 +260,17 @@ export class EnvsClient implements IEnvsClient {
         }
     }
 
-    isUniqueName(projectId: number, name: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/Envs/{projectId}/uniquename/{name}";
+    isUniqueName(projectId: number, name: string | undefined, envId: number | null | undefined): Promise<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/Envs/{ProjectId}/uniqueName?";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        if (envId !== undefined && envId !== null)
+            url_ += "EnvId=" + encodeURIComponent("" + envId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -289,15 +285,14 @@ export class EnvsClient implements IEnvsClient {
         });
     }
 
-    protected processIsUniqueName(response: Response): Promise<boolean> {
+    protected processIsUniqueName(response: Response): Promise<ResultOfBoolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfBoolean.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -305,51 +300,7 @@ export class EnvsClient implements IEnvsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<boolean>(null as any);
-    }
-
-    isUniqueNameExludingItself(projectId: number, name: string, envId: number): Promise<boolean> {
-        let url_ = this.baseUrl + "/Envs/{projectId}/uniquename/{name}/{envId}";
-        if (projectId === undefined || projectId === null)
-            throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
-        if (envId === undefined || envId === null)
-            throw new Error("The parameter 'envId' must be defined.");
-        url_ = url_.replace("{envId}", encodeURIComponent("" + envId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueNameExludingItself(_response);
-        });
-    }
-
-    protected processIsUniqueNameExludingItself(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<ResultOfBoolean>(null as any);
     }
 }
 
@@ -357,17 +308,15 @@ export interface IProjectsClient {
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfProjectHeadDto>;
 
-    create(command: ProjectCreateCommand): Promise<number>;
+    create(body: ProjectCreateCommandBody): Promise<ResultOfInteger>;
 
     getById(id: number): Promise<ProjectDto>;
 
-    update(id: number, command: ProjectUpdateCommand): Promise<void>;
+    update(id: number, body: ProjectUpdateCommandBody): Promise<void>;
 
     delete(id: number): Promise<void>;
 
-    isUniqueName(name: string): Promise<boolean>;
-
-    isUniqueNameExludingItself(name: string, projectId: number): Promise<boolean>;
+    isUniqueName(name: string | undefined, projectId: number | null | undefined): Promise<ResultOfBoolean>;
 }
 
 export class ProjectsClient implements IProjectsClient {
@@ -422,11 +371,11 @@ export class ProjectsClient implements IProjectsClient {
         return Promise.resolve<PaginatedListOfProjectHeadDto>(null as any);
     }
 
-    create(command: ProjectCreateCommand): Promise<number> {
+    create(body: ProjectCreateCommandBody): Promise<ResultOfInteger> {
         let url_ = this.baseUrl + "/Projects";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -442,15 +391,14 @@ export class ProjectsClient implements IProjectsClient {
         });
     }
 
-    protected processCreate(response: Response): Promise<number> {
+    protected processCreate(response: Response): Promise<ResultOfInteger> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfInteger.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -458,14 +406,14 @@ export class ProjectsClient implements IProjectsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<number>(null as any);
+        return Promise.resolve<ResultOfInteger>(null as any);
     }
 
     getById(id: number): Promise<ProjectDto> {
-        let url_ = this.baseUrl + "/Projects/{id}";
+        let url_ = this.baseUrl + "/Projects/{Id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -498,14 +446,14 @@ export class ProjectsClient implements IProjectsClient {
         return Promise.resolve<ProjectDto>(null as any);
     }
 
-    update(id: number, command: ProjectUpdateCommand): Promise<void> {
-        let url_ = this.baseUrl + "/Projects/{id}";
+    update(id: number, body: ProjectUpdateCommandBody): Promise<void> {
+        let url_ = this.baseUrl + "/Projects/{Id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -545,10 +493,10 @@ export class ProjectsClient implements IProjectsClient {
     }
 
     delete(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/Projects/{id}";
+        let url_ = this.baseUrl + "/Projects/{Id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -579,11 +527,14 @@ export class ProjectsClient implements IProjectsClient {
         }
     }
 
-    isUniqueName(name: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/Projects/uniquename/{name}";
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+    isUniqueName(name: string | undefined, projectId: number | null | undefined): Promise<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/Projects/uniquename?";
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        if (projectId !== undefined && projectId !== null)
+            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -598,15 +549,14 @@ export class ProjectsClient implements IProjectsClient {
         });
     }
 
-    protected processIsUniqueName(response: Response): Promise<boolean> {
+    protected processIsUniqueName(response: Response): Promise<ResultOfBoolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfBoolean.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -614,68 +564,25 @@ export class ProjectsClient implements IProjectsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<boolean>(null as any);
-    }
-
-    isUniqueNameExludingItself(name: string, projectId: number): Promise<boolean> {
-        let url_ = this.baseUrl + "/Projects/uniquename/{name}/{projectId}";
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
-        if (projectId === undefined || projectId === null)
-            throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueNameExludingItself(_response);
-        });
-    }
-
-    protected processIsUniqueNameExludingItself(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<ResultOfBoolean>(null as any);
     }
 }
 
 export interface ITargetsClient {
 
-    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto>;
+    getList(projectId: number, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto>;
 
-    create(projectId: number, command: TargetCreateCommand): Promise<number>;
+    create(projectId: number, body: TargetCreateCommandBody): Promise<ResultOfInteger>;
 
     getById(projectId: number, id: number): Promise<TargetDto>;
 
-    update(projectId: number, id: number, command: TargetUpdateCommand): Promise<void>;
+    update(projectId: number, id: number, body: TargetUpdateCommandBody): Promise<void>;
 
     delete(projectId: number, id: number): Promise<void>;
 
-    isUniqueName(projectId: number, name: string): Promise<boolean>;
+    isUniqueName(projectId: number, name: string | undefined, targetId: number | null | undefined): Promise<ResultOfBoolean>;
 
-    isUniqueNameExludingItself(projectId: number, name: string, targetId: number): Promise<boolean>;
-
-    regenerateKey(projectId: number, id: number): Promise<string>;
+    regenerateKey(projectId: number, id: number): Promise<ResultOfString>;
 }
 
 export class TargetsClient implements ITargetsClient {
@@ -688,15 +595,11 @@ export class TargetsClient implements ITargetsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto> {
-        let url_ = this.baseUrl + "/Targets/{projectId}?";
+    getList(projectId: number, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto> {
+        let url_ = this.baseUrl + "/Targets/{ProjectId}?";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        if (projectId === null)
-            throw new Error("The parameter 'projectId' cannot be null.");
-        else if (projectId !== undefined)
-            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
         else if (pageNumber !== undefined)
@@ -744,14 +647,14 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<PaginatedListOfTargetHeadDto>(null as any);
     }
 
-    create(projectId: number, command: TargetCreateCommand): Promise<number> {
-        let url_ = this.baseUrl + "/Targets/{projectId}";
+    create(projectId: number, body: TargetCreateCommandBody): Promise<ResultOfInteger> {
+        let url_ = this.baseUrl + "/Targets/{ProjectId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -767,15 +670,14 @@ export class TargetsClient implements ITargetsClient {
         });
     }
 
-    protected processCreate(response: Response): Promise<number> {
+    protected processCreate(response: Response): Promise<ResultOfInteger> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
             let result201: any = null;
             let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result201 = resultData201 !== undefined ? resultData201 : <any>null;
-    
+            result201 = ResultOfInteger.fromJS(resultData201);
             return result201;
             });
         } else if (status !== 200 && status !== 204) {
@@ -783,17 +685,17 @@ export class TargetsClient implements ITargetsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<number>(null as any);
+        return Promise.resolve<ResultOfInteger>(null as any);
     }
 
     getById(projectId: number, id: number): Promise<TargetDto> {
-        let url_ = this.baseUrl + "/Targets/{projectId}/{id}";
+        let url_ = this.baseUrl + "/Targets/{ProjectId}/{Id}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -826,17 +728,17 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<TargetDto>(null as any);
     }
 
-    update(projectId: number, id: number, command: TargetUpdateCommand): Promise<void> {
-        let url_ = this.baseUrl + "/Targets/{projectId}/{id}";
+    update(projectId: number, id: number, body: TargetUpdateCommandBody): Promise<void> {
+        let url_ = this.baseUrl + "/Targets/{ProjectId}/{Id}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -869,13 +771,13 @@ export class TargetsClient implements ITargetsClient {
     }
 
     delete(projectId: number, id: number): Promise<void> {
-        let url_ = this.baseUrl + "/Targets/{projectId}/{id}";
+        let url_ = this.baseUrl + "/Targets/{ProjectId}/{Id}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -906,14 +808,17 @@ export class TargetsClient implements ITargetsClient {
         }
     }
 
-    isUniqueName(projectId: number, name: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/Targets/{projectId}/uniquename/{name}";
+    isUniqueName(projectId: number, name: string | undefined, targetId: number | null | undefined): Promise<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/Targets/{ProjectId}/uniqueName?";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        if (targetId !== undefined && targetId !== null)
+            url_ += "TargetId=" + encodeURIComponent("" + targetId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -928,15 +833,14 @@ export class TargetsClient implements ITargetsClient {
         });
     }
 
-    protected processIsUniqueName(response: Response): Promise<boolean> {
+    protected processIsUniqueName(response: Response): Promise<ResultOfBoolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfBoolean.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -944,61 +848,17 @@ export class TargetsClient implements ITargetsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<ResultOfBoolean>(null as any);
     }
 
-    isUniqueNameExludingItself(projectId: number, name: string, targetId: number): Promise<boolean> {
-        let url_ = this.baseUrl + "/Targets/{projectId}/uniquename/{name}/{targetId}";
+    regenerateKey(projectId: number, id: number): Promise<ResultOfString> {
+        let url_ = this.baseUrl + "/Targets/{ProjectId}/{Id}/regenerateKey";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
-        if (targetId === undefined || targetId === null)
-            throw new Error("The parameter 'targetId' must be defined.");
-        url_ = url_.replace("{targetId}", encodeURIComponent("" + targetId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processIsUniqueNameExludingItself(_response);
-        });
-    }
-
-    protected processIsUniqueNameExludingItself(response: Response): Promise<boolean> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<boolean>(null as any);
-    }
-
-    regenerateKey(projectId: number, id: number): Promise<string> {
-        let url_ = this.baseUrl + "/Targets/{projectId}/{id}/regeneratekey";
-        if (projectId === undefined || projectId === null)
-            throw new Error("The parameter 'projectId' must be defined.");
-        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace("{ProjectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -1013,15 +873,14 @@ export class TargetsClient implements ITargetsClient {
         });
     }
 
-    protected processRegenerateKey(response: Response): Promise<string> {
+    protected processRegenerateKey(response: Response): Promise<ResultOfString> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfString.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -1029,7 +888,7 @@ export class TargetsClient implements ITargetsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<string>(null as any);
+        return Promise.resolve<ResultOfString>(null as any);
     }
 }
 
@@ -1098,19 +957,19 @@ export interface IUsersClient {
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfUserHeadDto>;
 
-    create(command: UserCreateCommand): Promise<ResultWithIdOfString>;
-
-    delete(command: UserDeleteCommand): Promise<Result>;
+    create(body: UserCreateCommandBody): Promise<ResultOfString>;
 
     getById(id: string): Promise<UserDto>;
 
-    isUniqueUserName(userName: string | undefined, id: string | null | undefined): Promise<boolean>;
+    delete(id: string): Promise<void>;
 
-    isUniqueEmail(email: string | undefined, id: string | null | undefined): Promise<boolean>;
+    isUniqueUserName(userName: string | undefined, id: string | null | undefined): Promise<ResultOfBoolean>;
 
-    setEmail(id: string, data: UserSetEmailDto): Promise<Result>;
+    isUniqueEmail(email: string | undefined, id: string | null | undefined): Promise<ResultOfBoolean>;
 
-    setUserName(id: string, data: UserSetUserNameDto): Promise<Result>;
+    setEmail(id: string, body: UserSetEmailCommandBody): Promise<void>;
+
+    setUserName(id: string, body: UserSetUserNameCommandBody): Promise<void>;
 }
 
 export class UsersClient implements IUsersClient {
@@ -1165,11 +1024,11 @@ export class UsersClient implements IUsersClient {
         return Promise.resolve<PaginatedListOfUserHeadDto>(null as any);
     }
 
-    create(command: UserCreateCommand): Promise<ResultWithIdOfString> {
+    create(body: UserCreateCommandBody): Promise<ResultOfString> {
         let url_ = this.baseUrl + "/Users";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(command);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
@@ -1185,14 +1044,14 @@ export class UsersClient implements IUsersClient {
         });
     }
 
-    protected processCreate(response: Response): Promise<ResultWithIdOfString> {
+    protected processCreate(response: Response): Promise<ResultOfString> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultWithIdOfString.fromJS(resultData200);
+            result200 = ResultOfString.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -1200,52 +1059,14 @@ export class UsersClient implements IUsersClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ResultWithIdOfString>(null as any);
-    }
-
-    delete(command: UserDeleteCommand): Promise<Result> {
-        let url_ = this.baseUrl + "/Users";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(command);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete(_response);
-        });
-    }
-
-    protected processDelete(response: Response): Promise<Result> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Result.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Result>(null as any);
+        return Promise.resolve<ResultOfString>(null as any);
     }
 
     getById(id: string): Promise<UserDto> {
-        let url_ = this.baseUrl + "/Users/{id}";
+        let url_ = this.baseUrl + "/Users/{Id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -1278,7 +1099,40 @@ export class UsersClient implements IUsersClient {
         return Promise.resolve<UserDto>(null as any);
     }
 
-    isUniqueUserName(userName: string | undefined, id: string | null | undefined): Promise<boolean> {
+    delete(id: string): Promise<void> {
+        let url_ = this.baseUrl + "/Users/{Id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDelete(_response);
+        });
+    }
+
+    protected processDelete(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    isUniqueUserName(userName: string | undefined, id: string | null | undefined): Promise<ResultOfBoolean> {
         let url_ = this.baseUrl + "/Users/uniqueUserName?";
         if (userName === null)
             throw new Error("The parameter 'userName' cannot be null.");
@@ -1300,15 +1154,14 @@ export class UsersClient implements IUsersClient {
         });
     }
 
-    protected processIsUniqueUserName(response: Response): Promise<boolean> {
+    protected processIsUniqueUserName(response: Response): Promise<ResultOfBoolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfBoolean.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -1316,10 +1169,10 @@ export class UsersClient implements IUsersClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<ResultOfBoolean>(null as any);
     }
 
-    isUniqueEmail(email: string | undefined, id: string | null | undefined): Promise<boolean> {
+    isUniqueEmail(email: string | undefined, id: string | null | undefined): Promise<ResultOfBoolean> {
         let url_ = this.baseUrl + "/Users/uniqueEmail?";
         if (email === null)
             throw new Error("The parameter 'email' cannot be null.");
@@ -1341,15 +1194,14 @@ export class UsersClient implements IUsersClient {
         });
     }
 
-    protected processIsUniqueEmail(response: Response): Promise<boolean> {
+    protected processIsUniqueEmail(response: Response): Promise<ResultOfBoolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = ResultOfBoolean.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -1357,24 +1209,23 @@ export class UsersClient implements IUsersClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<ResultOfBoolean>(null as any);
     }
 
-    setEmail(id: string, data: UserSetEmailDto): Promise<Result> {
-        let url_ = this.baseUrl + "/Users/{id}/email";
+    setEmail(id: string, body: UserSetEmailCommandBody): Promise<void> {
+        let url_ = this.baseUrl + "/Users/{Id}/email";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(data);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
@@ -1383,39 +1234,35 @@ export class UsersClient implements IUsersClient {
         });
     }
 
-    protected processSetEmail(response: Response): Promise<Result> {
+    protected processSetEmail(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
+        if (status === 204) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Result.fromJS(resultData200);
-            return result200;
+            return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Result>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
-    setUserName(id: string, data: UserSetUserNameDto): Promise<Result> {
-        let url_ = this.baseUrl + "/Users/{id}/userName";
+    setUserName(id: string, body: UserSetUserNameCommandBody): Promise<void> {
+        let url_ = this.baseUrl + "/Users/{Id}/userName";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(data);
+        const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
@@ -1424,22 +1271,19 @@ export class UsersClient implements IUsersClient {
         });
     }
 
-    protected processSetUserName(response: Response): Promise<Result> {
+    protected processSetUserName(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
+        if (status === 204) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Result.fromJS(resultData200);
-            return result200;
+            return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Result>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -1709,12 +1553,10 @@ export interface IEnvDto {
     name?: string;
 }
 
-export class EnvCreateCommand implements IEnvCreateCommand {
-    projectId?: number;
-    targetId?: number;
-    name!: string;
+export class ResultOfBoolean implements IResultOfBoolean {
+    value?: boolean;
 
-    constructor(data?: IEnvCreateCommand) {
+    constructor(data?: IResultOfBoolean) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1725,41 +1567,32 @@ export class EnvCreateCommand implements IEnvCreateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.projectId = _data["projectId"];
-            this.targetId = _data["targetId"];
-            this.name = _data["name"];
+            this.value = _data["value"];
         }
     }
 
-    static fromJS(data: any): EnvCreateCommand {
+    static fromJS(data: any): ResultOfBoolean {
         data = typeof data === 'object' ? data : {};
-        let result = new EnvCreateCommand();
+        let result = new ResultOfBoolean();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["projectId"] = this.projectId;
-        data["targetId"] = this.targetId;
-        data["name"] = this.name;
+        data["value"] = this.value;
         return data;
     }
 }
 
-export interface IEnvCreateCommand {
-    projectId?: number;
-    targetId?: number;
-    name: string;
+export interface IResultOfBoolean {
+    value?: boolean;
 }
 
-export class EnvUpdateCommand implements IEnvUpdateCommand {
-    projectId?: number;
-    id?: number;
-    targetId?: number;
-    name!: string;
+export class ResultOfInteger implements IResultOfInteger {
+    value?: number;
 
-    constructor(data?: IEnvUpdateCommand) {
+    constructor(data?: IResultOfInteger) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1770,35 +1603,106 @@ export class EnvUpdateCommand implements IEnvUpdateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.projectId = _data["projectId"];
-            this.id = _data["id"];
-            this.targetId = _data["targetId"];
-            this.name = _data["name"];
+            this.value = _data["value"];
         }
     }
 
-    static fromJS(data: any): EnvUpdateCommand {
+    static fromJS(data: any): ResultOfInteger {
         data = typeof data === 'object' ? data : {};
-        let result = new EnvUpdateCommand();
+        let result = new ResultOfInteger();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["projectId"] = this.projectId;
-        data["id"] = this.id;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface IResultOfInteger {
+    value?: number;
+}
+
+export class EnvCreateCommandBody implements IEnvCreateCommandBody {
+    targetId?: number;
+    name?: string;
+
+    constructor(data?: IEnvCreateCommandBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.targetId = _data["targetId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EnvCreateCommandBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvCreateCommandBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
         data["targetId"] = this.targetId;
         data["name"] = this.name;
         return data;
     }
 }
 
-export interface IEnvUpdateCommand {
-    projectId?: number;
-    id?: number;
+export interface IEnvCreateCommandBody {
     targetId?: number;
-    name: string;
+    name?: string;
+}
+
+export class EnvUpdateCommandBody implements IEnvUpdateCommandBody {
+    targetId?: number;
+    name?: string;
+
+    constructor(data?: IEnvUpdateCommandBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.targetId = _data["targetId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EnvUpdateCommandBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvUpdateCommandBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["targetId"] = this.targetId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IEnvUpdateCommandBody {
+    targetId?: number;
+    name?: string;
 }
 
 export class PaginatedListOfProjectHeadDto implements IPaginatedListOfProjectHeadDto {
@@ -1945,10 +1849,10 @@ export interface IProjectDto {
     name?: string;
 }
 
-export class ProjectCreateCommand implements IProjectCreateCommand {
-    name!: string;
+export class ProjectCreateCommandBody implements IProjectCreateCommandBody {
+    name?: string;
 
-    constructor(data?: IProjectCreateCommand) {
+    constructor(data?: IProjectCreateCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1963,9 +1867,9 @@ export class ProjectCreateCommand implements IProjectCreateCommand {
         }
     }
 
-    static fromJS(data: any): ProjectCreateCommand {
+    static fromJS(data: any): ProjectCreateCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new ProjectCreateCommand();
+        let result = new ProjectCreateCommandBody();
         result.init(data);
         return result;
     }
@@ -1977,15 +1881,14 @@ export class ProjectCreateCommand implements IProjectCreateCommand {
     }
 }
 
-export interface IProjectCreateCommand {
-    name: string;
+export interface IProjectCreateCommandBody {
+    name?: string;
 }
 
-export class ProjectUpdateCommand implements IProjectUpdateCommand {
-    id?: number;
-    name!: string;
+export class ProjectUpdateCommandBody implements IProjectUpdateCommandBody {
+    name?: string;
 
-    constructor(data?: IProjectUpdateCommand) {
+    constructor(data?: IProjectUpdateCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1996,29 +1899,26 @@ export class ProjectUpdateCommand implements IProjectUpdateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
             this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): ProjectUpdateCommand {
+    static fromJS(data: any): ProjectUpdateCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new ProjectUpdateCommand();
+        let result = new ProjectUpdateCommandBody();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
         data["name"] = this.name;
         return data;
     }
 }
 
-export interface IProjectUpdateCommand {
-    id?: number;
-    name: string;
+export interface IProjectUpdateCommandBody {
+    name?: string;
 }
 
 export class PaginatedListOfTargetHeadDto implements IPaginatedListOfTargetHeadDto {
@@ -2173,11 +2073,10 @@ export interface ITargetDto {
     name?: string;
 }
 
-export class TargetCreateCommand implements ITargetCreateCommand {
-    projectId?: number;
-    name!: string;
+export class TargetCreateCommandBody implements ITargetCreateCommandBody {
+    name?: string;
 
-    constructor(data?: ITargetCreateCommand) {
+    constructor(data?: ITargetCreateCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2188,37 +2087,32 @@ export class TargetCreateCommand implements ITargetCreateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.projectId = _data["projectId"];
             this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): TargetCreateCommand {
+    static fromJS(data: any): TargetCreateCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new TargetCreateCommand();
+        let result = new TargetCreateCommandBody();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["projectId"] = this.projectId;
         data["name"] = this.name;
         return data;
     }
 }
 
-export interface ITargetCreateCommand {
-    projectId?: number;
-    name: string;
+export interface ITargetCreateCommandBody {
+    name?: string;
 }
 
-export class TargetUpdateCommand implements ITargetUpdateCommand {
-    id?: number;
-    projectId?: number;
-    name!: string;
+export class TargetUpdateCommandBody implements ITargetUpdateCommandBody {
+    name?: string;
 
-    constructor(data?: ITargetUpdateCommand) {
+    constructor(data?: ITargetUpdateCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2229,32 +2123,62 @@ export class TargetUpdateCommand implements ITargetUpdateCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.projectId = _data["projectId"];
             this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): TargetUpdateCommand {
+    static fromJS(data: any): TargetUpdateCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new TargetUpdateCommand();
+        let result = new TargetUpdateCommandBody();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["projectId"] = this.projectId;
         data["name"] = this.name;
         return data;
     }
 }
 
-export interface ITargetUpdateCommand {
-    id?: number;
-    projectId?: number;
-    name: string;
+export interface ITargetUpdateCommandBody {
+    name?: string;
+}
+
+export class ResultOfString implements IResultOfString {
+    value?: string | undefined;
+
+    constructor(data?: IResultOfString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): ResultOfString {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfString();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface IResultOfString {
+    value?: string | undefined;
 }
 
 export class SuccessfulLoginResponse implements ISuccessfulLoginResponse {
@@ -2509,65 +2433,13 @@ export interface IUserDto {
     accessFailedCount?: number;
 }
 
-export class ResultWithIdOfString implements IResultWithIdOfString {
-    id?: string | undefined;
-    succeeded?: boolean;
-    errors?: string[];
-
-    constructor(data?: IResultWithIdOfString) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.succeeded = _data["succeeded"];
-            if (Array.isArray(_data["errors"])) {
-                this.errors = [] as any;
-                for (let item of _data["errors"])
-                    this.errors!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ResultWithIdOfString {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResultWithIdOfString();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["succeeded"] = this.succeeded;
-        if (Array.isArray(this.errors)) {
-            data["errors"] = [];
-            for (let item of this.errors)
-                data["errors"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IResultWithIdOfString {
-    id?: string | undefined;
-    succeeded?: boolean;
-    errors?: string[];
-}
-
-export class UserCreateCommand implements IUserCreateCommand {
-    userName!: string;
+export class UserCreateCommandBody implements IUserCreateCommandBody {
+    userName?: string;
     email?: string | undefined;
-    password!: string;
-    confirmPassword!: string;
+    password?: string;
+    confirmPassword?: string;
 
-    constructor(data?: IUserCreateCommand) {
+    constructor(data?: IUserCreateCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2585,9 +2457,9 @@ export class UserCreateCommand implements IUserCreateCommand {
         }
     }
 
-    static fromJS(data: any): UserCreateCommand {
+    static fromJS(data: any): UserCreateCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new UserCreateCommand();
+        let result = new UserCreateCommandBody();
         result.init(data);
         return result;
     }
@@ -2602,101 +2474,17 @@ export class UserCreateCommand implements IUserCreateCommand {
     }
 }
 
-export interface IUserCreateCommand {
-    userName: string;
+export interface IUserCreateCommandBody {
+    userName?: string;
     email?: string | undefined;
-    password: string;
-    confirmPassword: string;
+    password?: string;
+    confirmPassword?: string;
 }
 
-export class Result implements IResult {
-    succeeded?: boolean;
-    errors?: string[];
-
-    constructor(data?: IResult) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.succeeded = _data["succeeded"];
-            if (Array.isArray(_data["errors"])) {
-                this.errors = [] as any;
-                for (let item of _data["errors"])
-                    this.errors!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): Result {
-        data = typeof data === 'object' ? data : {};
-        let result = new Result();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["succeeded"] = this.succeeded;
-        if (Array.isArray(this.errors)) {
-            data["errors"] = [];
-            for (let item of this.errors)
-                data["errors"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IResult {
-    succeeded?: boolean;
-    errors?: string[];
-}
-
-export class UserDeleteCommand implements IUserDeleteCommand {
-    id?: string;
-
-    constructor(data?: IUserDeleteCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): UserDeleteCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserDeleteCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IUserDeleteCommand {
-    id?: string;
-}
-
-export class UserSetEmailDto implements IUserSetEmailDto {
+export class UserSetEmailCommandBody implements IUserSetEmailCommandBody {
     email?: string;
 
-    constructor(data?: IUserSetEmailDto) {
+    constructor(data?: IUserSetEmailCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2711,9 +2499,9 @@ export class UserSetEmailDto implements IUserSetEmailDto {
         }
     }
 
-    static fromJS(data: any): UserSetEmailDto {
+    static fromJS(data: any): UserSetEmailCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new UserSetEmailDto();
+        let result = new UserSetEmailCommandBody();
         result.init(data);
         return result;
     }
@@ -2725,14 +2513,14 @@ export class UserSetEmailDto implements IUserSetEmailDto {
     }
 }
 
-export interface IUserSetEmailDto {
+export interface IUserSetEmailCommandBody {
     email?: string;
 }
 
-export class UserSetUserNameDto implements IUserSetUserNameDto {
+export class UserSetUserNameCommandBody implements IUserSetUserNameCommandBody {
     userName?: string;
 
-    constructor(data?: IUserSetUserNameDto) {
+    constructor(data?: IUserSetUserNameCommandBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2747,9 +2535,9 @@ export class UserSetUserNameDto implements IUserSetUserNameDto {
         }
     }
 
-    static fromJS(data: any): UserSetUserNameDto {
+    static fromJS(data: any): UserSetUserNameCommandBody {
         data = typeof data === 'object' ? data : {};
-        let result = new UserSetUserNameDto();
+        let result = new UserSetUserNameCommandBody();
         result.init(data);
         return result;
     }
@@ -2761,7 +2549,7 @@ export class UserSetUserNameDto implements IUserSetUserNameDto {
     }
 }
 
-export interface IUserSetUserNameDto {
+export interface IUserSetUserNameCommandBody {
     userName?: string;
 }
 

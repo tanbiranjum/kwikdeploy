@@ -9,67 +9,54 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KwikDeploy.Api.Controllers;
 
-[Route("Envs/{projectId}")]
+[Route("Envs/{ProjectId}")]
 public class EnvsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<PaginatedList<EnvHeadDto>>> GetList(int projectId, [FromQuery] EnvGetList query)
+    public async Task<ActionResult<PaginatedList<EnvHeadDto>>> GetList(EnvGetList query, CancellationToken cancellationToken)
     {
-        query.ProjectId = projectId;
-
-        return await Mediator.Send(query);
+        return await Mediator.Send(query, cancellationToken);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<EnvDto>> GetById(int projectId, int id)
+    [HttpGet("{Id}")]
+    public async Task<ActionResult<EnvDto>> GetById(EnvGetQuery query, CancellationToken cancellationToken)
     {
-        return await Mediator.Send(new EnvGetQuery { ProjectId = projectId, Id = id });
+        return await Mediator.Send(query, cancellationToken);
     }
 
-    [HttpGet("uniquename/{name}")]
-    public async Task<ActionResult<bool>> IsUniqueName(int projectId, string name)
+    [HttpGet("uniqueName")]
+    public async Task<ActionResult<Result<bool>>> IsUniqueName(EnvUniqueNameQuery query, CancellationToken cancellationToken)
     {
-        return await Mediator.Send(new EnvUniqueNameQuery { ProjectId = projectId, Name = name, EnvId = null });
-    }
-
-    [HttpGet("uniquename/{name}/{envId}")]
-    public async Task<ActionResult<bool>> IsUniqueNameExludingItself(int projectId, string name, int envId)
-    {
-        return await Mediator.Send(new EnvUniqueNameQuery { ProjectId = projectId, Name = name, EnvId = envId });
+        return await Mediator.Send(query, cancellationToken);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<int>> Create(int projectId, EnvCreateCommand command)
+    public async Task<ActionResult<Result<int>>> Create(EnvCreateCommand command, CancellationToken cancellationToken)
     {
-        command.ProjectId = projectId;
-
-        return await Mediator.Send(command);
+        return await Mediator.Send(command, cancellationToken);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(int projectId, int id, EnvUpdateCommand command)
+    public async Task<ActionResult> Update(EnvUpdateCommand command, CancellationToken cancellationToken)
     {
-        command.ProjectId = projectId;
-        command.Id = id;
-
-        await Mediator.Send(command);
+        await Mediator.Send(command, cancellationToken);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(int projectId, int id)
+    public async Task<ActionResult> Delete(EnvDeleteCommand command, CancellationToken cancellationToken)
     {
-        await Mediator.Send(new EnvDeleteCommand(projectId, id));
+        await Mediator.Send(command, cancellationToken);
 
         return NoContent();
     }

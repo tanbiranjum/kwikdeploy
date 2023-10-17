@@ -2,11 +2,19 @@
 using KwikDeploy.Application.Common.Interfaces;
 using KwikDeploy.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KwikDeploy.Application.Envs.Commands.EnvDelete;
 
-public record EnvDeleteCommand(int projectId, int Id) : IRequest;
+public record EnvDeleteCommand() : IRequest
+{
+    [FromRoute]
+    public int ProjectId { get; init; }
+
+    [FromRoute]
+    public int Id { get; init; }
+}
 
 public class EnvDeleteCommandHandler : IRequestHandler<EnvDeleteCommand>
 {
@@ -21,9 +29,9 @@ public class EnvDeleteCommandHandler : IRequestHandler<EnvDeleteCommand>
     {
         // Existance Check
         var entity = await _context.Envs
-                        .Where(x => x.ProjectId == request.projectId && x.Id == request.Id)
+                        .Where(x => x.ProjectId == request.ProjectId && x.Id == request.Id)
                         .SingleOrDefaultAsync(cancellationToken);
-        if (entity == null)
+        if (entity is null)
         {
             throw new NotFoundException(nameof(Target), request.Id);
         }

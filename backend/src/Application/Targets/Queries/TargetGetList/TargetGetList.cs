@@ -2,13 +2,19 @@
 using KwikDeploy.Application.Common.Mappings;
 using KwikDeploy.Application.Common.Models;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KwikDeploy.Application.Targets.Queries.TargetGetList;
 
 public record TargetGetList : IRequest<PaginatedList<TargetHeadDto>>
 {
+    [FromRoute]
     public int ProjectId { get; set; }
+
+    [FromQuery]
     public int PageNumber { get; init; } = 1;
+
+    [FromQuery]
     public int PageSize { get; init; } = 10;
 }
 
