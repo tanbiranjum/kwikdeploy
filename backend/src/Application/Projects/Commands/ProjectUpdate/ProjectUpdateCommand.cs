@@ -33,7 +33,9 @@ public class ProjectUpdateCommandHandler : IRequestHandler<ProjectUpdateCommand>
         }
 
         // Unique Name Check
-        var existingEntity = await _context.Projects.Where(x => x.Id != request.Id && x.Name == request.Name).SingleOrDefaultAsync(cancellationToken);
+        var existingEntity = await _context.Projects
+                                .Where(x => x.Id != request.Id && x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
+                                .SingleOrDefaultAsync(cancellationToken);
         if (existingEntity != null)
         {
             throw new ValidationException(new List<ValidationFailure> {
@@ -42,7 +44,7 @@ public class ProjectUpdateCommandHandler : IRequestHandler<ProjectUpdateCommand>
         }
 
         // Update
-        entity.Name = request.Name;
+        entity.Name = request.Name.Trim();
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

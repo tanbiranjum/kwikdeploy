@@ -8,6 +8,351 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+export interface IEnvsClient {
+
+    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfEnvHeadDto>;
+
+    create(projectId: number, command: EnvCreateCommand): Promise<number>;
+
+    getById(projectId: number, id: number): Promise<EnvDto>;
+
+    update(projectId: number, id: number, command: EnvUpdateCommand): Promise<void>;
+
+    delete(projectId: number, id: number): Promise<void>;
+
+    isUniqueName(projectId: number, name: string): Promise<boolean>;
+
+    isUniqueNameExludingItself(projectId: number, name: string, envId: number): Promise<boolean>;
+}
+
+export class EnvsClient implements IEnvsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfEnvHeadDto> {
+        let url_ = this.baseUrl + "/Envs/{projectId}?";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetList(_response);
+        });
+    }
+
+    protected processGetList(response: Response): Promise<PaginatedListOfEnvHeadDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedListOfEnvHeadDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PaginatedListOfEnvHeadDto>(null as any);
+    }
+
+    create(projectId: number, command: EnvCreateCommand): Promise<number> {
+        let url_ = this.baseUrl + "/Envs/{projectId}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreate(_response);
+        });
+    }
+
+    protected processCreate(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return result201;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(null as any);
+    }
+
+    getById(projectId: number, id: number): Promise<EnvDto> {
+        let url_ = this.baseUrl + "/Envs/{projectId}/{id}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetById(_response);
+        });
+    }
+
+    protected processGetById(response: Response): Promise<EnvDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EnvDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<EnvDto>(null as any);
+    }
+
+    update(projectId: number, id: number, command: EnvUpdateCommand): Promise<void> {
+        let url_ = this.baseUrl + "/Envs/{projectId}/{id}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else {
+            return response.text().then((_responseText) => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            });
+        }
+    }
+
+    delete(projectId: number, id: number): Promise<void> {
+        let url_ = this.baseUrl + "/Envs/{projectId}/{id}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDelete(_response);
+        });
+    }
+
+    protected processDelete(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else {
+            return response.text().then((_responseText) => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            });
+        }
+    }
+
+    isUniqueName(projectId: number, name: string): Promise<boolean> {
+        let url_ = this.baseUrl + "/Envs/{projectId}/uniquename/{name}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (name === undefined || name === null)
+            throw new Error("The parameter 'name' must be defined.");
+        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processIsUniqueName(_response);
+        });
+    }
+
+    protected processIsUniqueName(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    isUniqueNameExludingItself(projectId: number, name: string, envId: number): Promise<boolean> {
+        let url_ = this.baseUrl + "/Envs/{projectId}/uniquename/{name}/{envId}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (name === undefined || name === null)
+            throw new Error("The parameter 'name' must be defined.");
+        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+        if (envId === undefined || envId === null)
+            throw new Error("The parameter 'envId' must be defined.");
+        url_ = url_.replace("{envId}", encodeURIComponent("" + envId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processIsUniqueNameExludingItself(_response);
+        });
+    }
+
+    protected processIsUniqueNameExludingItself(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+}
+
 export interface IProjectsClient {
 
     getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfProjectHeadDto>;
@@ -316,21 +661,21 @@ export class ProjectsClient implements IProjectsClient {
 
 export interface ITargetsClient {
 
-    getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto>;
+    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto>;
 
-    create(command: TargetCreateCommand): Promise<number>;
+    create(projectId: number, command: TargetCreateCommand): Promise<number>;
 
-    getById(id: number): Promise<TargetDto>;
+    getById(projectId: number, id: number): Promise<TargetDto>;
 
-    update(id: number, command: TargetUpdateCommand): Promise<void>;
+    update(projectId: number, id: number, command: TargetUpdateCommand): Promise<void>;
 
-    delete(id: number): Promise<void>;
+    delete(projectId: number, id: number): Promise<void>;
 
-    isUniqueName(name: string): Promise<boolean>;
+    isUniqueName(projectId: number, name: string): Promise<boolean>;
 
-    isUniqueNameExludingItself(name: string, targetId: number): Promise<boolean>;
+    isUniqueNameExludingItself(projectId: number, name: string, targetId: number): Promise<boolean>;
 
-    regenerateKey(id: number): Promise<string>;
+    regenerateKey(projectId: number, id: number): Promise<string>;
 }
 
 export class TargetsClient implements ITargetsClient {
@@ -343,8 +688,15 @@ export class TargetsClient implements ITargetsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getList(pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto> {
-        let url_ = this.baseUrl + "/Targets?";
+    getList(projectId: number, projectId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Promise<PaginatedListOfTargetHeadDto> {
+        let url_ = this.baseUrl + "/Targets/{projectId}?";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
         else if (pageNumber !== undefined)
@@ -377,6 +729,13 @@ export class TargetsClient implements ITargetsClient {
             result200 = PaginatedListOfTargetHeadDto.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -385,8 +744,11 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<PaginatedListOfTargetHeadDto>(null as any);
     }
 
-    create(command: TargetCreateCommand): Promise<number> {
-        let url_ = this.baseUrl + "/Targets";
+    create(projectId: number, command: TargetCreateCommand): Promise<number> {
+        let url_ = this.baseUrl + "/Targets/{projectId}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -408,13 +770,13 @@ export class TargetsClient implements ITargetsClient {
     protected processCreate(response: Response): Promise<number> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
+        if (status === 201) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
     
-            return result200;
+            return result201;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -424,8 +786,11 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<number>(null as any);
     }
 
-    getById(id: number): Promise<TargetDto> {
-        let url_ = this.baseUrl + "/Targets/{id}";
+    getById(projectId: number, id: number): Promise<TargetDto> {
+        let url_ = this.baseUrl + "/Targets/{projectId}/{id}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -461,8 +826,11 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<TargetDto>(null as any);
     }
 
-    update(id: number, command: TargetUpdateCommand): Promise<void> {
-        let url_ = this.baseUrl + "/Targets/{id}";
+    update(projectId: number, id: number, command: TargetUpdateCommand): Promise<void> {
+        let url_ = this.baseUrl + "/Targets/{projectId}/{id}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -490,13 +858,6 @@ export class TargetsClient implements ITargetsClient {
             return response.text().then((_responseText) => {
             return;
             });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
         } else {
             return response.text().then((_responseText) => {
             let resultdefault: any = null;
@@ -507,8 +868,11 @@ export class TargetsClient implements ITargetsClient {
         }
     }
 
-    delete(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/Targets/{id}";
+    delete(projectId: number, id: number): Promise<void> {
+        let url_ = this.baseUrl + "/Targets/{projectId}/{id}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -542,8 +906,11 @@ export class TargetsClient implements ITargetsClient {
         }
     }
 
-    isUniqueName(name: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/Targets/uniquename/{name}";
+    isUniqueName(projectId: number, name: string): Promise<boolean> {
+        let url_ = this.baseUrl + "/Targets/{projectId}/uniquename/{name}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         if (name === undefined || name === null)
             throw new Error("The parameter 'name' must be defined.");
         url_ = url_.replace("{name}", encodeURIComponent("" + name));
@@ -580,8 +947,11 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<boolean>(null as any);
     }
 
-    isUniqueNameExludingItself(name: string, targetId: number): Promise<boolean> {
-        let url_ = this.baseUrl + "/Targets/uniquename/{name}/{targetId}";
+    isUniqueNameExludingItself(projectId: number, name: string, targetId: number): Promise<boolean> {
+        let url_ = this.baseUrl + "/Targets/{projectId}/uniquename/{name}/{targetId}";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         if (name === undefined || name === null)
             throw new Error("The parameter 'name' must be defined.");
         url_ = url_.replace("{name}", encodeURIComponent("" + name));
@@ -621,8 +991,11 @@ export class TargetsClient implements ITargetsClient {
         return Promise.resolve<boolean>(null as any);
     }
 
-    regenerateKey(id: number): Promise<string> {
-        let url_ = this.baseUrl + "/Targets/{id}/regeneratekey";
+    regenerateKey(projectId: number, id: number): Promise<string> {
+        let url_ = this.baseUrl + "/Targets/{projectId}/{id}/regeneratekey";
+        if (projectId === undefined || projectId === null)
+            throw new Error("The parameter 'projectId' must be defined.");
+        url_ = url_.replace("{projectId}", encodeURIComponent("" + projectId));
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1116,6 +1489,318 @@ export class WebSocketClient implements IWebSocketClient {
     }
 }
 
+export class PaginatedListOfEnvHeadDto implements IPaginatedListOfEnvHeadDto {
+    items?: EnvHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfEnvHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(EnvHeadDto.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfEnvHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfEnvHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data;
+    }
+}
+
+export interface IPaginatedListOfEnvHeadDto {
+    items?: EnvHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+}
+
+export class EnvHeadDto implements IEnvHeadDto {
+    id?: number;
+    targetName?: string;
+    name?: string;
+
+    constructor(data?: IEnvHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.targetName = _data["targetName"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EnvHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["targetName"] = this.targetName;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IEnvHeadDto {
+    id?: number;
+    targetName?: string;
+    name?: string;
+}
+
+export class ProblemDetails implements IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+
+    [key: string]: any;
+
+    constructor(data?: IProblemDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.status = _data["status"];
+            this.detail = _data["detail"];
+            this.instance = _data["instance"];
+        }
+    }
+
+    static fromJS(data: any): ProblemDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProblemDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["status"] = this.status;
+        data["detail"] = this.detail;
+        data["instance"] = this.instance;
+        return data;
+    }
+}
+
+export interface IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+
+    [key: string]: any;
+}
+
+export class EnvDto implements IEnvDto {
+    id?: number;
+    projectId?: number;
+    targetId?: number;
+    name?: string;
+
+    constructor(data?: IEnvDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.projectId = _data["projectId"];
+            this.targetId = _data["targetId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EnvDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["projectId"] = this.projectId;
+        data["targetId"] = this.targetId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IEnvDto {
+    id?: number;
+    projectId?: number;
+    targetId?: number;
+    name?: string;
+}
+
+export class EnvCreateCommand implements IEnvCreateCommand {
+    projectId?: number;
+    targetId?: number;
+    name!: string;
+
+    constructor(data?: IEnvCreateCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.projectId = _data["projectId"];
+            this.targetId = _data["targetId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EnvCreateCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvCreateCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["projectId"] = this.projectId;
+        data["targetId"] = this.targetId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IEnvCreateCommand {
+    projectId?: number;
+    targetId?: number;
+    name: string;
+}
+
+export class EnvUpdateCommand implements IEnvUpdateCommand {
+    projectId?: number;
+    id?: number;
+    targetId?: number;
+    name!: string;
+
+    constructor(data?: IEnvUpdateCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.projectId = _data["projectId"];
+            this.id = _data["id"];
+            this.targetId = _data["targetId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EnvUpdateCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvUpdateCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["projectId"] = this.projectId;
+        data["id"] = this.id;
+        data["targetId"] = this.targetId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IEnvUpdateCommand {
+    projectId?: number;
+    id?: number;
+    targetId?: number;
+    name: string;
+}
+
 export class PaginatedListOfProjectHeadDto implements IPaginatedListOfProjectHeadDto {
     items?: ProjectHeadDto[];
     pageNumber?: number;
@@ -1294,70 +1979,6 @@ export class ProjectCreateCommand implements IProjectCreateCommand {
 
 export interface IProjectCreateCommand {
     name: string;
-}
-
-export class ProblemDetails implements IProblemDetails {
-    type?: string | undefined;
-    title?: string | undefined;
-    status?: number | undefined;
-    detail?: string | undefined;
-    instance?: string | undefined;
-
-    [key: string]: any;
-
-    constructor(data?: IProblemDetails) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.type = _data["type"];
-            this.title = _data["title"];
-            this.status = _data["status"];
-            this.detail = _data["detail"];
-            this.instance = _data["instance"];
-        }
-    }
-
-    static fromJS(data: any): ProblemDetails {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProblemDetails();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["type"] = this.type;
-        data["title"] = this.title;
-        data["status"] = this.status;
-        data["detail"] = this.detail;
-        data["instance"] = this.instance;
-        return data;
-    }
-}
-
-export interface IProblemDetails {
-    type?: string | undefined;
-    title?: string | undefined;
-    status?: number | undefined;
-    detail?: string | undefined;
-    instance?: string | undefined;
-
-    [key: string]: any;
 }
 
 export class ProjectUpdateCommand implements IProjectUpdateCommand {

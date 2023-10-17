@@ -24,7 +24,9 @@ public class ProjectCreateCommandHandler : IRequestHandler<ProjectCreateCommand,
     public async Task<int> Handle(ProjectCreateCommand request, CancellationToken cancellationToken)
     {
         // Unique Name Check
-        var existingEntity = await _context.Projects.Where(x => x.Name == request.Name).SingleOrDefaultAsync(cancellationToken);
+        var existingEntity = await _context.Projects
+                                .Where(x => x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
+                                .SingleOrDefaultAsync(cancellationToken);
         if (existingEntity != null)
         {
             throw new ValidationException(new List<ValidationFailure> {
@@ -35,7 +37,7 @@ public class ProjectCreateCommandHandler : IRequestHandler<ProjectCreateCommand,
         // Create
         var entity = new Project
         {
-            Name = request.Name
+            Name = request.Name.Trim()
         };
         _context.Projects.Add(entity);
         await _context.SaveChangesAsync(cancellationToken);

@@ -2,32 +2,32 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace KwikDeploy.Application.Targets.Queries.TargetUniqueName;
+namespace KwikDeploy.Application.Envs.Queries.EnvUniqueName;
 
-public record TargetUniqueNameQuery : IRequest<bool>
+public record EnvUniqueNameQuery : IRequest<bool>
 {
     public int ProjectId { get; init; }
 
     public string Name { get; init; } = null!;
 
-    public int? TargetId { get; init; } = null;
+    public int? EnvId { get; init; } = null;
 }
 
-public class TargetUniqueNameQueryHandler : IRequestHandler<TargetUniqueNameQuery, bool>
+public class EnvUniqueNameQueryHandler : IRequestHandler<EnvUniqueNameQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public TargetUniqueNameQueryHandler(IApplicationDbContext context)
+    public EnvUniqueNameQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<bool> Handle(TargetUniqueNameQuery request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(EnvUniqueNameQuery request, CancellationToken cancellationToken)
     {
-        if (request.TargetId == null)
+        if (request.EnvId == null)
         {
-            var entity = await _context.Targets
-                            .Where(x => x.ProjectId == request.ProjectId 
+            var entity = await _context.Envs
+                            .Where(x => x.ProjectId == request.ProjectId
                                         && x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
                             .SingleOrDefaultAsync(cancellationToken);
             if (entity == null)
@@ -37,9 +37,9 @@ public class TargetUniqueNameQueryHandler : IRequestHandler<TargetUniqueNameQuer
         }
         else
         {
-            var entity = await _context.Targets
-                            .Where(x => x.ProjectId == request.ProjectId 
-                                        && x.Id != request.TargetId 
+            var entity = await _context.Envs
+                            .Where(x => x.ProjectId == request.ProjectId
+                                        && x.Id != request.EnvId
                                         && x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
                             .SingleOrDefaultAsync(cancellationToken);
             if (entity == null)

@@ -8,6 +8,7 @@ namespace KwikDeploy.Application.Targets.Commands.TargetRegenerateKey;
 
 public record TargetRegenerateKeyCommand : IRequest<string>
 {
+    public int ProjectId { get; init; }
     public int Id { get; init; }
 }
 
@@ -24,7 +25,7 @@ public class TargetRegenerateKeyCommandHandler : IRequestHandler<TargetRegenerat
     {
         // Existance Check
         var entity = await _context.Targets
-                        .Where(x => x.Id == request.Id)
+                        .Where(x => x.ProjectId == request.ProjectId && x.Id == request.Id)
                         .SingleOrDefaultAsync(cancellationToken);
         if (entity == null)
         {

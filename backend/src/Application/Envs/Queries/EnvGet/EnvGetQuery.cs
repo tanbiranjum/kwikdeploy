@@ -1,31 +1,35 @@
 ﻿using KwikDeploy.Application.Common.Exceptions;
 using KwikDeploy.Application.Common.Interfaces;
+using KwikDeploy.Application.Targets.Queries.TargetGet;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace KwikDeploy.Application.Targets.Queries.TargetGet;
+namespace KwikDeploy.Application.Envs.Queries.EnvGet;
 
-public record TargetGetQuery : IRequest<TargetDto>
+public record EnvGetQuery : IRequest<EnvDto>
 {
+    public int ProjectId { get; init; }
+
     public int Id { get; init; }
 }
 
-public class TargetGetHandler : IRequestHandler<TargetGetQuery, TargetDto>
+public class EnvGetHandler : IRequestHandler<EnvGetQuery, EnvDto>
 {
     private readonly IApplicationDbContext _context;
 
-    public TargetGetHandler(IApplicationDbContext context)
+    public EnvGetHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<TargetDto> Handle(TargetGetQuery request, CancellationToken cancellationToken)
+    public async Task<EnvDto> Handle(EnvGetQuery request, CancellationToken cancellationToken)
     {
-        var targetDto = await _context.Targets.Where(x => x.Id == request.Id)
-                                    .Select(x => new TargetDto
+        var targetDto = await _context.Envs.Where(x => x.ProjectId == request.ProjectId && x.Id == request.Id)
+                                    .Select(x => new EnvDto
                                     {
                                         Id = x.Id,
                                         ProjectId = x.ProjectId,
+                                        TargetId = x.TargetId,
                                         Name = x.Name,
                                     }).SingleOrDefaultAsync();
 

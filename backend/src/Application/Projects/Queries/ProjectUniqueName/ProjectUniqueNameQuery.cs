@@ -24,7 +24,9 @@ public class ProjectUniqueNameQueryHandler : IRequestHandler<ProjectUniqueNameQu
     {
         if (request.ProjectId == null)
         {
-            var entity = await _context.Projects.Where(x => x.Name.ToLower() == request.Name.ToLower()).SingleOrDefaultAsync(cancellationToken);
+            var entity = await _context.Projects
+                            .Where(x => x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
+                            .SingleOrDefaultAsync(cancellationToken);
 
             if (entity == null)
             {
@@ -33,7 +35,9 @@ public class ProjectUniqueNameQueryHandler : IRequestHandler<ProjectUniqueNameQu
         }
         else
         {
-            var entity = await _context.Projects.Where(x => x.Id != request.ProjectId && x.Name.ToLower() == request.Name.ToLower()).SingleOrDefaultAsync(cancellationToken);
+            var entity = await _context.Projects
+                            .Where(x => x.Id != request.ProjectId && x.Name.Trim().ToLower() == request.Name.Trim().ToLower())
+                            .SingleOrDefaultAsync(cancellationToken);
 
             if (entity == null)
             {

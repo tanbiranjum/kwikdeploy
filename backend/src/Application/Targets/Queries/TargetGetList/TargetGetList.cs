@@ -7,6 +7,7 @@ namespace KwikDeploy.Application.Targets.Queries.TargetGetList;
 
 public record TargetGetList : IRequest<PaginatedList<TargetHeadDto>>
 {
+    public int ProjectId { get; set; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
@@ -23,6 +24,7 @@ public class TargetGetListHandler : IRequestHandler<TargetGetList, PaginatedList
     public async Task<PaginatedList<TargetHeadDto>> Handle(TargetGetList request, CancellationToken cancellationToken)
     {
         return await _context.Targets
+            .Where(x => x.ProjectId == request.ProjectId)
             .OrderBy(x => x.Name)
             .Select(x => new TargetHeadDto
             {

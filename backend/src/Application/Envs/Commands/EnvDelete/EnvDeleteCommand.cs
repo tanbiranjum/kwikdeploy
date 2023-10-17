@@ -4,24 +4,24 @@ using KwikDeploy.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace KwikDeploy.Application.Targets.Commands.TargetDelete;
+namespace KwikDeploy.Application.Envs.Commands.EnvDelete;
 
-public record TargetDeleteCommand(int ProjectId, int Id) : IRequest;
+public record EnvDeleteCommand(int projectId, int Id) : IRequest;
 
-public class TargetDeleteCommandHandler : IRequestHandler<TargetDeleteCommand>
+public class EnvDeleteCommandHandler : IRequestHandler<EnvDeleteCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public TargetDeleteCommandHandler(IApplicationDbContext context)
+    public EnvDeleteCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task Handle(TargetDeleteCommand request, CancellationToken cancellationToken)
+    public async Task Handle(EnvDeleteCommand request, CancellationToken cancellationToken)
     {
         // Existance Check
-        var entity = await _context.Targets
-                        .Where(x => x.ProjectId == request.ProjectId && x.Id == request.Id)
+        var entity = await _context.Envs
+                        .Where(x => x.ProjectId == request.projectId && x.Id == request.Id)
                         .SingleOrDefaultAsync(cancellationToken);
         if (entity == null)
         {
@@ -29,7 +29,7 @@ public class TargetDeleteCommandHandler : IRequestHandler<TargetDeleteCommand>
         }
 
         // Delete
-        _context.Targets.Remove(entity);
+        _context.Envs.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
