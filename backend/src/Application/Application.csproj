@@ -20,8 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="AppDefs\Commands\" />
-      <Folder Include="AppDefs\Queries\" />
       <Folder Include="Pipelines\Commands\" />
       <Folder Include="Pipelines\Queries\" />
       <Folder Include="Releases\Commands\" />

@@ -1,12 +1,13 @@
 ﻿using KwikDeploy.Application.Common.Exceptions;
 using KwikDeploy.Application.Common.Interfaces;
+using KwikDeploy.Application.Targets.Queries.TargetGet;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace KwikDeploy.Application.Targets.Queries.TargetGet;
+namespace KwikDeploy.Application.AppDefs.Queries.AppDefGet;
 
-public record TargetGetQuery : IRequest<TargetDto>
+public record AppDefGetQuery : IRequest<AppDefDto>
 {
     [FromRoute]
     public int ProjectId { get; set; }
@@ -15,30 +16,32 @@ public record TargetGetQuery : IRequest<TargetDto>
     public int Id { get; init; }
 }
 
-public class TargetGetHandler : IRequestHandler<TargetGetQuery, TargetDto>
+public class AppDefGetHandler : IRequestHandler<AppDefGetQuery, AppDefDto>
 {
     private readonly IApplicationDbContext _context;
 
-    public TargetGetHandler(IApplicationDbContext context)
+    public AppDefGetHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<TargetDto> Handle(TargetGetQuery request, CancellationToken cancellationToken)
+    public async Task<AppDefDto> Handle(AppDefGetQuery request, CancellationToken cancellationToken)
     {
-        var targetDto = await _context.Targets.Where(x => x.ProjectId == request.ProjectId && x.Id == request.Id)
-                                    .Select(x => new TargetDto
+        var appDefDto = await _context.AppDefs.Where(x => x.ProjectId == request.ProjectId && x.Id == request.Id)
+                                    .Select(x => new AppDefDto
                                     {
                                         Id = x.Id,
                                         ProjectId = x.ProjectId,
                                         Name = x.Name,
+                                        ImageName = x.ImageName,
+                                        Tag = x.Tag,
                                     }).SingleOrDefaultAsync();
 
-        if (targetDto is null)
+        if (appDefDto is null)
         {
             throw new NotFoundException(nameof(TargetDto), request.Id);
         }
 
-        return targetDto;
+        return appDefDto;
     }
 }
