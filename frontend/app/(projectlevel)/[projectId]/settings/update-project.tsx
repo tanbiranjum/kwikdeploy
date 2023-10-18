@@ -44,6 +44,7 @@ export default function CardWithForm({
 
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
   const formSchema = z.object({
+    id: z.number(),
     name: z.preprocess(
       trimString,
       z
@@ -62,6 +63,7 @@ export default function CardWithForm({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id,
       name,
     },
   })
