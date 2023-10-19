@@ -1,9 +1,5 @@
-﻿using KwikDeploy.Application.AppDefs.Commands.AppDefCreate;
-using KwikDeploy.Application.AppDefs.Commands.AppDefDelete;
-using KwikDeploy.Application.AppDefs.Commands.AppDefUpdate;
-using KwikDeploy.Application.AppDefs.Queries.AppDefGet;
-using KwikDeploy.Application.AppDefs.Queries.AppDefGetList;
-using KwikDeploy.Application.AppDefs.Queries.AppDefUniqueName;
+﻿using KwikDeploy.Application.AppDefs.Commands;
+using KwikDeploy.Application.AppDefs.Queries;
 using KwikDeploy.Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,20 +17,20 @@ public class AppDefsController : ApiControllerBase
     }
 
     [HttpGet("{Id}")]
-    public async Task<ActionResult<AppDefDto>> GetById(AppDefGetQuery query, CancellationToken cancellationToken)
+    public async Task<ActionResult<AppDefDto>> GetById(AppDefGet query, CancellationToken cancellationToken)
     {
         return await Mediator.Send(query, cancellationToken);
     }
 
     [HttpGet("uniqueName")]
-    public async Task<ActionResult<Result<bool>>> IsUniqueName(AppDefUniqueNameQuery query, CancellationToken cancellationToken)
+    public async Task<ActionResult<Result<bool>>> IsUniqueName(AppDefUniqueName query, CancellationToken cancellationToken)
     {
         return await Mediator.Send(query, cancellationToken);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Result<int>>> Create(AppDefCreateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Result<int>>> Create(AppDefCreate command, CancellationToken cancellationToken)
     {
         return await Mediator.Send(command, cancellationToken);
     }
@@ -42,7 +38,7 @@ public class AppDefsController : ApiControllerBase
     [HttpPut("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> Update(AppDefUpdateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> Update(AppDefUpdate command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
 
@@ -52,7 +48,7 @@ public class AppDefsController : ApiControllerBase
     [HttpDelete("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> Delete(AppDefDeleteCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> Delete(AppDefDelete command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
 

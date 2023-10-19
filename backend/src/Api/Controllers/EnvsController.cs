@@ -1,10 +1,6 @@
 ﻿using KwikDeploy.Application.Common.Models;
-using KwikDeploy.Application.Envs.Commands.EnvCreate;
-using KwikDeploy.Application.Envs.Commands.EnvDelete;
-using KwikDeploy.Application.Envs.Commands.EnvUpdate;
-using KwikDeploy.Application.Envs.Queries.EnvGet;
-using KwikDeploy.Application.Envs.Queries.EnvGetList;
-using KwikDeploy.Application.Envs.Queries.EnvUniqueName;
+using KwikDeploy.Application.Envs.Commands;
+using KwikDeploy.Application.Envs.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KwikDeploy.Api.Controllers;
@@ -21,13 +17,13 @@ public class EnvsController : ApiControllerBase
     }
 
     [HttpGet("{Id}")]
-    public async Task<ActionResult<EnvDto>> GetById(EnvGetQuery query, CancellationToken cancellationToken)
+    public async Task<ActionResult<EnvDto>> GetById(EnvGet query, CancellationToken cancellationToken)
     {
         return await Mediator.Send(query, cancellationToken);
     }
 
     [HttpGet("uniqueName")]
-    public async Task<ActionResult<Result<bool>>> IsUniqueName(EnvUniqueNameQuery query, CancellationToken cancellationToken)
+    public async Task<ActionResult<Result<bool>>> IsUniqueName(EnvUniqueName query, CancellationToken cancellationToken)
     {
         return await Mediator.Send(query, cancellationToken);
     }
@@ -35,7 +31,7 @@ public class EnvsController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Result<int>>> Create(EnvCreateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Result<int>>> Create(EnvCreate command, CancellationToken cancellationToken)
     {
         return await Mediator.Send(command, cancellationToken);
     }
@@ -44,7 +40,7 @@ public class EnvsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> Update(EnvUpdateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> Update(EnvUpdate command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
 
@@ -54,7 +50,7 @@ public class EnvsController : ApiControllerBase
     [HttpDelete("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> Delete(EnvDeleteCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> Delete(EnvDelete command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
 

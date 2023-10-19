@@ -310,12 +310,12 @@ export interface IResultOfInteger {
     value?: number;
 }
 
-export class AppDefCreateCommandBody implements IAppDefCreateCommandBody {
+export class AppDefCreateBody implements IAppDefCreateBody {
     name?: string;
     imageName?: string;
     tag?: string;
 
-    constructor(data?: IAppDefCreateCommandBody) {
+    constructor(data?: IAppDefCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -332,9 +332,9 @@ export class AppDefCreateCommandBody implements IAppDefCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): AppDefCreateCommandBody {
+    static fromJS(data: any): AppDefCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new AppDefCreateCommandBody();
+        let result = new AppDefCreateBody();
         result.init(data);
         return result;
     }
@@ -348,18 +348,18 @@ export class AppDefCreateCommandBody implements IAppDefCreateCommandBody {
     }
 }
 
-export interface IAppDefCreateCommandBody {
+export interface IAppDefCreateBody {
     name?: string;
     imageName?: string;
     tag?: string;
 }
 
-export class AppDefUpdateCommandBody implements IAppDefUpdateCommandBody {
+export class AppDefUpdateBody implements IAppDefUpdateBody {
     name?: string;
     imageName?: string;
     tag?: string;
 
-    constructor(data?: IAppDefUpdateCommandBody) {
+    constructor(data?: IAppDefUpdateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -376,9 +376,9 @@ export class AppDefUpdateCommandBody implements IAppDefUpdateCommandBody {
         }
     }
 
-    static fromJS(data: any): AppDefUpdateCommandBody {
+    static fromJS(data: any): AppDefUpdateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new AppDefUpdateCommandBody();
+        let result = new AppDefUpdateBody();
         result.init(data);
         return result;
     }
@@ -392,7 +392,7 @@ export class AppDefUpdateCommandBody implements IAppDefUpdateCommandBody {
     }
 }
 
-export interface IAppDefUpdateCommandBody {
+export interface IAppDefUpdateBody {
     name?: string;
     imageName?: string;
     tag?: string;
@@ -554,11 +554,11 @@ export interface IEnvDto {
     name?: string;
 }
 
-export class EnvCreateCommandBody implements IEnvCreateCommandBody {
+export class EnvCreateBody implements IEnvCreateBody {
     targetId?: number;
     name?: string;
 
-    constructor(data?: IEnvCreateCommandBody) {
+    constructor(data?: IEnvCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -574,9 +574,9 @@ export class EnvCreateCommandBody implements IEnvCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): EnvCreateCommandBody {
+    static fromJS(data: any): EnvCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new EnvCreateCommandBody();
+        let result = new EnvCreateBody();
         result.init(data);
         return result;
     }
@@ -589,16 +589,16 @@ export class EnvCreateCommandBody implements IEnvCreateCommandBody {
     }
 }
 
-export interface IEnvCreateCommandBody {
+export interface IEnvCreateBody {
     targetId?: number;
     name?: string;
 }
 
-export class EnvUpdateCommandBody implements IEnvUpdateCommandBody {
+export class EnvUpdateBody implements IEnvUpdateBody {
     targetId?: number;
     name?: string;
 
-    constructor(data?: IEnvUpdateCommandBody) {
+    constructor(data?: IEnvUpdateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -614,9 +614,9 @@ export class EnvUpdateCommandBody implements IEnvUpdateCommandBody {
         }
     }
 
-    static fromJS(data: any): EnvUpdateCommandBody {
+    static fromJS(data: any): EnvUpdateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new EnvUpdateCommandBody();
+        let result = new EnvUpdateBody();
         result.init(data);
         return result;
     }
@@ -629,7 +629,7 @@ export class EnvUpdateCommandBody implements IEnvUpdateCommandBody {
     }
 }
 
-export interface IEnvUpdateCommandBody {
+export interface IEnvUpdateBody {
     targetId?: number;
     name?: string;
 }
@@ -782,10 +782,10 @@ export interface IPipelineDto {
     name?: string;
 }
 
-export class PipelineCreateCommandBody implements IPipelineCreateCommandBody {
+export class PipelineCreateBody implements IPipelineCreateBody {
     name?: string;
 
-    constructor(data?: IPipelineCreateCommandBody) {
+    constructor(data?: IPipelineCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -800,9 +800,9 @@ export class PipelineCreateCommandBody implements IPipelineCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): PipelineCreateCommandBody {
+    static fromJS(data: any): PipelineCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new PipelineCreateCommandBody();
+        let result = new PipelineCreateBody();
         result.init(data);
         return result;
     }
@@ -814,14 +814,14 @@ export class PipelineCreateCommandBody implements IPipelineCreateCommandBody {
     }
 }
 
-export interface IPipelineCreateCommandBody {
+export interface IPipelineCreateBody {
     name?: string;
 }
 
-export class PipelineUpdateCommandBody implements IPipelineUpdateCommandBody {
+export class PipelineUpdateBody implements IPipelineUpdateBody {
     name?: string;
 
-    constructor(data?: IPipelineUpdateCommandBody) {
+    constructor(data?: IPipelineUpdateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -836,9 +836,9 @@ export class PipelineUpdateCommandBody implements IPipelineUpdateCommandBody {
         }
     }
 
-    static fromJS(data: any): PipelineUpdateCommandBody {
+    static fromJS(data: any): PipelineUpdateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new PipelineUpdateCommandBody();
+        let result = new PipelineUpdateBody();
         result.init(data);
         return result;
     }
@@ -850,7 +850,7 @@ export class PipelineUpdateCommandBody implements IPipelineUpdateCommandBody {
     }
 }
 
-export interface IPipelineUpdateCommandBody {
+export interface IPipelineUpdateBody {
     name?: string;
 }
 
@@ -998,10 +998,10 @@ export interface IProjectDto {
     name?: string;
 }
 
-export class ProjectCreateCommandBody implements IProjectCreateCommandBody {
+export class ProjectCreateBody implements IProjectCreateBody {
     name?: string;
 
-    constructor(data?: IProjectCreateCommandBody) {
+    constructor(data?: IProjectCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1016,9 +1016,9 @@ export class ProjectCreateCommandBody implements IProjectCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): ProjectCreateCommandBody {
+    static fromJS(data: any): ProjectCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new ProjectCreateCommandBody();
+        let result = new ProjectCreateBody();
         result.init(data);
         return result;
     }
@@ -1030,14 +1030,14 @@ export class ProjectCreateCommandBody implements IProjectCreateCommandBody {
     }
 }
 
-export interface IProjectCreateCommandBody {
+export interface IProjectCreateBody {
     name?: string;
 }
 
-export class ProjectUpdateCommandBody implements IProjectUpdateCommandBody {
+export class ProjectUpdateBody implements IProjectUpdateBody {
     name?: string;
 
-    constructor(data?: IProjectUpdateCommandBody) {
+    constructor(data?: IProjectUpdateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1052,9 +1052,9 @@ export class ProjectUpdateCommandBody implements IProjectUpdateCommandBody {
         }
     }
 
-    static fromJS(data: any): ProjectUpdateCommandBody {
+    static fromJS(data: any): ProjectUpdateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new ProjectUpdateCommandBody();
+        let result = new ProjectUpdateBody();
         result.init(data);
         return result;
     }
@@ -1066,7 +1066,7 @@ export class ProjectUpdateCommandBody implements IProjectUpdateCommandBody {
     }
 }
 
-export interface IProjectUpdateCommandBody {
+export interface IProjectUpdateBody {
     name?: string;
 }
 
@@ -1218,10 +1218,10 @@ export interface IReleaseDto {
     name?: string;
 }
 
-export class ReleaseCreateCommandBody implements IReleaseCreateCommandBody {
+export class ReleaseCreateBody implements IReleaseCreateBody {
     name?: string;
 
-    constructor(data?: IReleaseCreateCommandBody) {
+    constructor(data?: IReleaseCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1236,9 +1236,9 @@ export class ReleaseCreateCommandBody implements IReleaseCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): ReleaseCreateCommandBody {
+    static fromJS(data: any): ReleaseCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new ReleaseCreateCommandBody();
+        let result = new ReleaseCreateBody();
         result.init(data);
         return result;
     }
@@ -1250,14 +1250,14 @@ export class ReleaseCreateCommandBody implements IReleaseCreateCommandBody {
     }
 }
 
-export interface IReleaseCreateCommandBody {
+export interface IReleaseCreateBody {
     name?: string;
 }
 
-export class ReleaseUpdateCommandBody implements IReleaseUpdateCommandBody {
+export class ReleaseUpdateBody implements IReleaseUpdateBody {
     name?: string;
 
-    constructor(data?: IReleaseUpdateCommandBody) {
+    constructor(data?: IReleaseUpdateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1272,9 +1272,9 @@ export class ReleaseUpdateCommandBody implements IReleaseUpdateCommandBody {
         }
     }
 
-    static fromJS(data: any): ReleaseUpdateCommandBody {
+    static fromJS(data: any): ReleaseUpdateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new ReleaseUpdateCommandBody();
+        let result = new ReleaseUpdateBody();
         result.init(data);
         return result;
     }
@@ -1286,7 +1286,7 @@ export class ReleaseUpdateCommandBody implements IReleaseUpdateCommandBody {
     }
 }
 
-export interface IReleaseUpdateCommandBody {
+export interface IReleaseUpdateBody {
     name?: string;
 }
 
@@ -1442,10 +1442,10 @@ export interface ITargetDto {
     name?: string;
 }
 
-export class TargetCreateCommandBody implements ITargetCreateCommandBody {
+export class TargetCreateBody implements ITargetCreateBody {
     name?: string;
 
-    constructor(data?: ITargetCreateCommandBody) {
+    constructor(data?: ITargetCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1460,9 +1460,9 @@ export class TargetCreateCommandBody implements ITargetCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): TargetCreateCommandBody {
+    static fromJS(data: any): TargetCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new TargetCreateCommandBody();
+        let result = new TargetCreateBody();
         result.init(data);
         return result;
     }
@@ -1474,14 +1474,14 @@ export class TargetCreateCommandBody implements ITargetCreateCommandBody {
     }
 }
 
-export interface ITargetCreateCommandBody {
+export interface ITargetCreateBody {
     name?: string;
 }
 
-export class TargetUpdateCommandBody implements ITargetUpdateCommandBody {
+export class TargetUpdateBody implements ITargetUpdateBody {
     name?: string;
 
-    constructor(data?: ITargetUpdateCommandBody) {
+    constructor(data?: ITargetUpdateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1496,9 +1496,9 @@ export class TargetUpdateCommandBody implements ITargetUpdateCommandBody {
         }
     }
 
-    static fromJS(data: any): TargetUpdateCommandBody {
+    static fromJS(data: any): TargetUpdateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new TargetUpdateCommandBody();
+        let result = new TargetUpdateBody();
         result.init(data);
         return result;
     }
@@ -1510,7 +1510,7 @@ export class TargetUpdateCommandBody implements ITargetUpdateCommandBody {
     }
 }
 
-export interface ITargetUpdateCommandBody {
+export interface ITargetUpdateBody {
     name?: string;
 }
 
@@ -1802,13 +1802,13 @@ export interface IUserDto {
     accessFailedCount?: number;
 }
 
-export class UserCreateCommandBody implements IUserCreateCommandBody {
+export class UserCreateBody implements IUserCreateBody {
     userName?: string;
     email?: string | undefined;
     password?: string;
     confirmPassword?: string;
 
-    constructor(data?: IUserCreateCommandBody) {
+    constructor(data?: IUserCreateBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1826,9 +1826,9 @@ export class UserCreateCommandBody implements IUserCreateCommandBody {
         }
     }
 
-    static fromJS(data: any): UserCreateCommandBody {
+    static fromJS(data: any): UserCreateBody {
         data = typeof data === 'object' ? data : {};
-        let result = new UserCreateCommandBody();
+        let result = new UserCreateBody();
         result.init(data);
         return result;
     }
@@ -1843,17 +1843,17 @@ export class UserCreateCommandBody implements IUserCreateCommandBody {
     }
 }
 
-export interface IUserCreateCommandBody {
+export interface IUserCreateBody {
     userName?: string;
     email?: string | undefined;
     password?: string;
     confirmPassword?: string;
 }
 
-export class UserSetEmailCommandBody implements IUserSetEmailCommandBody {
+export class UserSetEmailBody implements IUserSetEmailBody {
     email?: string;
 
-    constructor(data?: IUserSetEmailCommandBody) {
+    constructor(data?: IUserSetEmailBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1868,9 +1868,9 @@ export class UserSetEmailCommandBody implements IUserSetEmailCommandBody {
         }
     }
 
-    static fromJS(data: any): UserSetEmailCommandBody {
+    static fromJS(data: any): UserSetEmailBody {
         data = typeof data === 'object' ? data : {};
-        let result = new UserSetEmailCommandBody();
+        let result = new UserSetEmailBody();
         result.init(data);
         return result;
     }
@@ -1882,14 +1882,14 @@ export class UserSetEmailCommandBody implements IUserSetEmailCommandBody {
     }
 }
 
-export interface IUserSetEmailCommandBody {
+export interface IUserSetEmailBody {
     email?: string;
 }
 
-export class UserSetUserNameCommandBody implements IUserSetUserNameCommandBody {
+export class UserSetUserNameBody implements IUserSetUserNameBody {
     userName?: string;
 
-    constructor(data?: IUserSetUserNameCommandBody) {
+    constructor(data?: IUserSetUserNameBody) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1904,9 +1904,9 @@ export class UserSetUserNameCommandBody implements IUserSetUserNameCommandBody {
         }
     }
 
-    static fromJS(data: any): UserSetUserNameCommandBody {
+    static fromJS(data: any): UserSetUserNameBody {
         data = typeof data === 'object' ? data : {};
-        let result = new UserSetUserNameCommandBody();
+        let result = new UserSetUserNameBody();
         result.init(data);
         return result;
     }
@@ -1918,6 +1918,6 @@ export class UserSetUserNameCommandBody implements IUserSetUserNameCommandBody {
     }
 }
 
-export interface IUserSetUserNameCommandBody {
+export interface IUserSetUserNameBody {
     userName?: string;
 }

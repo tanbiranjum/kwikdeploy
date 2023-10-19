@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using AutoMapper;
 using KwikDeploy.Application.Common.Mappings;
-using KwikDeploy.Application.Targets.Queries.TargetGetList;
+using KwikDeploy.Application.Targets.Queries;
 using KwikDeploy.Domain.Entities;
 using NUnit.Framework;
 

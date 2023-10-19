@@ -1,10 +1,6 @@
 ﻿using KwikDeploy.Application.Common.Models;
-using KwikDeploy.Application.Releases.Commands.ReleaseCreate;
-using KwikDeploy.Application.Releases.Commands.ReleaseDelete;
-using KwikDeploy.Application.Releases.Commands.ReleaseUpdate;
-using KwikDeploy.Application.Releases.Queries.ReleaseGet;
-using KwikDeploy.Application.Releases.Queries.ReleaseGetList;
-using KwikDeploy.Application.Releases.Queries.ReleaseUniqueName;
+using KwikDeploy.Application.Releases.Commands;
+using KwikDeploy.Application.Releases.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KwikDeploy.Api.Controllers;
@@ -21,20 +17,20 @@ public class ReleasesController : ApiControllerBase
     }
 
     [HttpGet("{Id}")]
-    public async Task<ActionResult<ReleaseDto>> GetById(ReleaseGetQuery query, CancellationToken cancellationToken)
+    public async Task<ActionResult<ReleaseDto>> GetById(ReleaseGet query, CancellationToken cancellationToken)
     {
         return await Mediator.Send(query, cancellationToken);
     }
 
     [HttpGet("uniqueName")]
-    public async Task<ActionResult<Result<bool>>> IsUniqueName(ReleaseUniqueNameQuery query, CancellationToken cancellationToken)
+    public async Task<ActionResult<Result<bool>>> IsUniqueName(ReleaseUniqueName query, CancellationToken cancellationToken)
     {
         return await Mediator.Send(query, cancellationToken);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Result<int>>> Create(ReleaseCreateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Result<int>>> Create(ReleaseCreate command, CancellationToken cancellationToken)
     {
         return await Mediator.Send(command, cancellationToken);
     }
@@ -42,7 +38,7 @@ public class ReleasesController : ApiControllerBase
     [HttpPut("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> Update(ReleaseUpdateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> Update(ReleaseUpdate command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
 
@@ -52,7 +48,7 @@ public class ReleasesController : ApiControllerBase
     [HttpDelete("{Id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> Delete(ReleaseDeleteCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> Delete(ReleaseDelete command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
 

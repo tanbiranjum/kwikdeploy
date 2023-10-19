@@ -92,7 +92,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AppDefCreateCommandBody"
+                "$ref": "#/components/schemas/AppDefCreateBody"
               }
             }
           },
@@ -196,7 +196,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AppDefUpdateCommandBody"
+                "$ref": "#/components/schemas/AppDefUpdateBody"
               }
             }
           },
@@ -414,7 +414,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EnvCreateCommandBody"
+                "$ref": "#/components/schemas/EnvCreateBody"
               }
             }
           },
@@ -528,7 +528,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EnvUpdateCommandBody"
+                "$ref": "#/components/schemas/EnvUpdateBody"
               }
             }
           },
@@ -756,7 +756,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PipelineCreateCommandBody"
+                "$ref": "#/components/schemas/PipelineCreateBody"
               }
             }
           },
@@ -860,7 +860,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PipelineUpdateCommandBody"
+                "$ref": "#/components/schemas/PipelineUpdateBody"
               }
             }
           },
@@ -1046,7 +1046,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateCommandBody"
+                "$ref": "#/components/schemas/ProjectCreateBody"
               }
             }
           },
@@ -1130,7 +1130,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectUpdateCommandBody"
+                "$ref": "#/components/schemas/ProjectUpdateBody"
               }
             }
           },
@@ -1338,7 +1338,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ReleaseCreateCommandBody"
+                "$ref": "#/components/schemas/ReleaseCreateBody"
               }
             }
           },
@@ -1442,7 +1442,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ReleaseUpdateCommandBody"
+                "$ref": "#/components/schemas/ReleaseUpdateBody"
               }
             }
           },
@@ -1660,7 +1660,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TargetCreateCommandBody"
+                "$ref": "#/components/schemas/TargetCreateBody"
               }
             }
           },
@@ -1764,7 +1764,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TargetUpdateCommandBody"
+                "$ref": "#/components/schemas/TargetUpdateBody"
               }
             }
           },
@@ -2039,7 +2039,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateCommandBody"
+                "$ref": "#/components/schemas/UserCreateBody"
               }
             }
           },
@@ -2238,7 +2238,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserSetEmailCommandBody"
+                "$ref": "#/components/schemas/UserSetEmailBody"
               }
             }
           },
@@ -2279,7 +2279,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserSetUserNameCommandBody"
+                "$ref": "#/components/schemas/UserSetUserNameBody"
               }
             }
           },
@@ -2434,7 +2434,7 @@
           }
         }
       },
-      "AppDefCreateCommandBody": {
+      "AppDefCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2449,7 +2449,7 @@
           }
         }
       },
-      "AppDefUpdateCommandBody": {
+      "AppDefUpdateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2531,7 +2531,7 @@
           }
         }
       },
-      "EnvCreateCommandBody": {
+      "EnvCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2544,7 +2544,7 @@
           }
         }
       },
-      "EnvUpdateCommandBody": {
+      "EnvUpdateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2617,7 +2617,7 @@
           }
         }
       },
-      "PipelineCreateCommandBody": {
+      "PipelineCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2626,7 +2626,7 @@
           }
         }
       },
-      "PipelineUpdateCommandBody": {
+      "PipelineUpdateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2691,7 +2691,7 @@
           }
         }
       },
-      "ProjectCreateCommandBody": {
+      "ProjectCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2700,7 +2700,7 @@
           }
         }
       },
-      "ProjectUpdateCommandBody": {
+      "ProjectUpdateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2769,7 +2769,7 @@
           }
         }
       },
-      "ReleaseCreateCommandBody": {
+      "ReleaseCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2778,7 +2778,7 @@
           }
         }
       },
-      "ReleaseUpdateCommandBody": {
+      "ReleaseUpdateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2850,7 +2850,7 @@
           }
         }
       },
-      "TargetCreateCommandBody": {
+      "TargetCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2859,7 +2859,7 @@
           }
         }
       },
-      "TargetUpdateCommandBody": {
+      "TargetUpdateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2983,7 +2983,7 @@
           }
         }
       },
-      "UserCreateCommandBody": {
+      "UserCreateBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3002,7 +3002,7 @@
           }
         }
       },
-      "UserSetEmailCommandBody": {
+      "UserSetEmailBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3011,7 +3011,7 @@
           }
         }
       },
-      "UserSetUserNameCommandBody": {
+      "UserSetUserNameBody": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
