@@ -634,6 +634,226 @@ export interface IEnvUpdateCommandBody {
     name?: string;
 }
 
+export class PaginatedListOfPipelineHeadDto implements IPaginatedListOfPipelineHeadDto {
+    items?: PipelineHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfPipelineHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(PipelineHeadDto.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfPipelineHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfPipelineHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data;
+    }
+}
+
+export interface IPaginatedListOfPipelineHeadDto {
+    items?: PipelineHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+}
+
+export class PipelineHeadDto implements IPipelineHeadDto {
+    id?: number;
+    name?: string;
+
+    constructor(data?: IPipelineHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PipelineHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PipelineHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IPipelineHeadDto {
+    id?: number;
+    name?: string;
+}
+
+export class PipelineDto implements IPipelineDto {
+    id?: number;
+    projectId?: number;
+    name?: string;
+
+    constructor(data?: IPipelineDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.projectId = _data["projectId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PipelineDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PipelineDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["projectId"] = this.projectId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IPipelineDto {
+    id?: number;
+    projectId?: number;
+    name?: string;
+}
+
+export class PipelineCreateCommandBody implements IPipelineCreateCommandBody {
+    name?: string;
+
+    constructor(data?: IPipelineCreateCommandBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PipelineCreateCommandBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new PipelineCreateCommandBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IPipelineCreateCommandBody {
+    name?: string;
+}
+
+export class PipelineUpdateCommandBody implements IPipelineUpdateCommandBody {
+    name?: string;
+
+    constructor(data?: IPipelineUpdateCommandBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): PipelineUpdateCommandBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new PipelineUpdateCommandBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IPipelineUpdateCommandBody {
+    name?: string;
+}
+
 export class PaginatedListOfProjectHeadDto implements IPaginatedListOfProjectHeadDto {
     items?: ProjectHeadDto[];
     pageNumber?: number;
@@ -847,6 +1067,226 @@ export class ProjectUpdateCommandBody implements IProjectUpdateCommandBody {
 }
 
 export interface IProjectUpdateCommandBody {
+    name?: string;
+}
+
+export class PaginatedListOfReleaseHeadDto implements IPaginatedListOfReleaseHeadDto {
+    items?: ReleaseHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfReleaseHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ReleaseHeadDto.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfReleaseHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfReleaseHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data;
+    }
+}
+
+export interface IPaginatedListOfReleaseHeadDto {
+    items?: ReleaseHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+}
+
+export class ReleaseHeadDto implements IReleaseHeadDto {
+    id?: number;
+    name?: string;
+
+    constructor(data?: IReleaseHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ReleaseHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReleaseHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IReleaseHeadDto {
+    id?: number;
+    name?: string;
+}
+
+export class ReleaseDto implements IReleaseDto {
+    id?: number;
+    projectId?: number;
+    name?: string;
+
+    constructor(data?: IReleaseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.projectId = _data["projectId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ReleaseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReleaseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["projectId"] = this.projectId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IReleaseDto {
+    id?: number;
+    projectId?: number;
+    name?: string;
+}
+
+export class ReleaseCreateCommandBody implements IReleaseCreateCommandBody {
+    name?: string;
+
+    constructor(data?: IReleaseCreateCommandBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ReleaseCreateCommandBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReleaseCreateCommandBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IReleaseCreateCommandBody {
+    name?: string;
+}
+
+export class ReleaseUpdateCommandBody implements IReleaseUpdateCommandBody {
+    name?: string;
+
+    constructor(data?: IReleaseUpdateCommandBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ReleaseUpdateCommandBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReleaseUpdateCommandBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IReleaseUpdateCommandBody {
     name?: string;
 }
 

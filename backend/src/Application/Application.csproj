@@ -19,11 +19,4 @@
         <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pipelines\Commands\" />
-      <Folder Include="Pipelines\Queries\" />
-      <Folder Include="Releases\Commands\" />
-      <Folder Include="Releases\Queries\" />
-    </ItemGroup>
-
 </Project>
