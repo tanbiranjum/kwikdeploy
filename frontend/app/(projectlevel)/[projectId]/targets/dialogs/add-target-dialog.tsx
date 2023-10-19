@@ -29,11 +29,11 @@ import useTargets from "@/hooks/useTargets"
 import { useParams } from "next/navigation"
 
 export default function AddTargetDialog() {
-  const { projectId } = useParams()
+  const { projectId }: { projectId: string } = useParams()
 
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const { mutateTargets } = useTargets(1)
+  const { mutateTargets } = useTargets(projectId)
   const { toast } = useToast()
 
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
