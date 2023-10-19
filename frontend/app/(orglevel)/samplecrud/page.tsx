@@ -1,6 +1,6 @@
 "use client"
 
-import AddProjectDialog from "@/components/app-project-dialog"
+import AddProjectDialog from "@/components/add-project-dialog"
 import { Icons } from "@/components/icons"
 import MainContainer from "@/components/main-container"
 import { Button } from "@/components/ui/button"

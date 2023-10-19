@@ -1,73 +1,23 @@
-import { Icons } from "@/components/icons"
-import MainContainer from "@/components/main-container"
-import { Button } from "@/components/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+"use client"
+
 import React from "react"
+import MainContainer from "@/components/main-container"
+import { DataTable } from "@/components/ui/data-table"
+import { columns } from "./table/columns"
+import useTargets from "@/hooks/useTargets"
+import AddTargetDialog from "./dialogs/add-target-dialog"
+import { useParams } from "next/navigation"
 
-type Props = {}
+export default function TargetsPage() {
+  const { projectId }: { projectId: string } = useParams()
+  const { targets } = useTargets(projectId)
 
-const targetName = [
-  {
-    name: "target 1",
-    status: "Online",
-  },
-  {
-    name: "target 2",
-    status: "Online",
-  },
-  {
-    name: "target 3",
-    status: "Online",
-  },
-  {
-    name: "target 4",
-    status: "Online",
-  },
-]
+  if (!targets?.items) return null
 
-const TargetsPage = (props: Props) => {
   return (
     <MainContainer props={{ className: "" }}>
-      <Button>
-        <Icons.plus className="mr-2 h-4 w-4" />
-        Add Target
-      </Button>
-      <Table>
-        <TableHeader className="border bg-slate-100">
-          <TableRow>
-            <TableHead className="w-[200px]">Target Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {targetName.map((target) => (
-            <TableRow key={target.name}>
-              <TableCell className="font-medium">{target.name}</TableCell>
-              <TableCell>{target.status}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-3">
-                  <Button variant="outline" size="icon">
-                    <Icons.pencil className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <Icons.trash className="h-4 w-4 text-red-600" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <AddTargetDialog />
+      <DataTable columns={columns} data={targets.items} />
     </MainContainer>
   )
 }
-
-export default TargetsPage

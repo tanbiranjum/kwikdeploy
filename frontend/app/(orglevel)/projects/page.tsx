@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import React from "react"
 import ProjectCard from "./project-card"
 
-import AddProjectDialog from "@/components/app-project-dialog"
+import AddProjectDialog from "@/components/add-project-dialog"
 import MainContainer from "@/components/main-container"
 import useProjects from "@/hooks/useProjects"
 
