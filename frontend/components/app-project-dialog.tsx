@@ -45,7 +45,9 @@ const AddProjectDialog = (props: Props) => {
         .min(1, "Project Name is required")
         .max(20)
         .refine(async (value) => {
-          const res = await fetch(`/backendapi/projects/uniquename/${value}`)
+          const res = await fetch(
+            `/backendapi/projects/uniquename?name=${value}&projectId=0`
+          )
           return await res.json()
         }, "Another project with this name already exists")
     ),

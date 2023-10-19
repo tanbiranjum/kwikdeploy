@@ -1,6 +1,6 @@
 import fetcher from "@/lib/fetcher"
 import useSWR, { mutate } from "swr"
-import { PaginatedListOfProjectHeadDto } from "@/lib/api/web-api-client"
+import { PaginatedListOfProjectHeadDto } from "@/lib/api/web-api-models"
 
 export default function useProjects() {
   const url = "/backendapi/projects"

@@ -1,4 +1,4 @@
-import { SuccessfulLoginResponse } from "@/lib/api/web-api-client"
+import { SuccessfulLoginResponse } from "@/lib/api/web-api-models"
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 

@@ -1,4 +1,5 @@
 "use client"
+
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -44,7 +45,6 @@ export default function CardWithForm({
 
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
   const formSchema = z.object({
-    id: z.number(),
     name: z.preprocess(
       trimString,
       z
@@ -52,7 +52,9 @@ export default function CardWithForm({
         .min(1, "Project Name is required")
         .max(20)
         .refine(async (value) => {
-          const res = await fetch(`/backendapi/projects/uniquename/${value}`)
+          const res = await fetch(
+            `/backendapi/projects/uniquename?name=${value}&projectId=${id}`
+          )
           return await res.json()
         }, "Another project with this name already exists")
     ),
@@ -63,7 +65,6 @@ export default function CardWithForm({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id,
       name,
     },
   })
