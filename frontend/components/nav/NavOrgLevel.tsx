@@ -8,7 +8,6 @@ import { UserNav } from "@/components/user-nav"
 const navItems = [
   { name: "Projects", href: "/projects" },
   { name: "Settings", href: "/settings" },
-  { name: "Sample CRUD", href: "/samplecrud" },
 ]
 
 export default function NavOrgLevel() {

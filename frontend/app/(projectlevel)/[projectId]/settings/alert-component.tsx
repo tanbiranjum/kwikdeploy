@@ -112,7 +112,7 @@ export default function AlertComponet({ projectName, id }: AlertProps) {
             disabled={isDisable}
             onClick={handleOnDelete}
           >
-            Cancel
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
