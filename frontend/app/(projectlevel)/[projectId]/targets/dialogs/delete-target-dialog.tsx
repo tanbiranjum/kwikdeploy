@@ -28,6 +28,7 @@ export default function DeleteTargetDialog() {
 
   const handleDeleteTarget = async () => {
     setIsSaving(true)
+
     const response = await fetch(
       `/backendapi/targets/${projectId}/${targetId}`,
       {
@@ -38,9 +39,11 @@ export default function DeleteTargetDialog() {
     if (!response.ok) {
       setOpen(false)
     } else {
-      await mutateTargets()
-      setOpen(false)
-      router.push(`/${projectId}/targets`)
+      mutateTargets()
+      setTimeout(() => {
+        setOpen(false)
+        router.push(`/${projectId}/targets`)
+      }, 500)
     }
     setIsSaving(false)
   }

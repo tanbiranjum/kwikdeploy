@@ -79,7 +79,7 @@ export default function AddTargetDialog() {
         description: "There was a problem when saving new target. Try again!",
       })
     } else {
-      await mutateTargets()
+      mutateTargets()
       setOpen(false)
       form.reset()
       toast({
