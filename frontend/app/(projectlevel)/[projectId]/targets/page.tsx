@@ -10,8 +10,10 @@ import { useParams, useRouter } from "next/navigation"
 
 export default function TargetsPage() {
   const { projectId }: { projectId: string } = useParams()
-  const { targets } = useTargets(projectId)
+  const { isLoading, targets } = useTargets(projectId)
   const router = useRouter()
+
+  if (isLoading) return <div>Loading...</div>
 
   if (!targets?.items) return null
 

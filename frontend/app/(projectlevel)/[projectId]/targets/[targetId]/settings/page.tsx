@@ -20,6 +20,8 @@ import { cn } from "@/lib/utils"
 import useTargets from "@/hooks/useTargets"
 import useTarget from "@/hooks/useTarget"
 import { useParams } from "next/navigation"
+import { Separator } from "@/components/ui/separator"
+import DeleteTargetDialog from "../../dialogs/delete-target-dialog"
 
 export default function TargetSettings() {
   const { projectId, targetId }: { projectId: string; targetId: string } =
@@ -41,7 +43,7 @@ export default function TargetSettings() {
       trimString,
       z
         .string()
-        .min(1, "Target Name is required")
+        .min(1, "Name is required")
         .max(20)
         .refine(async (value) => {
           const res = await fetch(
@@ -86,40 +88,51 @@ export default function TargetSettings() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <fieldset className={cn("group")}>
-          <div className="grid gap-4 py-4 group-disabled:opacity-50">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Target Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div>
-            <Button
-              className={cn("relative group-disabled:pointer-events-none")}
-              type="submit"
-              disabled={isSaving}
-            >
-              <Icons.spinner
-                className={cn(
-                  "absolute animate-spin text-slate-100 group-enabled:opacity-0  "
-                )}
-              />
-              <span className={cn("group-disabled:opacity-0")}>Save</span>
-            </Button>
-          </div>
-        </fieldset>
-      </form>
-    </Form>
+    <>
+      <div className="space-y-6">
+        <h3 className="text-lg font-medium">Target Details</h3>
+        <Separator />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <fieldset className={cn("group")}>
+              <div className="grid gap-4 pb-4 group-disabled:opacity-50">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <Button
+                  className={cn("relative group-disabled:pointer-events-none")}
+                  type="submit"
+                  disabled={isSaving}
+                >
+                  <Icons.spinner
+                    className={cn(
+                      "absolute animate-spin text-slate-100 group-enabled:opacity-0  "
+                    )}
+                  />
+                  <span className={cn("group-disabled:opacity-0")}>Save</span>
+                </Button>
+              </div>
+            </fieldset>
+          </form>
+        </Form>
+      </div>
+      <div className="mt-12 space-y-6">
+        <h3 className="text-lg font-medium text-rose-500">Danger Zone</h3>
+        <Separator />
+        <DeleteTargetDialog />
+      </div>
+    </>
   )
 }

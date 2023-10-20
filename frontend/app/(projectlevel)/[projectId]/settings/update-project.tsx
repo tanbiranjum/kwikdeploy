@@ -70,7 +70,6 @@ export default function CardWithForm({
   })
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsSaving(true)
-    console.log(data)
     const response = await fetch(`/backendapi/projects/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
