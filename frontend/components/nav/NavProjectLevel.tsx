@@ -29,7 +29,7 @@ export default function NavProjectLevel({
             className="text-sm font-medium transition-colors"
             href={`/projects`}
           >
-            &lt;- Back
+            &lt;- Home
           </Link>
           {navItems.map((navItem, i) => (
             <Link
