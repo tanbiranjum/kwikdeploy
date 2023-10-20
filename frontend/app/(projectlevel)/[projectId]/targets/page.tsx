@@ -7,13 +7,14 @@ import { columns } from "./table/columns"
 import useTargets from "@/hooks/useTargets"
 import AddTargetDialog from "./dialogs/add-target-dialog"
 import { useParams, useRouter } from "next/navigation"
+import Loading from "@/components/loading"
 
 export default function TargetsPage() {
   const { projectId }: { projectId: string } = useParams()
   const { isLoading, targets } = useTargets(projectId)
   const router = useRouter()
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <Loading />
 
   if (!targets?.items) return null
 

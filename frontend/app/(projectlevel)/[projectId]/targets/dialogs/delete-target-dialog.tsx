@@ -38,7 +38,7 @@ export default function DeleteTargetDialog() {
     if (!response.ok) {
       setOpen(false)
     } else {
-      mutateTargets()
+      await mutateTargets()
       setOpen(false)
       router.push(`/${projectId}/targets`)
     }
