@@ -43,7 +43,7 @@ export default function AddTargetDialog() {
       trimString,
       z
         .string()
-        .min(1, "Tatget Name is required")
+        .min(1, "Target Name is required")
         .max(20)
         .refine(async (value) => {
           const res = await fetch(
