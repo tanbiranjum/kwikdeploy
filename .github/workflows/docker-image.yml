@@ -27,7 +27,7 @@ jobs:
       - name: Build and Push API
         uses: docker/build-push-action@v5
         with:
-          context: "{{defaultContext}}:backend:src"
+          context: "{{defaultContext}}:backend/src"
           file: KwikDeploy.Api/Dockerfile
           push: true
           tags: ghcr.io/kwikdeploy/api:dev
