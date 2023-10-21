@@ -18,8 +18,8 @@ jobs:
           username: ${{ secrets.DOCKERREGISTRY_USERNAME }}
           password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
       - name: Add Next Config
+        working-directory: ${{ github.action_path }}
         run: |
-          cd ${{ github.action_path }}
           pwd
           ls -l
           ENVFILE=${{  github. }} ./frontend/.env
