@@ -17,6 +17,13 @@ jobs:
           registry: ghcr.io
           username: ${{ secrets.DOCKERREGISTRY_USERNAME }}
           password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
+      - name: Add Next Config
+        run: |
+          echo "NEXTAUTH_URL=\"https://app.kwikdeploy.com\"" >> {{defaultContext}}:frontend/.env.production
+          echo "NEXTAUTH_SECRET=\"${{ secrets.NEXTAUTH_SECRET }}"" >> {{defaultContext}}:frontend/.env.production
+          echo "BACKENDAPI_SCHEME=https" >> {{defaultContext}}:frontend/.env.production
+          echo "BACKENDAPI_HOST=api.kwikdeploy.com" >> {{defaultContext}}:frontend/.env.production
+          echo "BACKENDAPI_PORT=443" >> {{defaultContext}}:frontend/.env.production
       - name: Build and Push UI
         uses: docker/build-push-action@v5
         with:
