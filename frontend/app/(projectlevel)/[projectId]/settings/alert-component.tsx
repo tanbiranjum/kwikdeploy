@@ -1,4 +1,3 @@
-import { Icons } from "@/components/icons"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,20 +20,22 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import React, { useCallback, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
-import { setTimeout } from "timers"
 
 interface AlertProps {
   projectName?: string
-  id: number
+  projectId: string
 }
 
-export default function AlertComponet({ projectName, id }: AlertProps) {
-  const { mutateProjects, isLoading } = useProjects()
+export default function AlertComponet({
+  projectName,
+  projectId: id,
+}: AlertProps) {
+  const router = useRouter()
+  const { mutateProjects } = useProjects()
 
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
 
-  const [isDisable, setIsDisable] = useState(true)
-  const router = useRouter()
+  const [isDisabled, setIsDisabled] = useState(true)
 
   const formSchema = z.object({
     name: z.preprocess(
@@ -56,31 +57,31 @@ export default function AlertComponet({ projectName, id }: AlertProps) {
     const input = { name: e.target.value }
     const validation = formSchema.safeParse(input)
 
-    if (validation.success) {
-      setIsDisable(false)
-    } else setIsDisable(true)
+    setIsDisabled(!validation.success)
   }
 
   const handleOnDelete = useCallback(async () => {
     const response = await fetch(`/backendapi/projects/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
     })
     if (!response.ok) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem when saving new project. Try again!",
+        description:
+          "There was a problem when deleting the project. Try again!",
       })
     } else {
       mutateProjects()
       toast({
         title: "Success!",
-        description: "You successfully Delete the project.",
+        description: "Project deleted successfully.",
+        color: "red",
       })
+      setTimeout(() => {
+        router.push("/projects")
+      }, 500)
     }
-    !isLoading && router.push("/projects")
   }, [])
 
   return (
@@ -102,20 +103,20 @@ export default function AlertComponet({ projectName, id }: AlertProps) {
           </AlertDialogDescription>
           <Input
             className={cn("mt-16", {
-              "focus-visible:ring-red-600": isDisable,
+              "focus-visible:ring-red-600": isDisabled,
             })}
             onChange={handleOnChangeMatcher}
           />
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className={cn(buttonVariants({ variant: "destructive" }))}
-            disabled={isDisable}
+            disabled={isDisabled}
             onClick={handleOnDelete}
           >
             Delete
           </AlertDialogAction>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

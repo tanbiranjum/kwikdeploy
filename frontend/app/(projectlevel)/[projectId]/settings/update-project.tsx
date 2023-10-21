@@ -1,20 +1,13 @@
 "use client"
 
-import * as React from "react"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { toast } from "../../../../components/ui/use-toast"
+import { toast } from "@/components/ui/use-toast"
 import { z } from "zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Icons } from "../../../../components/icons"
+import { Icons } from "@/components/icons"
 import {
   Form,
   FormControl,
@@ -22,27 +15,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../components/ui/form"
+} from "@/components/ui/form"
 
 import useProjects from "@/hooks/useProjects"
 import { cn } from "@/lib/utils"
 import AlertComponet from "./alert-component"
+import useProject from "@/hooks/useProject"
+import { useParams } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
 
-type CardAttributes = {
-  projectId: number
-  name?: string
-}
-
-type CardProps = React.ComponentProps<typeof Card> & CardAttributes
-
-export default function CardWithForm({
-  projectId: id,
-  name,
-  className,
-  ...props
-}: CardProps) {
+export default function CardWithForm() {
+  const { projectId }: { projectId: string } = useParams()
+  const { project } = useProject(projectId)
   const { mutateProjects } = useProjects()
-  const [isSaving, setIsSaving] = React.useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    form.reset(project)
+  }, [project])
 
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
 
@@ -51,11 +41,11 @@ export default function CardWithForm({
       trimString,
       z
         .string()
-        .min(1, "Project Name is required")
+        .min(1, "Name is required")
         .max(20)
         .refine(async (value) => {
           const res = await fetch(
-            `/backendapi/projects/uniquename?name=${value}&projectId=${id}`
+            `/backendapi/projects/uniquename?name=${value}&projectId=${projectId}`
           )
           return await res.json()
         }, "Another project with this name already exists")
@@ -66,14 +56,12 @@ export default function CardWithForm({
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name,
-    },
+    defaultValues: useMemo(() => project, [project]),
   })
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsSaving(true)
-    const response = await fetch(`/backendapi/projects/${id}`, {
+    const response = await fetch(`/backendapi/projects/${projectId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -97,7 +85,7 @@ export default function CardWithForm({
 
   return (
     <>
-      <Card className={cn("w-full", className)} {...props}>
+      <Card className={cn("w-full")}>
         <CardHeader>
           <CardTitle>Make changes to your project</CardTitle>
         </CardHeader>
@@ -135,7 +123,10 @@ export default function CardWithForm({
                     />
                     <span className="group-disabled:opacity-0">Save</span>
                   </Button>
-                  <AlertComponet id={id} projectName={name} />
+                  <AlertComponet
+                    projectId={projectId}
+                    projectName={project?.name}
+                  />
                 </div>
               </fieldset>
             </form>

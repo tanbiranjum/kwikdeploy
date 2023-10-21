@@ -65,13 +65,6 @@ export default function DeleteTargetDialog() {
         <DialogFooter>
           <fieldset disabled={isSaving} className="group">
             <Button
-              variant={"secondary"}
-              className="mr-2 w-24"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
               variant={"destructive"}
               className={cn("relative w-24 group-disabled:pointer-events-none")}
               disabled={isSaving}
@@ -83,6 +76,13 @@ export default function DeleteTargetDialog() {
                 )}
               />
               <span className={cn("group-disabled:opacity-0")}>Delete</span>
+            </Button>
+            <Button
+              variant={"secondary"}
+              className="mr-2 w-24"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
             </Button>
           </fieldset>
         </DialogFooter>
