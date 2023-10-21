@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import micromatch from "micromatch"
 import { getToken } from "next-auth/jwt"
 
-const noAuthRoutes = ["/api/auth/**"]
+const noAuthRoutes = ["/api/auth/**", "/login"]
 
 const noAuthBackendApiRoutes = ["/backendapi/accounts/login"]
 
@@ -47,7 +47,8 @@ export async function middleware(request: NextRequest) {
 
   if (!token) {
     const url = new URL("/api/auth/signin", request.url)
-    url.searchParams.set("callbackUrl ", encodeURI(request.url))
+    url.searchParams.set("callbackUrl", encodeURI(request.url))
+
     return NextResponse.redirect(url)
   }
 
