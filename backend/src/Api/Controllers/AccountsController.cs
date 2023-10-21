@@ -83,7 +83,7 @@ public class AccountsController : ApiControllerBase
             Subject = new ClaimsIdentity(authClaims),
             Issuer = _configuration["JWT:ValidIssuer"],
             Audience = _configuration["JWT:ValidAudience"],
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddDays(30),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
