@@ -51,7 +51,9 @@ export default function DeleteTargetDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"destructive"}>Delete</Button>
+        <Button variant={"destructive"} className="w-24">
+          Delete
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -64,14 +66,14 @@ export default function DeleteTargetDialog() {
           <fieldset disabled={isSaving} className="group">
             <Button
               variant={"secondary"}
-              className="mr-2"
+              className="mr-2 w-24"
               onClick={() => setOpen(false)}
             >
               Cancel
             </Button>
             <Button
               variant={"destructive"}
-              className={cn("relative group-disabled:pointer-events-none")}
+              className={cn("relative w-24 group-disabled:pointer-events-none")}
               disabled={isSaving}
               onClick={() => handleDeleteTarget()}
             >

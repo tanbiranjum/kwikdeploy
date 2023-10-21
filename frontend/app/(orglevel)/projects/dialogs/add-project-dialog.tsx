@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog"
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -16,15 +16,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form"
-import { Button } from "./ui/button"
-import { Icons } from "./icons"
-import { Input } from "./ui/input"
+} from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import { Icons } from "@/components/icons"
+import { Input } from "@/components/ui/input"
 import useProjects from "@/hooks/useProjects"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useToast } from "./ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 
 export default function AddProjectDialog() {
@@ -40,7 +40,7 @@ export default function AddProjectDialog() {
       trimString,
       z
         .string()
-        .min(1, "Project Name is required")
+        .min(1, "Name is required")
         .max(20)
         .refine(async (value) => {
           const res = await fetch(
@@ -60,6 +60,11 @@ export default function AddProjectDialog() {
     },
   })
 
+  const closeForm = () => {
+    setOpen(false)
+    form.reset()
+  }
+
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsSaving(true)
     const response = await fetch(`/backendapi/projects`, {
@@ -68,8 +73,7 @@ export default function AddProjectDialog() {
       body: JSON.stringify(data),
     })
     if (!response.ok) {
-      setOpen(false)
-      form.reset()
+      closeForm()
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -77,8 +81,7 @@ export default function AddProjectDialog() {
       })
     } else {
       mutateProjects()
-      setOpen(false)
-      form.reset()
+      closeForm()
       toast({
         title: "Success!",
         description: "New project has been added.",
@@ -108,7 +111,7 @@ export default function AddProjectDialog() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Name</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -119,7 +122,17 @@ export default function AddProjectDialog() {
               </div>
               <DialogFooter>
                 <Button
-                  className={cn("relative group-disabled:pointer-events-none")}
+                  type="button"
+                  className="w-24"
+                  variant={"secondary"}
+                  onClick={closeForm}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className={cn(
+                    "relative w-24 group-disabled:pointer-events-none"
+                  )}
                   type="submit"
                   disabled={isSaving}
                 >

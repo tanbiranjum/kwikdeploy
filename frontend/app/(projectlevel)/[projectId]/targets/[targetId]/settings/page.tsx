@@ -112,7 +112,9 @@ export default function TargetSettings() {
               </div>
               <div>
                 <Button
-                  className={cn("relative group-disabled:pointer-events-none")}
+                  className={cn(
+                    "relative w-24 group-disabled:pointer-events-none"
+                  )}
                   type="submit"
                   disabled={isSaving}
                 >

@@ -14,7 +14,7 @@ export default function NavOrgLevel() {
   const currentRoute = usePathname()
 
   return (
-    <div className="border-b bg-indigo-600 text-gray-200">
+    <div className="border-b bg-primary text-gray-200">
       <div className="flex h-16 items-center px-4">
         <nav className={cn("flex items-center space-x-4 lg:space-x-6")}>
           {navItems.map((navItem, i) => (
@@ -22,8 +22,8 @@ export default function NavOrgLevel() {
               key={i}
               className={
                 currentRoute === navItem.href
-                  ? "rounded-md bg-indigo-700 px-3 py-2 text-sm font-medium text-white"
-                  : "rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
+                  ? "rounded-md bg-blue-500 px-3 py-2 text-sm font-medium text-white"
+                  : "rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-blue-500 hover:bg-opacity-75"
               }
               href={navItem.href}
             >

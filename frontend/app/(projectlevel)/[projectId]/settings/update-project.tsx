@@ -123,7 +123,7 @@ export default function CardWithForm({
                 <div className={cn("flex w-full justify-between")}>
                   <Button
                     className={cn(
-                      "relative group-disabled:pointer-events-none"
+                      "relative w-24 group-disabled:pointer-events-none"
                     )}
                     type="submit"
                     disabled={isSaving}

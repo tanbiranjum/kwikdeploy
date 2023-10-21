@@ -63,6 +63,11 @@ export default function AddTargetDialog() {
     },
   })
 
+  const closeForm = () => {
+    setOpen(false)
+    form.reset()
+  }
+
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsSaving(true)
     const response = await fetch(`/backendapi/targets/${projectId}`, {
@@ -71,8 +76,7 @@ export default function AddTargetDialog() {
       body: JSON.stringify(data),
     })
     if (!response.ok) {
-      setOpen(false)
-      form.reset()
+      closeForm()
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -80,8 +84,7 @@ export default function AddTargetDialog() {
       })
     } else {
       mutateTargets()
-      setOpen(false)
-      form.reset()
+      closeForm()
       toast({
         title: "Success!",
         description: "New target has been added.",
@@ -111,7 +114,7 @@ export default function AddTargetDialog() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Target Name</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -122,7 +125,17 @@ export default function AddTargetDialog() {
               </div>
               <DialogFooter>
                 <Button
-                  className={cn("relative group-disabled:pointer-events-none")}
+                  type="button"
+                  className="w-24"
+                  variant={"secondary"}
+                  onClick={closeForm}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className={cn(
+                    "relative w-24 group-disabled:pointer-events-none"
+                  )}
                   type="submit"
                   disabled={isSaving}
                 >
