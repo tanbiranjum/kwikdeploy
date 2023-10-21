@@ -19,6 +19,8 @@ jobs:
           password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
       - name: Add Next Config
         run: |
+          pwd
+          ls -l
           ENVFILE=./frontend/.env
           touch $ENVFILE
           echo "NEXTAUTH_URL=\"https://app.kwikdeploy.com\"" >> $ENVFILE
