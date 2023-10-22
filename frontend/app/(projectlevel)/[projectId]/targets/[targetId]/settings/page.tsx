@@ -27,7 +27,7 @@ export default function TargetSettings() {
   const { projectId, targetId }: { projectId: string; targetId: string } =
     useParams()
 
-  const { target } = useTarget(projectId, targetId)
+  const { target, mutateTarget } = useTarget(projectId, targetId)
   const { mutateTargets } = useTargets(projectId)
   const [isSaving, setIsSaving] = useState(false)
   const { toast } = useToast()
@@ -74,6 +74,7 @@ export default function TargetSettings() {
         description: "There was a problem when saving the target. Try again!",
       })
     } else {
+      mutateTarget()
       mutateTargets()
       toast({
         title: "Success!",

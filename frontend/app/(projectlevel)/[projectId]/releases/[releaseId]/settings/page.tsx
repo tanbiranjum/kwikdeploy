@@ -19,18 +19,16 @@ import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { Separator } from "@/components/ui/separator"
-import DeletePipelineDialog from "../../dialogs/delete-pipeline-dialog"
-import usePipeline from "@/hooks/usePipeline"
-import usePipelines from "@/hooks/usePipelines"
+import DeletePipelineDialog from "../../dialogs/delete-release-dialog"
+import useRelease from "@/hooks/useRelease"
+import useReleases from "@/hooks/useReleases"
 
-export default function PipelineSettings() {
-  const {
-    projectId,
-    pipelineId: pipelineId,
-  }: { projectId: string; pipelineId: string } = useParams()
+export default function ReleaseSettings() {
+  const { projectId, releaseId }: { projectId: string; releaseId: string } =
+    useParams()
 
-  const { pipeline, mutatePipeline } = usePipeline(projectId, pipelineId)
-  const { mutatePipelines } = usePipelines(projectId)
+  const { release, mutateRelease } = useRelease(projectId, releaseId)
+  const { mutateReleases } = useReleases(projectId)
   const [isSaving, setIsSaving] = useState(false)
   const { toast } = useToast()
 
@@ -45,10 +43,10 @@ export default function PipelineSettings() {
         .max(20)
         .refine(async (value) => {
           const res = await fetch(
-            `/backendapi/pipelines/${projectId}/uniquename?name=${value}&pipelineId=${pipelineId}`
+            `/backendapi/releases/${projectId}/uniquename?name=${value}&releaseId=${releaseId}`
           )
           return (await res.json()).value
-        }, "Another pipeline with this name already exists")
+        }, "Another release with this name already exists")
     ),
   })
 
@@ -56,13 +54,13 @@ export default function PipelineSettings() {
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: useMemo(() => pipeline, [pipeline]),
+    defaultValues: useMemo(() => release, [release]),
   })
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsSaving(true)
     const response = await fetch(
-      `/backendapi/pipelines/${projectId}/${pipelineId}`,
+      `/backendapi/releases/${projectId}/${releaseId}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -73,27 +71,27 @@ export default function PipelineSettings() {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem when saving the pipeline. Try again!",
+        description: "There was a problem when saving the release. Try again!",
       })
     } else {
-      mutatePipeline()
-      mutatePipelines()
+      mutateRelease()
+      mutateReleases()
       toast({
         title: "Success!",
-        description: "Pipeline has been saved.",
+        description: "Release has been saved.",
       })
     }
     setIsSaving(false)
   }
 
   useEffect(() => {
-    form.reset(pipeline)
-  }, [pipeline, form])
+    form.reset(release)
+  }, [release, form])
 
   return (
     <>
       <div className="space-y-6">
-        <h3 className="text-lg font-medium">Pipeline Details</h3>
+        <h3 className="text-lg font-medium">Release Details</h3>
         <Separator />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

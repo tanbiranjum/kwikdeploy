@@ -15,6 +15,6 @@ export default function useRelease(projectId: string, releaseId: string) {
     isLoading,
     isError: error,
     release: data,
-    mutatePipeline: mutateRelease,
+    mutateRelease,
   }
 }
