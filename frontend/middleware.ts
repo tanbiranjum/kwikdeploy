@@ -46,7 +46,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!token) {
-    const url = new URL("/api/auth/signin", request.url)
+    const url = new URL(
+      `${process.env.NEXT_PUBLIC_URL}/api/auth/signin`,
+      request.url
+    )
     url.searchParams.set("callbackUrl", encodeURI(request.url))
 
     return NextResponse.redirect(url)
