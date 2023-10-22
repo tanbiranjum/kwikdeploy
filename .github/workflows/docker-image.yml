@@ -16,7 +16,14 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ secrets.DOCKERREGISTRY_USERNAME }}
-          password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}      
+          password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
+      - name: UI Config
+        working-directory: frontend
+        run: |
+          touch .env.local
+          echo "NEXT_PUBLIC_URL=https://app.kwikdeploy.com" >> .env.local
+          echo "NEXTAUTH_URL=https://app.kwikdeploy.com" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"  >> .env.local
       - name: Build and Push UI
         uses: docker/build-push-action@v5
         with:
