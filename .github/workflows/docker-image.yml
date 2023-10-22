@@ -20,14 +20,17 @@ jobs:
           password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
       - name: Build and Push UI
         working-directory: frontend
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
         run: |
-          touch .env.local
-          echo "NEXT_PUBLIC_URL=https://app.kwikdeploy.com" >> .env.local
-          echo "NEXTAUTH_URL=https://app.kwikdeploy.com" >> .env.local
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"  >> .env.local
-          echo "BACKENDAPI_SCHEME=https" >> .env.local
-          echo "BACKENDAPI_HOST=api.kwikdeploy.com" >> .env.local
-          echo "BACKENDAPI_PORT=443" >> .env.local
+          ENVFILE=.env.production
+          touch $ENVFILE
+          echo "NEXT_PUBLIC_URL=https://app.kwikdeploy.com" >> $ENVFILE
+          echo "NEXTAUTH_URL=https://app.kwikdeploy.com" >> $ENVFILE
+          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> $ENVFILE
+          echo "BACKENDAPI_SCHEME=https" >> $ENVFILE
+          echo "BACKENDAPI_HOST=api.kwikdeploy.com" >> $ENVFILE
+          echo "BACKENDAPI_PORT=443" >> $ENVFILE
           docker build . -t ghcr.io/kwikdeploy/ui:dev
           docker push ghcr.io/kwikdeploy/ui:dev      
       - name: Build and Push API
