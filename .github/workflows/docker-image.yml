@@ -9,6 +9,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to ProductiveOps Docker Registry
@@ -16,7 +17,17 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ secrets.DOCKERREGISTRY_USERNAME }}
-          password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}      
+          password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
+      - name: UI Config
+        working-directory: frontend
+        run: |
+          touch .env.local
+          echo "NEXT_PUBLIC_URL=https://app.kwikdeploy.com" >> .env.local
+          echo "NEXTAUTH_URL=https://app.kwikdeploy.com" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"  >> .env.local
+          echo "BACKENDAPI_SCHEME=https" >> .env.local
+          echo "BACKENDAPI_HOST=api.kwikdeploy.com" >> .env.local
+          echo "BACKENDAPI_PORT=443" >> .env.local
       - name: Build and Push UI
         uses: docker/build-push-action@v5
         with:
