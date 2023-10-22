@@ -17,7 +17,7 @@ import useProjects from "@/hooks/useProjects"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import React, { useCallback, useRef, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
 
@@ -60,7 +60,7 @@ export default function AlertComponet({
     setIsDisabled(!validation.success)
   }
 
-  const handleOnDelete = useCallback(async () => {
+  const handleOnDelete = async () => {
     const response = await fetch(`/backendapi/projects/${id}`, {
       method: "DELETE",
     })
@@ -82,7 +82,7 @@ export default function AlertComponet({
         router.push("/projects")
       }, 500)
     }
-  }, [])
+  }
 
   return (
     <AlertDialog>

@@ -30,10 +30,6 @@ export default function CardWithForm() {
   const { mutateProjects } = useProjects()
   const [isSaving, setIsSaving] = useState(false)
 
-  useEffect(() => {
-    form.reset(project)
-  }, [project])
-
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
 
   const formSchema = z.object({
@@ -82,6 +78,10 @@ export default function CardWithForm() {
     mutateProjects()
     setIsSaving(false)
   }
+
+  useEffect(() => {
+    form.reset(project)
+  }, [project, form])
 
   return (
     <>

@@ -32,10 +32,6 @@ export default function TargetSettings() {
   const [isSaving, setIsSaving] = useState(false)
   const { toast } = useToast()
 
-  useEffect(() => {
-    form.reset(target)
-  }, [target])
-
   const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u)
 
   const formSchema = z.object({
@@ -86,6 +82,10 @@ export default function TargetSettings() {
     }
     setIsSaving(false)
   }
+
+  useEffect(() => {
+    form.reset(target)
+  }, [target, form])
 
   return (
     <>
