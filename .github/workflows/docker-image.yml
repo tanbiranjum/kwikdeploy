@@ -25,6 +25,9 @@ jobs:
           echo "NEXT_PUBLIC_URL=https://app.kwikdeploy.com" >> .env.local
           echo "NEXTAUTH_URL=https://app.kwikdeploy.com" >> .env.local
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"  >> .env.local
+          echo "BACKENDAPI_SCHEME=https" >> .env.local
+          echo "BACKENDAPI_HOST=api.kwikdeploy.com" >> .env.local
+          echo "BACKENDAPI_PORT=443" >> .env.local
       - name: Build and Push UI
         uses: docker/build-push-action@v5
         with:
