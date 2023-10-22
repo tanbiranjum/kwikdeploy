@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!token) {
-    const url = new URL(`/api/auth/signin`)
+    const url = new URL(`/api/auth/signin`, process.env.NEXT_PUBLIC_URL)
 
     // TODO: Ensure request.url has original hostname and not 0.0.0.0
     //       Below adds 0.0.0.0 and causes Google Chrome to flag site as deceptive
