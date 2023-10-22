@@ -18,7 +18,7 @@ jobs:
           registry: ghcr.io
           username: ${{ secrets.DOCKERREGISTRY_USERNAME }}
           password: ${{ secrets.DOCKERREGISTRY_PASSWORD }}
-      - name: UI Config
+      - name: Build and Push UI
         working-directory: frontend
         run: |
           touch .env.local
@@ -28,13 +28,8 @@ jobs:
           echo "BACKENDAPI_SCHEME=https" >> .env.local
           echo "BACKENDAPI_HOST=api.kwikdeploy.com" >> .env.local
           echo "BACKENDAPI_PORT=443" >> .env.local
-      - name: Build and Push UI
-        uses: docker/build-push-action@v5
-        with:
-          context: "{{defaultContext}}:frontend"
-          file: Dockerfile
-          push: true
-          tags: ghcr.io/kwikdeploy/ui:dev
+          docker build . -t ghcr.io/kwikdeploy/ui:dev
+          docker push ghcr.io/kwikdeploy/ui:dev      
       - name: Build and Push API
         uses: docker/build-push-action@v5
         with:
