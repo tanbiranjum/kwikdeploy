@@ -8,14 +8,8 @@ import {
 import { Button } from "./ui/button"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
-import { NextRequest } from "next/server"
-import { getToken } from "next-auth/jwt"
 
-export async function UserNav(req: NextRequest) {
-  // const token = await getToken({ req })
-
-  // console.log("token", req, JSON.stringify(token))
-
+export async function UserNav() {
   const handleLogout = () => {
     signOut()
   }

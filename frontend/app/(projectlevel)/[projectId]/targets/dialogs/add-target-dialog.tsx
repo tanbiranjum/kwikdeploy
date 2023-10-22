@@ -63,7 +63,7 @@ export default function AddTargetDialog() {
     },
   })
 
-  const closeForm = () => {
+  const handleCloseForm = () => {
     setOpen(false)
     form.reset()
   }
@@ -76,7 +76,7 @@ export default function AddTargetDialog() {
       body: JSON.stringify(data),
     })
     if (!response.ok) {
-      closeForm()
+      handleCloseForm()
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -84,7 +84,7 @@ export default function AddTargetDialog() {
       })
     } else {
       mutateTargets()
-      closeForm()
+      handleCloseForm()
       toast({
         title: "Success!",
         description: "New target has been added.",
@@ -141,7 +141,7 @@ export default function AddTargetDialog() {
                   type="button"
                   className="w-24"
                   variant={"secondary"}
-                  onClick={closeForm}
+                  onClick={handleCloseForm}
                 >
                   Cancel
                 </Button>

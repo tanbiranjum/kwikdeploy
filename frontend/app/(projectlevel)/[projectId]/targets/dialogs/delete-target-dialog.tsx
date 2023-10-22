@@ -16,14 +16,12 @@ import useTargets from "@/hooks/useTargets"
 import { useParams, useRouter } from "next/navigation"
 
 export default function DeleteTargetDialog() {
-  const { projectId, targetId }: { projectId: string; targetId: string } =
-    useParams()
-
-  const router = useRouter()
-
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
+  const router = useRouter()
+  const { projectId, targetId }: { projectId: string; targetId: string } =
+    useParams()
   const { mutateTargets } = useTargets(projectId)
 
   const handleDeleteTarget = async () => {
@@ -79,7 +77,7 @@ export default function DeleteTargetDialog() {
             </Button>
             <Button
               variant={"secondary"}
-              className="mr-2 w-24"
+              className="ml-2 w-24"
               onClick={() => setOpen(false)}
             >
               Cancel

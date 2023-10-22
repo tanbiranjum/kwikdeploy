@@ -122,14 +122,6 @@ export default function AddProjectDialog() {
               </div>
               <DialogFooter>
                 <Button
-                  type="button"
-                  className="w-24"
-                  variant={"secondary"}
-                  onClick={closeForm}
-                >
-                  Cancel
-                </Button>
-                <Button
                   className={cn(
                     "relative w-24 group-disabled:pointer-events-none"
                   )}
@@ -142,6 +134,14 @@ export default function AddProjectDialog() {
                     )}
                   />
                   <span className={cn("group-disabled:opacity-0")}>Save</span>
+                </Button>
+                <Button
+                  type="button"
+                  className="w-24"
+                  variant={"secondary"}
+                  onClick={closeForm}
+                >
+                  Cancel
                 </Button>
               </DialogFooter>
             </fieldset>

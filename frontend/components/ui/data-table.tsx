@@ -4,7 +4,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -16,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "./button"
-import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -34,7 +31,6 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       columnVisibility: { id: false },
     },
@@ -92,12 +88,6 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className={cn("space-x-2  ")}>
-        <Button disabled={data.length < 10} onClick={() => table.previousPage}>
-          Prev
-        </Button>
-        <Button onClick={() => table.nextPage}>Next</Button>
       </div>
     </>
   )
