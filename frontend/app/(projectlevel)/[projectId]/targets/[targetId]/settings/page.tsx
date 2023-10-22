@@ -94,7 +94,7 @@ export default function TargetSettings() {
         <Separator />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <fieldset className={cn("group")}>
+            <fieldset className={cn("group")} disabled={isSaving}>
               <div className="grid gap-4 pb-4 group-disabled:opacity-50">
                 <FormField
                   control={form.control}
@@ -116,11 +116,10 @@ export default function TargetSettings() {
                     "relative w-24 group-disabled:pointer-events-none"
                   )}
                   type="submit"
-                  disabled={isSaving}
                 >
                   <Icons.spinner
                     className={cn(
-                      "absolute animate-spin text-slate-100 group-enabled:opacity-0  "
+                      "absolute animate-spin text-slate-100 group-enabled:opacity-0"
                     )}
                   />
                   <span className={cn("group-disabled:opacity-0")}>Save</span>

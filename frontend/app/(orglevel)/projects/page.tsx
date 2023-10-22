@@ -7,14 +7,15 @@ import ProjectCard from "./project-card"
 import AddProjectDialog from "@/app/(orglevel)/projects/dialogs/add-project-dialog"
 import MainContainer from "@/components/main-container"
 import useProjects from "@/hooks/useProjects"
+import Loading from "@/components/loading"
 
-type Props = {}
+export default function ProjectsPage() {
+  const { projects, isLoading, isError } = useProjects()
 
-const ProjectsPage = (props: Props) => {
-  const { projects, isError } = useProjects()
+  if (isLoading) return <Loading />
 
   if (isError) {
-    return <p>Something whent wrong try again!</p>
+    return <p>Something went wrong try again!</p>
   }
 
   return (
@@ -36,5 +37,3 @@ const ProjectsPage = (props: Props) => {
     </MainContainer>
   )
 }
-
-export default ProjectsPage

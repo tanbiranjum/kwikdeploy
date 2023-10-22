@@ -16,7 +16,6 @@ export default function TargetsPage() {
 
   if (isLoading) return <Loading />
 
-  
   if (!targets?.items) return null
 
   return (

@@ -1,5 +1,6 @@
 "use client"
 
+import Loading from "@/components/loading"
 import { SidebarNav } from "./sidebar-nav"
 import { Separator } from "@/components/ui/separator"
 
@@ -28,7 +29,9 @@ interface TargetLayoutProps {
 export default function TargetLayout({ children }: TargetLayoutProps) {
   const { projectId, targetId }: { projectId: string; targetId: string } =
     useParams()
-  const { target } = useTarget(projectId, targetId)
+  const { target, isLoading } = useTarget(projectId, targetId)
+
+  if (isLoading) return <Loading />
 
   return (
     <>

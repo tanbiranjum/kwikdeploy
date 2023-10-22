@@ -19,7 +19,7 @@ export default function ProjectSettingsPage() {
   )
 
   if (isError) {
-    return <p>Something whent wrong try again!</p>
+    return <p>Something went wrong try again!</p>
   }
 
   if (project?.id === undefined) return null
