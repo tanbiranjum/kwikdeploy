@@ -46,8 +46,11 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!token) {
-    const url = new URL(`${process.env.NEXT_PUBLIC_URL}/api/auth/signin`)
-    url.searchParams.set("callbackUrl", encodeURI(request.url))
+    const url = new URL(`/api/auth/signin`)
+
+    // TODO: Ensure request.url has original hostname and not 0.0.0.0
+    //       Below adds 0.0.0.0 and causes Google Chrome to flag site as deceptive
+    // url.searchParams.set("callbackUrl", encodeURI(request.url))
 
     return NextResponse.redirect(url)
   }
