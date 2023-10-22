@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
         userName: { label: "User Name", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const response = await fetch(
           `${process.env.NEXTAUTH_URL}/backendapi/accounts/login`,
           {
