@@ -30,11 +30,11 @@ const variables: IVariable[] = [
   {
     id: 1,
     name: "ENV",
-    secret: true,
+    secret: false,
     values: {
       "1": "QA",
       "2": "UAT",
-      "3": "Prod",
+      "3": "This is such a big value for a variable",
     },
   },
   {
@@ -60,6 +60,7 @@ export default function VariablesPages() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[10px]"></TableHead>
               <TableHead className="w-[300px]">Variable Name</TableHead>
               <TableHead className="w-[100px]">Secret</TableHead>
               <TableHead>Values</TableHead>
@@ -68,23 +69,24 @@ export default function VariablesPages() {
           <TableBody>
             {variables.map((variable) => (
               <TableRow key={variable.id}>
-                <TableCell className="align-top">{variable.name}</TableCell>
+                <TableCell className="align-top">
+                  <Icons.trash className="h-4 w-4 cursor-pointer" />
+                </TableCell>
+                <TableCell className="align-top">
+                  <span className="cursor-pointer hover:underline">
+                    {variable.name}
+                  </span>
+                </TableCell>
                 <TableCell className="align-top">
                   <Checkbox checked={variable.secret} />
                 </TableCell>
                 <TableCell>
                   {Object.keys(variable.values).map((envId) => (
-                    <span
-                      key={envId}
-                      className="mr-4 inline-flex items-center rounded-md text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/40"
-                    >
-                      <span className="rounded-l-md bg-gray-100 px-3 py-2 font-bold ring-1 ring-inset ring-gray-500/40">
-                        {envMap[envId]}
-                      </span>
-                      <span className="px-3">
-                        {variable.secret ? "***" : variable.values[envId]}
-                      </span>
-                    </span>
+                    <VariableValue
+                      envName={envMap[envId]}
+                      isSecret={variable.secret}
+                      value={variable.values[envId]}
+                    />
                   ))}
                 </TableCell>
               </TableRow>
@@ -93,5 +95,37 @@ export default function VariablesPages() {
         </Table>
       </div>
     </MainContainer>
+  )
+}
+
+function truncateVariableValue(value: string, chars = 20) {
+  if (value && value.length > chars) {
+    return value.substring(0, chars) + " ..."
+  }
+
+  return value
+}
+
+function VariableValue({
+  envName,
+  value,
+  isSecret,
+}: {
+  envName: string
+  value: string
+  isSecret: boolean
+}) {
+  return (
+    <span
+      key={envName}
+      className="mr-4 inline-flex cursor-pointer items-center rounded-md text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/40 hover:shadow-md"
+    >
+      <span className="rounded-l-md bg-gray-100 px-3 py-2 font-bold ring-1 ring-inset ring-gray-500/40">
+        {envName}
+      </span>
+      <span className="px-3">
+        {isSecret ? "***" : truncateVariableValue(value)}
+      </span>
+    </span>
   )
 }
