@@ -83,6 +83,7 @@ export default function VariablesPages() {
                 <TableCell>
                   {Object.keys(variable.values).map((envId) => (
                     <VariableValue
+                      key={envId}
                       envName={envMap[envId]}
                       isSecret={variable.secret}
                       value={variable.values[envId]}
