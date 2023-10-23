@@ -8,8 +8,8 @@ import { UserNav } from "@/components/user-nav"
 const navItems = [
   { name: "Targets", href: "/targets" },
   { name: "Environments", href: "/environments" },
+  { name: "Variables", href: "/variables" },
   { name: "App Definitions", href: "/appdefinitions" },
-  { name: "Pipelines", href: "/pipelines" },
   { name: "Releases", href: "/releases" },
   { name: "Settings", href: "/settings" },
 ]
