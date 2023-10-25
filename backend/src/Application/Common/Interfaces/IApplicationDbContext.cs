@@ -11,6 +11,8 @@ public interface IApplicationDbContext
     DbSet<Project> Projects { get; }
     DbSet<Release> Releases { get; }
     DbSet<Target> Targets { get; }
+    DbSet<Variable> Variables { get; }
+    DbSet<VariableValue> VariableValues { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

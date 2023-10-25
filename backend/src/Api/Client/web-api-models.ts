@@ -1550,6 +1550,242 @@ export interface IResultOfString {
     value?: string | undefined;
 }
 
+export class PaginatedListOfVariableHeadDto implements IPaginatedListOfVariableHeadDto {
+    items?: VariableHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfVariableHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(VariableHeadDto.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfVariableHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfVariableHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data;
+    }
+}
+
+export interface IPaginatedListOfVariableHeadDto {
+    items?: VariableHeadDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+}
+
+export class VariableHeadDto implements IVariableHeadDto {
+    id?: number;
+    name?: string;
+    isSecret?: boolean;
+
+    constructor(data?: IVariableHeadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.isSecret = _data["isSecret"];
+        }
+    }
+
+    static fromJS(data: any): VariableHeadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VariableHeadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["isSecret"] = this.isSecret;
+        return data;
+    }
+}
+
+export interface IVariableHeadDto {
+    id?: number;
+    name?: string;
+    isSecret?: boolean;
+}
+
+export class VariableDto implements IVariableDto {
+    id?: number;
+    projectId?: number;
+    name?: string;
+    isSecret?: boolean;
+
+    constructor(data?: IVariableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.projectId = _data["projectId"];
+            this.name = _data["name"];
+            this.isSecret = _data["isSecret"];
+        }
+    }
+
+    static fromJS(data: any): VariableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VariableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["projectId"] = this.projectId;
+        data["name"] = this.name;
+        data["isSecret"] = this.isSecret;
+        return data;
+    }
+}
+
+export interface IVariableDto {
+    id?: number;
+    projectId?: number;
+    name?: string;
+    isSecret?: boolean;
+}
+
+export class VariableCreateBody implements IVariableCreateBody {
+    name?: string;
+    isSecret?: boolean;
+
+    constructor(data?: IVariableCreateBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.isSecret = _data["isSecret"];
+        }
+    }
+
+    static fromJS(data: any): VariableCreateBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new VariableCreateBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["isSecret"] = this.isSecret;
+        return data;
+    }
+}
+
+export interface IVariableCreateBody {
+    name?: string;
+    isSecret?: boolean;
+}
+
+export class VariableUpdateBody implements IVariableUpdateBody {
+    name?: string;
+    isSecret?: boolean;
+
+    constructor(data?: IVariableUpdateBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.isSecret = _data["isSecret"];
+        }
+    }
+
+    static fromJS(data: any): VariableUpdateBody {
+        data = typeof data === 'object' ? data : {};
+        let result = new VariableUpdateBody();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["isSecret"] = this.isSecret;
+        return data;
+    }
+}
+
+export interface IVariableUpdateBody {
+    name?: string;
+    isSecret?: boolean;
+}
+
 export class SuccessfulLoginResponse implements ISuccessfulLoginResponse {
     id?: string;
     username?: string;

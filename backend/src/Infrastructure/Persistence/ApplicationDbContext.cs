@@ -30,6 +30,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Release> Releases => Set<Release>();
     public DbSet<Target> Targets => Set<Target>();
+    public DbSet<Variable> Variables => Set<Variable>();
+    public DbSet<VariableValue> VariableValues => Set<VariableValue>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
